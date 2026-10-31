@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>전세이프</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="불안한 전세 계약, 등기부등본 사진 몇 장으로 확인하세요. 전세이프가 위험한 줄을 짚고 쉬운 말로 알려 드려요.">
+<meta name="description" content="어렵고 무서운 전세 계약, 찍으면 보여요. 전세이프는 등기부등본을 읽고 위험한 곳을 짚어 쉬운 말로 알려 드려요. 잔금 날, 이사 다음 날까지 함께 확인해요.">
 <meta name="theme-color" content="#07140F">
 <meta property="og:type" content="website">
-<meta property="og:title" content="전세이프 — 불안한 전세 계약, 찍어서 확인하세요">
-<meta property="og:description" content="등기부등본을 찍으면 위험한 줄을 짚고 쉬운 말로 알려 드려요. 계약부터 입주 다음 날까지 함께 확인해요.">
+<meta property="og:title" content="전세이프 — 어렵고 무서운 전세 계약, 찍으면 보여요">
+<meta property="og:description" content="등기부등본을 찍으면 위험한 곳을 짚고 쉬운 말로 알려 드려요. 계약서 쓰는 날부터 이사 다음 날까지 함께.">
 <meta property="og:url" content="https://jeonseai.github.io/">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" href="favicon.png">
@@ -17,12 +17,22 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Serif+KR:wght@700&display=swap" rel="stylesheet">
+<script>
+/* 처음 들어올 때만 로고 오프닝을 보여 준다. 움직임 줄이기 설정이면 오프닝도 스크롤 효과도 끈다. */
+(function () {
+  var d = document.documentElement, reduce = false, first = true;
+  try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+  try { first = !sessionStorage.getItem('jsafe-intro'); sessionStorage.setItem('jsafe-intro', '1'); } catch (e) {}
+  if (!reduce && 'IntersectionObserver' in window) d.classList.add('an');
+  if (!reduce && first) d.classList.add('intro-on');
+})();
+</script>
 <style>
-/* 레이아웃: 폰 먼저. 한 열로 쌓다가 넓은 화면에서 두세 열로 연다. 어두운 초록 무대 ↔ 밝은 종이 띠, 섹션 6개. */
+/* 레이아웃: 폰 먼저 한 열. 넓은 화면에서 두세 열. 4막(문제 → 해결 → 믿음 → 함께), 어두운 초록 무대와 밝은 종이 판을 번갈아 쌓는다. */
 :root{
-  --ink:#07140F; --deep:#0B2A1F; --forest:#0E3526; --green:#14724B; --mint:#E7F3EC;
-  --gold:#E2C27F; --gold-hi:#F1DDB0; --paper:#F2EEE5; --sheet:#FFFDF8; --white:#FFFFFF;
-  --text:#16211B; --body:#3C4842; --muted:#5E6B64; --line:#E1E8E3;
+  --ink:#07140F; --night:#0A1E16; --deep:#0B2A1F; --forest:#0E3526; --green:#14724B; --mint:#E7F3EC;
+  --gold:#E2C27F; --gold-hi:#F1DDB0; --gold-data:#BD872C; --paper:#F2EEE5; --sheet:#FFFDF8; --white:#FFFFFF;
+  --text:#16211B; --body:#3C4842; --muted:#5E6B64; --line:#E1E8E3; --dim:rgba(255,255,255,.7); --faint:rgba(255,255,255,.14);
   --red:#D32F2F; --red-soft:#FBEAE8; --amber:#A16207;
   --sans:"Pretendard",-apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
   --serif:"Noto Serif KR","Apple SD Gothic Neo",serif;
@@ -38,55 +48,87 @@
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:64px;-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--ink);color:var(--white);font-family:var(--sans);word-break:keep-all;overflow-wrap:break-word;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top, 0px);z-index:70;background:var(--ink)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top, 0px);z-index:90;background:var(--ink)}
 img{max-width:100%}
 a{color:var(--gold)}
+button{font:inherit;color:inherit}
 :focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 .wrap{max-width:1180px;margin:0 auto;padding-left:var(--gut);padding-right:var(--gutr);position:relative}
 @media (min-width:760px){:root{--gut:max(40px, env(safe-area-inset-left, 0px));--gutr:max(40px, env(safe-area-inset-right, 0px))}}
 h1,h2,h3{text-wrap:balance}
-.wm{font-family:var(--mark);font-size:24px;line-height:1;letter-spacing:-.5px;color:var(--white)}
+.wm{font-family:var(--mark);line-height:1;letter-spacing:-.5px;color:var(--white)}
 .wm i{font-style:normal;color:var(--gold)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ── 오프닝: 로고 선 그리기 → 이름 → 위로 걷히며 첫 화면 ── */
+.intro{display:none}
+.intro-on .intro{display:flex;position:fixed;inset:0;z-index:100;background:var(--ink);align-items:center;justify-content:center;animation:introOut .8s cubic-bezier(.7,0,.2,1) 2.15s forwards;cursor:pointer}
+.intro-in{display:flex;flex-direction:column;align-items:center;gap:18px}
+.intro-logo{width:112px;height:auto;overflow:visible}
+.intro-logo path{stroke-dasharray:1;stroke-dashoffset:1;stroke-width:9;fill-opacity:0;animation:draw 1.15s cubic-bezier(.6,0,.3,1) .15s forwards, fillin .5s ease 1.05s forwards}
+.intro-logo .lg-w{stroke:#F7FAF5}
+.intro-logo .lg-g{stroke:#DDBE7C;animation-delay:.35s, 1.15s}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fillin{to{fill-opacity:1;stroke-width:0}}
+.intro .wm{font-size:40px;opacity:0;transform:translateY(12px);animation:rise .6s cubic-bezier(.2,.8,.2,1) 1.2s forwards}
+.intro-tag{margin:0;font-size:14px;letter-spacing:.12em;color:var(--dim);opacity:0;animation:rise .6s ease 1.45s forwards}
+@keyframes rise{to{opacity:1;transform:none}}
+@keyframes introOut{to{clip-path:inset(0 0 100% 0);visibility:hidden}}
+.intro{clip-path:inset(0 0 0 0)}
+.intro-skip{animation:none !important;display:none !important}
+
+/* 읽은 만큼 차오르는 위쪽 줄 */
+.progress{position:fixed;left:0;right:0;top:env(safe-area-inset-top, 0px);height:3px;z-index:80;pointer-events:none}
+.progress i{display:block;height:100%;width:100%;background:var(--gold);transform-origin:0 50%;transform:scaleX(var(--read,0))}
 
 /* 머리 */
-.nav{position:sticky;top:env(safe-area-inset-top, 0px);z-index:60;background:rgba(7,20,15,.8);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.07)}
+.nav{position:sticky;top:env(safe-area-inset-top, 0px);z-index:60;background:rgba(7,20,15,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.07)}
 .navin{height:60px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .logo{display:flex;align-items:center;gap:9px;text-decoration:none}
 .logo .ib{width:34px;height:34px;border-radius:10px;background:var(--paper);display:inline-flex;align-items:center;justify-content:center;flex:none}
 .logo img{width:24px;height:26px;object-fit:contain}
+.logo .wm{font-size:24px}
 .links{display:none;gap:26px;font-size:15px;font-weight:600}
-.links a{color:rgba(255,255,255,.72);text-decoration:none}.links a:hover{color:var(--white)}
-.btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 24px;border-radius:999px;font-weight:700;font-size:16px;text-decoration:none;transition:transform .25s ease, background-color .25s ease;white-space:nowrap}
+.links a{color:var(--dim);text-decoration:none}.links a:hover{color:var(--white)}
+@media (min-width:960px){.links{display:flex}.navin{height:68px}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 24px;border-radius:999px;border:0;font-weight:700;font-size:16px;text-decoration:none;cursor:pointer;transition:transform .25s ease, background-color .25s ease;white-space:nowrap}
 .btn:hover{transform:translateY(-2px)}
 .btn-gold{background:var(--gold);color:var(--ink)}.btn-gold:hover{background:var(--gold-hi);color:var(--ink)}
-.btn-line{color:var(--white);border:1.5px solid rgba(255,255,255,.3)}.btn-line:hover{color:var(--white);background:rgba(255,255,255,.06)}
+.btn-line{background:transparent;color:var(--white);border:1.5px solid rgba(255,255,255,.3)}.btn-line:hover{color:var(--white);background:rgba(255,255,255,.06)}
+.btn-ink{background:var(--ink);color:var(--gold-hi)}.btn-ink:hover{color:var(--white)}
 .btn-s{min-height:40px;padding:0 16px;font-size:14px}
-@media (min-width:900px){.links{display:flex}.navin{height:68px}}
 
-/* 공통 글자 */
+/* 공통 글 */
+.sec{padding-block:clamp(72px, 10vw, 136px);position:relative;overflow:hidden}
 .kick{display:block;font-size:14px;font-weight:700;color:var(--gold);letter-spacing:.06em;margin:0 0 14px}
-.lt .kick{color:var(--green)}
-.h2{font-size:clamp(30px, 5vw, 54px);line-height:1.2;letter-spacing:-.035em;font-weight:800;margin:0}
-.lead{font-size:clamp(16px, 1.6vw, 19px);line-height:1.7;color:rgba(255,255,255,.76);margin:0;max-width:36em}
-.lt{background:var(--paper);color:var(--text)}
-.lt .lead{color:var(--body)}
-.sec{padding-block:clamp(72px, 10vw, 128px);position:relative;overflow:hidden}
+.on-light .kick{color:var(--green)}
+.h2{font-size:clamp(30px, 5vw, 56px);line-height:1.2;letter-spacing:-.035em;font-weight:800;margin:0}
+.lead{font-size:clamp(16px, 1.6vw, 19px);line-height:1.7;color:var(--dim);margin:18px 0 0;max-width:34em}
+.on-light{color:var(--text)}
+.on-light .lead{color:var(--body)}
+.src{margin:22px 0 0;font-size:12px;line-height:1.7;color:rgba(255,255,255,.45)}
+.on-light .src{color:var(--muted)}
 
-/* 등장 효과: 스크립트가 .an 을 붙였을 때만 숨겼다가 보여 준다 */
-.an .rv{opacity:0;transform:translateY(28px);transition:opacity .8s ease, transform .8s cubic-bezier(.2,.7,.2,1)}
-.an .in .rv{opacity:1;transform:none}
-.an .in .d1{transition-delay:.1s}.an .in .d2{transition-delay:.2s}.an .in .d3{transition-delay:.3s}
+/* 등장 효과 (.an 일 때만): 글줄이 아래에서 올라오며 열림, 덩어리는 떠오름 */
+.ln{display:block;overflow:hidden;padding-bottom:.06em;margin-bottom:-.06em}
+.ln > span{display:block}
+.an .ln > span{transform:translateY(108%);transition:transform 1s cubic-bezier(.2,.8,.2,1)}
+.an .in .ln > span{transform:none}
+.an .in .ln:nth-child(2) > span{transition-delay:.08s}.an .in .ln:nth-child(3) > span{transition-delay:.16s}
+.an .rv{opacity:0;transform:translateY(28px);transition:opacity .9s ease, transform .9s cubic-bezier(.2,.8,.2,1)}
+.an .in .rv,.an .rv.in{opacity:1;transform:none}
+.an .in .d1{transition-delay:.12s}.an .in .d2{transition-delay:.24s}.an .in .d3{transition-delay:.36s}.an .in .d4{transition-delay:.48s}
 
-/* ── 1. 첫 화면 ── */
-.hero{position:relative;overflow:hidden;padding-block:36px 56px;background:var(--ink)}
+/* ━━ 1. 첫 화면 ━━ */
+.hero{position:relative;overflow:hidden;padding-block:32px 48px;background:var(--ink)}
 .hbg{position:absolute;inset:0;overflow:hidden;pointer-events:none}
 .blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55}
-.bl1{width:90vw;max-width:760px;aspect-ratio:1;left:-30%;top:-20%;background:#0F4A33;animation:blob1 18s ease-in-out infinite}
-.bl2{width:70vw;max-width:620px;aspect-ratio:1;right:-25%;bottom:-25%;background:#3A2E12;animation:blob2 22s ease-in-out infinite}
+.bl1{width:90vw;max-width:780px;aspect-ratio:1;left:-30%;top:-20%;background:#0F4A33;animation:blob1 18s ease-in-out infinite}
+.bl2{width:70vw;max-width:640px;aspect-ratio:1;right:-25%;bottom:-25%;background:#3A2E12;animation:blob2 22s ease-in-out infinite}
 @keyframes blob1{0%,100%{transform:translate(0,0)}50%{transform:translate(8%,6%)}}
 @keyframes blob2{0%,100%{transform:translate(0,0)}50%{transform:translate(-7%,-5%)}}
 .drift{position:absolute;inset:-5% 0;display:flex;flex-direction:column;justify-content:space-around}
-.drow{display:flex;gap:36px;width:max-content;white-space:nowrap;animation:slide 90s linear infinite;will-change:transform}
+.drow{display:flex;gap:36px;width:max-content;white-space:nowrap;animation:slide 90s linear infinite}
 .drow:nth-child(2n){animation-direction:reverse;animation-duration:70s}
 .drow:nth-child(1),.drow:nth-child(5){font-size:15px;color:rgba(255,255,255,.08)}
 .drow:nth-child(2){font-size:28px;font-weight:700;color:rgba(255,255,255,.05);filter:blur(1px)}
@@ -94,26 +136,28 @@ h1,h2,h3{text-wrap:balance}
 .drow:nth-child(4){font-size:52px;font-weight:800;color:rgba(226,194,127,.06);filter:blur(2px)}
 @keyframes slide{to{transform:translateX(-50%)}}
 .vig{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%, rgba(7,20,15,.35), rgba(7,20,15,.94) 70%)}
-.herog{display:grid;grid-template-columns:minmax(0,1fr);gap:28px;align-items:center;position:relative;z-index:1}
-.h1{font-size:clamp(38px, 6.4vw, 78px);line-height:1.12;letter-spacing:-.045em;font-weight:800;margin:0}
-.hl{position:relative;color:var(--gold);white-space:nowrap}
-.hl::after{content:"";position:absolute;left:-3px;right:-3px;bottom:.06em;height:.2em;border-radius:4px;background:rgba(226,194,127,.3);transform-origin:0 50%;transform:scaleX(0);animation:grow 1s .8s cubic-bezier(.6,.1,.2,1) forwards;z-index:-1}
-@keyframes grow{to{transform:scaleX(1)}}
+.herog{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;align-items:center;position:relative;z-index:1}
+.h1{font-size:clamp(40px, 6.6vw, 82px);line-height:1.1;letter-spacing:-.045em;font-weight:800;margin:0}
+.hl{position:relative;display:inline-block;color:var(--gold)}
+.hl::after{content:"";position:absolute;left:-3px;right:-3px;bottom:.06em;height:.22em;border-radius:4px;background:rgba(226,194,127,.3);transform-origin:0 50%;transform:scaleX(0);z-index:-1;transition:transform 1s cubic-bezier(.6,.1,.2,1) .7s}
+.in .hl::after,html:not(.an) .hl::after{transform:scaleX(1)}
 .hero .lead{margin-top:18px}
 .ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
-.ctas .btn{flex:1 1 160px}
-@media (min-width:900px){
-  .hero{padding-block:72px 96px}
+.ctas .btn{flex:1 1 150px}
+@media (min-width:960px){
+  .hero{padding-block:64px 88px}
   .herog{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:48px}
   .ctas .btn{flex:0 0 auto}
 }
 
-/* 폰 장면: 12초 반복. 질문이 튀어나옴(0~30%) → 초록 빛이 훑음(30~50%) → 답과 결과(50~92%) */
+/* 폰 장면: 12초 반복 — 물음이 튀어나옴 → 초록 빛이 훑음 → 쉬운 말 답 + 결과 카드 */
 .stage{position:relative;height:500px;width:100%;max-width:540px;margin:0 auto}
 .phone{position:absolute;left:50%;top:50%;width:280px;height:580px;margin:-290px 0 0 -140px;border-radius:44px;background:#111915;padding:11px;box-shadow:0 60px 120px -40px rgba(0,0,0,.85), inset 0 0 0 2px #2A3530;transform:scale(.8)}
 .phone::before{content:"";position:absolute;left:50%;top:18px;width:84px;height:22px;margin-left:-42px;border-radius:12px;background:#111915;z-index:5}
+.phone::after{content:"";position:absolute;inset:11px;border-radius:34px;background:linear-gradient(115deg, rgba(255,255,255,0) 40%, rgba(255,255,255,.35) 50%, rgba(255,255,255,0) 60%);background-size:250% 100%;background-position:120% 0;animation:glare 12s ease-in-out infinite;pointer-events:none;z-index:7}
+@keyframes glare{0%,58%{background-position:120% 0}66%,100%{background-position:-60% 0}}
 @media (min-width:420px){.stage{height:560px}.phone{transform:scale(.9)}}
-@media (min-width:900px){.stage{height:620px}.phone{transform:none}}
+@media (min-width:960px){.stage{height:620px}.phone{transform:none}}
 .scr{position:relative;height:100%;border-radius:34px;background:var(--white);overflow:hidden;color:var(--text)}
 .abar{display:flex;align-items:center;justify-content:space-between;padding:46px 16px 10px}
 .abar .wm{font-size:17px;color:var(--deep)}
@@ -141,7 +185,7 @@ h1,h2,h3{text-wrap:balance}
 .grade::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
 .rsheet h4{margin:10px 0 4px;font-size:15px;letter-spacing:-.02em}
 .rsheet p{margin:0;font-size:12px;line-height:1.6;color:var(--body)}
-.rsheet .src{margin-top:8px;font-size:10px;color:var(--muted)}
+.rsheet .sx{margin-top:8px;font-size:10px;color:var(--muted)}
 .bub{position:absolute;z-index:6;max-width:min(205px, 50%);display:grid}
 .bub > span{grid-area:1/1;justify-self:start;display:block;padding:10px 14px;border-radius:18px;font-size:14px;font-weight:700;line-height:1.35;letter-spacing:-.02em;box-shadow:0 18px 36px -14px rgba(0,0,0,.6)}
 .bub.r > span{justify-self:end}
@@ -151,16 +195,73 @@ h1,h2,h3{text-wrap:balance}
 .bub.l > span{border-bottom-right-radius:6px}.bub.r > span{border-bottom-left-radius:6px}
 .bub.p1{left:0;top:7%}.bub.p2{right:0;top:24%}.bub.p3{left:0;top:62%}.bub.p4{right:0;top:79%}
 .bub.p2 span{animation-delay:.9s}.bub.p3 span{animation-delay:1.8s}.bub.p4 span{animation-delay:2.7s}
-@media (min-width:900px){.bub > span{font-size:16px;padding:12px 16px;border-radius:20px}.bub .a{font-size:15px}.bub .a em{font-size:12px}}
+@media (min-width:960px){.bub > span{font-size:16px;padding:12px 16px;border-radius:20px}.bub .a{font-size:15px}.bub .a em{font-size:12px}}
 @keyframes q{0%,4%{opacity:0;transform:scale(.3) translateY(14px)}9%{opacity:1;transform:scale(1.06)}12%,46%{opacity:1;transform:none}52%,100%{opacity:0;transform:scale(.92)}}
 @keyframes a{0%,46%{opacity:0;transform:scale(.9)}53%,86%{opacity:1;transform:none}92%,100%{opacity:0;transform:none}}
 .qm{position:absolute;font-weight:800;color:var(--gold);opacity:0;animation:qm 12s ease-out infinite;z-index:4}
 .qm.m1{left:16%;top:42%;font-size:36px}.qm.m2{right:16%;top:50%;font-size:28px;animation-delay:1.3s}.qm.m3{left:32%;top:3%;font-size:24px;animation-delay:2.2s}
 @keyframes qm{0%,6%{opacity:0;transform:translateY(10px) rotate(-10deg)}12%{opacity:.9;transform:none}40%{opacity:0;transform:translateY(-40px) rotate(12deg)}100%{opacity:0}}
-.hnote{margin:0;text-align:center;font-size:12px;color:rgba(255,255,255,.48)}
+.hnote{margin:0;text-align:center;font-size:12px;color:rgba(255,255,255,.45)}
 
-/* ── 2. 불안 ── */
-.fear{background:#0A1E16}
+/* 근거 숫자 띠 (흐름) */
+.ticker{position:relative;background:var(--gold);color:var(--ink);overflow:hidden;padding-block:14px}
+.tk{display:flex;gap:12px;width:max-content;animation:slide 40s linear infinite}
+.ticker:hover .tk{animation-play-state:paused}
+.tk span{display:inline-flex;align-items:center;gap:10px;font-weight:800;font-size:15px;white-space:nowrap;padding-right:12px}
+.tk span::after{content:"";width:6px;height:6px;border-radius:50%;background:rgba(7,20,15,.45)}
+
+/* ━━ 2. 현실 ━━ */
+.now{background:var(--night)}
+.chart-card{margin-top:32px;border-radius:24px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);padding:20px 16px 14px}
+@media (min-width:760px){.chart-card{padding:28px 28px 18px}}
+.ch-t{margin:0;font-size:16px;font-weight:700}
+.ch-s{margin:4px 0 0;font-size:13px;color:var(--dim)}
+.chart{position:relative;margin-top:14px;height:240px}
+@media (min-width:760px){.chart{height:300px}}
+.chart svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;touch-action:pan-y}
+.chart .grid line{stroke:rgba(255,255,255,.09);stroke-width:1}
+.chart .ax text{fill:rgba(255,255,255,.55);font-size:12px;font-family:var(--sans)}
+.chart .area{fill:url(#ar);opacity:.9}
+.chart .ln2{fill:none;stroke:var(--gold-data);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.chart .pt{fill:var(--gold-data);stroke:var(--night);stroke-width:2}
+.chart .end{fill:var(--gold-hi);stroke:var(--night);stroke-width:2}
+.chart .endlab{fill:var(--white);font-size:13px;font-weight:700;font-family:var(--sans)}
+.chart .rule{stroke:rgba(255,255,255,.35);stroke-width:1;stroke-dasharray:3 3}
+.chart .hov{fill:var(--gold-hi);stroke:var(--night);stroke-width:2}
+.an .chart .ln2{stroke-dasharray:1;stroke-dashoffset:1}
+.an .chart .area,.an .chart .pt,.an .chart .end,.an .chart .endlab{opacity:0}
+.an .drawn .ln2{stroke-dashoffset:0;transition:stroke-dashoffset 2s cubic-bezier(.4,0,.2,1)}
+.an .drawn .area{opacity:.9;transition:opacity .8s ease 1.4s}
+.an .drawn .pt,.an .drawn .end,.an .drawn .endlab{opacity:1;transition:opacity .5s ease 1.8s}
+.tip{position:absolute;pointer-events:none;transform:translate(-50%, calc(-100% - 12px));background:var(--white);color:var(--text);border-radius:10px;padding:7px 10px;font-size:12px;line-height:1.4;white-space:nowrap;box-shadow:0 10px 24px -10px rgba(0,0,0,.6);opacity:0;transition:opacity .15s ease}
+.tip b{display:block;font-size:14px}
+.tip.on{opacity:1}
+.ch-table{margin-top:10px;font-size:13px;color:var(--dim)}
+.ch-table summary{cursor:pointer;padding:8px 0;font-weight:600}
+.ch-table table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.ch-table td,.ch-table th{padding:6px 4px;border-top:1px solid rgba(255,255,255,.08);text-align:left;font-weight:400}
+.ch-table td:nth-child(2){text-align:right;color:var(--white);font-weight:700}
+.ch-wrap{overflow-x:auto}
+.duo{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;margin-top:14px}
+@media (min-width:760px){.duo{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)}}
+.box{border-radius:24px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);padding:22px 20px;min-width:0}
+.box h3{margin:0;font-size:clamp(19px, 2vw, 23px);letter-spacing:-.02em;line-height:1.35}
+.box h3 b{color:var(--gold)}
+.box p{margin:6px 0 0;font-size:14px;color:var(--dim)}
+.dots{display:grid;grid-template-columns:repeat(20, minmax(0,1fr));gap:5px;margin-top:18px;max-width:440px}
+.dots i{display:block;aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.14)}
+.dots i.y{background:var(--gold-data)}
+.an .dots i.y{background:rgba(255,255,255,.14);transition:background-color .35s ease}
+.an .lit .dots i.y{background:var(--gold-data)}
+.big{display:block;margin-top:12px;font-size:clamp(56px, 8vw, 84px);line-height:1;font-weight:800;letter-spacing:-.04em;color:var(--white);font-variant-numeric:tabular-nums}
+.big small{font-size:.4em;margin-left:2px}
+.meter{height:10px;border-radius:999px;background:rgba(255,255,255,.12);margin-top:16px;overflow:hidden}
+.meter i{display:block;height:100%;width:97.7%;border-radius:999px;background:var(--gold-data);transform-origin:0 50%}
+.an .meter i{transform:scaleX(0);transition:transform 1.4s cubic-bezier(.3,0,.2,1) .3s}
+.an .in .meter i{transform:none}
+
+/* ━━ 3. 원인 ━━ */
+.why{background:#06110D}
 .wall{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-around;padding-block:16px;pointer-events:none;overflow:hidden}
 .wrow{display:flex;gap:30px;width:max-content;white-space:nowrap;font-size:15px;font-weight:600;color:rgba(255,255,255,.06);animation:slide 70s linear infinite}
 .wrow.rev{animation-direction:reverse}
@@ -171,101 +272,186 @@ h1,h2,h3{text-wrap:balance}
 .wrow:nth-child(2n) span:nth-child(5n+2){animation-delay:-2s}
 .wrow:nth-child(3n) span:nth-child(5n+2){animation-delay:-4s}
 @keyframes glow{0%,100%{color:rgba(255,255,255,.06);text-shadow:none}45%,55%{color:rgba(226,194,127,.7);text-shadow:0 0 20px rgba(226,194,127,.4)}}
-.wfade{position:absolute;inset:0;background:linear-gradient(180deg, rgba(10,30,22,.6), rgba(10,30,22,.92) 60%);pointer-events:none}
-@media (min-width:900px){.wfade{background:linear-gradient(90deg, rgba(10,30,22,.95), rgba(10,30,22,.7) 50%, rgba(10,30,22,.25))}}
-.big{white-space:nowrap;font-size:clamp(64px, 12vw, 132px);line-height:1;font-weight:800;letter-spacing:-.05em;color:#FF6B5E;font-variant-numeric:tabular-nums;margin-top:26px}
-.big small{font-size:.34em;margin-left:4px}
-.bigcap{margin:10px 0 0;font-size:15px;color:rgba(255,255,255,.7)}
-.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
-.pill{display:inline-flex;align-items:baseline;gap:8px;padding:10px 16px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);font-size:14px;color:rgba(255,255,255,.8)}
-.pill b{font-size:18px;color:var(--white)}
-.turn{margin:48px 0 0;font-size:clamp(22px, 3.2vw, 36px);line-height:1.5;letter-spacing:-.025em;font-weight:700;max-width:22em}
-.turn em{font-style:normal;color:var(--gold)}
-.src{margin:18px 0 0;font-size:12px;line-height:1.6;color:rgba(255,255,255,.45)}
+.wfade{position:absolute;inset:0;background:linear-gradient(180deg, rgba(6,17,13,.55), rgba(6,17,13,.9) 55%);pointer-events:none}
+@media (min-width:960px){.wfade{background:linear-gradient(90deg, rgba(6,17,13,.96), rgba(6,17,13,.7) 50%, rgba(6,17,13,.3))}}
+.why .h2 em{font-style:normal;color:var(--gold)}
+.tr{display:flex;flex-direction:column;gap:10px;margin-top:34px;max-width:620px}
+.whyg{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;align-items:center}
+@media (min-width:960px){.whyg{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:56px}.whyg .tr{margin-top:0}.tw{font-size:15.5px;padding:15px 16px}}
+.trow{display:grid;grid-template-columns:minmax(0,1fr) 28px minmax(0,1fr);align-items:center;gap:8px}
+.tw{padding:12px 14px;border-radius:14px;font-size:14px;line-height:1.45;min-width:0}
+.tw.reg{background:var(--sheet);color:#2A2A24;font-weight:700}
+.tw.reg small{display:block;font-weight:400;font-size:12px;color:#7A766C;margin-top:2px}
+.tw.ez{background:var(--green);color:var(--white);font-weight:700}
+.arr{height:2px;background:var(--gold);position:relative;transform-origin:0 50%}
+.arr::after{content:"";position:absolute;right:-1px;top:-4px;border:5px solid transparent;border-left:7px solid var(--gold);border-right:0}
+.an .trow .arr{transform:scaleX(0);transition:transform .5s ease}
+.an .trow .ez{opacity:0;transform:translateX(-10px) scale(.96);transition:opacity .5s ease, transform .5s cubic-bezier(.3,1.4,.5,1)}
+.an .in .trow .arr{transform:none}
+.an .in .trow .ez{opacity:1;transform:none}
+.an .in .trow:nth-child(1) .arr{transition-delay:.5s}.an .in .trow:nth-child(1) .ez{transition-delay:.85s}
+.an .in .trow:nth-child(2) .arr{transition-delay:1.1s}.an .in .trow:nth-child(2) .ez{transition-delay:1.45s}
+.an .in .trow:nth-child(3) .arr{transition-delay:1.7s}.an .in .trow:nth-child(3) .ez{transition-delay:2.05s}
 
-/* ── 3. 어떻게 덜어 주나 ── */
-.moments{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;margin-top:36px}
-@media (min-width:900px){.moments{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:52px}}
-.mo{background:var(--white);border-radius:24px;padding:24px 22px;display:flex;flex-direction:column;gap:10px;box-shadow:0 20px 50px -36px rgba(22,33,27,.5);min-width:0}
-.when{align-self:flex-start;font-size:13px;font-weight:800;color:var(--green);background:var(--mint);padding:5px 12px;border-radius:999px}
-.mo h3{margin:4px 0 0;font-size:clamp(21px, 2vw, 25px);letter-spacing:-.025em;line-height:1.3}
-.mo p{margin:0;font-size:15.5px;line-height:1.65;color:var(--body)}
-.mock{margin-top:auto;border-radius:18px;background:#F4F6F4;padding:16px;display:flex;flex-direction:column;gap:10px;min-height:150px;justify-content:center}
-.mo > p + .mock{margin-top:8px}
-.mcard{background:var(--white);border-radius:14px;padding:12px 14px;box-shadow:0 8px 20px -14px rgba(22,33,27,.5)}
-.mcard b{display:block;margin-top:6px;font-size:15px}
-.mcard small{display:block;margin-top:2px;font-size:12.5px;line-height:1.5;color:var(--muted)}
-.mcard.hlt{background:#FFF7DB;outline:1.5px solid var(--amber)}
-.mcard.hlt small{margin:0;color:#5A4410}
-.ask{background:var(--deep);color:var(--white);border-radius:16px 16px 16px 6px;padding:12px 14px;font-size:14px;font-weight:600;line-height:1.5}
-.ask em{display:block;font-style:normal;font-size:11px;font-weight:700;color:var(--gold);margin-bottom:3px}
-.warn{font-size:12.5px;line-height:1.5;color:var(--red);font-weight:600;padding-left:4px}
-.noti{display:flex;gap:10px;align-items:flex-start;background:var(--white);border-radius:14px;padding:11px 12px;box-shadow:0 8px 20px -14px rgba(22,33,27,.5)}
-.noti img{width:28px;height:28px;border-radius:7px;background:var(--paper);padding:3px;flex:none}
-.noti small{display:block;font-size:11px;color:var(--muted)}
-.noti b{display:block;font-size:13.5px;margin-top:1px}
-.diff{border-radius:14px;padding:11px 12px;background:var(--red-soft);font-size:12.5px;line-height:1.5;color:#7A1F17}
-.diff b{color:var(--red)}
-.an .in .mock > *{animation:pop .6s cubic-bezier(.3,1.5,.5,1) both}
-.an .in .mock > :nth-child(2){animation-delay:.35s}
-.an .in .mo:nth-child(2) .mock > *{animation-delay:.3s}.an .in .mo:nth-child(2) .mock > :nth-child(2){animation-delay:.65s}
-.an .in .mo:nth-child(3) .mock > *{animation-delay:.6s}.an .in .mo:nth-child(3) .mock > :nth-child(2){animation-delay:.95s}
-@keyframes pop{from{opacity:0;transform:translateY(12px) scale(.94)}to{opacity:1;transform:none}}
+/* ━━ 4. 여정 (메인) ━━ */
+.how{background:#06110D;padding-block:0}
+.panel{background:var(--paper);color:var(--text);padding-block:clamp(64px, 9vw, 120px);transform-origin:50% 0;transform:scale(calc(.9 + .1 * var(--p, 1)));border-radius:calc(44px * (1 - var(--p, 1)))}
+.road{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin-top:30px}
+.road::before{content:"";position:absolute;left:12.5%;right:12.5%;top:13px;height:2px;background:#D8D2C4}
+.road .fillr{position:absolute;left:12.5%;top:13px;height:2px;width:75%;background:var(--green);transform-origin:0 50%;transform:scaleX(var(--rp, 1));transition:transform .5s ease}
+.stop{appearance:none;border:0;background:transparent;padding:0;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;position:relative;z-index:1}
+.stop i{width:28px;height:28px;border-radius:50%;background:var(--paper);border:2px solid #CFC8B8;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:12px;font-weight:800;color:var(--muted);transition:all .3s ease}
+.stop span{font-size:12.5px;font-weight:700;color:var(--muted);text-align:center;line-height:1.3}
+.stop.on i,.stop.past i{background:var(--green);border-color:var(--green);color:var(--white)}
+.stop.on span{color:var(--text)}
+.stations{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;margin-top:22px;padding:6px var(--gutr) 18px var(--gut);margin-inline:calc(-1 * var(--gut)) calc(-1 * var(--gutr));scrollbar-width:none;overscroll-behavior-x:contain}
+.stations::-webkit-scrollbar{display:none}
+.stn{flex:0 0 min(84%, 340px);scroll-snap-align:center;background:var(--white);border-radius:26px;padding:20px 18px 18px;display:flex;flex-direction:column;gap:8px;box-shadow:0 24px 50px -36px rgba(22,33,27,.55);min-width:0}
+@media (min-width:1100px){
+  .stations{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));overflow:visible;margin-inline:0;padding:6px 0 0}
+  .stn{flex:none}
+}
+.when{align-self:flex-start;font-size:12.5px;font-weight:800;color:var(--green);background:var(--mint);padding:5px 11px;border-radius:999px}
+.stn h3{margin:4px 0 0;font-size:20px;letter-spacing:-.025em;line-height:1.3}
+.stn p{margin:0;font-size:14.5px;line-height:1.6;color:var(--body)}
+.mini{margin-top:auto;padding-top:8px}
+.ms{border-radius:22px;background:#111915;padding:7px}
+.ms > div{border-radius:16px;background:#F4F6F4;padding:12px;display:flex;flex-direction:column;gap:8px;min-height:176px}
+.mc{background:var(--white);border-radius:12px;padding:10px 12px;box-shadow:0 8px 18px -12px rgba(22,33,27,.5);font-size:12.5px;line-height:1.5;color:var(--body)}
+.mc b{display:block;font-size:14px;color:var(--text);margin-top:4px}
+.mc.hlt{background:#FFF7DB;outline:1.5px solid var(--amber);color:#5A4410}
+.mc.ask{background:var(--deep);color:var(--white);font-weight:600;font-size:13px}
+.mc.ask em{display:block;font-style:normal;font-size:11px;font-weight:700;color:var(--gold);margin-bottom:2px}
+.mc.warn{background:transparent;box-shadow:none;padding:2px 4px;color:var(--red);font-weight:600}
+.mc.noti{display:flex;gap:9px;align-items:flex-start}
+.mc.noti img{width:26px;height:26px;border-radius:7px;background:var(--paper);padding:3px;flex:none}
+.mc.noti small{display:block;font-size:10.5px;color:var(--muted)}
+.mc.noti b{margin-top:0;font-size:13px}
+.mc.diff{background:var(--red-soft);color:#7A1F17}
+.mc.diff b{color:var(--red);display:inline;font-size:12.5px}
+.mc.ok{background:var(--mint);color:var(--green);font-weight:700}
+.chip{display:inline-flex;align-self:flex-start;font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--mint);color:var(--green)}
+.an .stn .ms > div > *{opacity:0;transform:translateY(10px) scale(.96);transition:opacity .45s ease, transform .45s cubic-bezier(.3,1.5,.5,1)}
+.an .stn.in .ms > div > *{opacity:1;transform:none}
+.an .stn.in .ms > div > :nth-child(2){transition-delay:.25s}.an .stn.in .ms > div > :nth-child(3){transition-delay:.5s}
+.chat{display:flex;gap:12px;align-items:center;margin-top:18px;padding:14px 16px;border-radius:18px;background:var(--white);border:1px solid var(--line)}
+.chat .cb{width:40px;height:40px;border-radius:12px;background:var(--deep);color:var(--gold);display:flex;align-items:center;justify-content:center;flex:none}
+.chat p{margin:0;font-size:14.5px;line-height:1.55;color:var(--body)}
+.chat b{color:var(--text)}
 
-/* ── 4. 잡는 사기 ── */
-.catch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:32px}
-@media (min-width:900px){.catch{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:44px}}
-.cc{background:var(--white);border-radius:20px;padding:18px 16px;display:flex;flex-direction:column;gap:8px;min-width:0;border:1px solid var(--line)}
-.cc .ic{width:38px;height:38px;border-radius:12px;background:var(--mint);display:flex;align-items:center;justify-content:center;color:var(--green)}
-.cc h3{margin:2px 0 0;font-size:clamp(16px, 1.7vw, 20px);letter-spacing:-.02em;line-height:1.35}
-.cc p{margin:0;font-size:14px;line-height:1.55;color:var(--body)}
-@media (min-width:900px){.cc{padding:24px 22px}.cc p{font-size:15.5px}}
-.honest{margin:20px 0 0;padding:16px 18px;border-radius:16px;background:var(--mint);font-size:15px;line-height:1.65;color:var(--text)}
+/* ━━ 5. 잡는 사기 ━━ */
+.catch{background:var(--white);color:var(--text)}
+.hint{margin:12px 0 0;font-size:14px;font-weight:700;color:var(--green)}
+.fr{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:26px}
+@media (min-width:900px){.fr{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}}
+.fc{appearance:none;border:0;padding:0;background:transparent;text-align:left;cursor:pointer;height:176px;perspective:1000px;border-radius:20px}
+@media (min-width:900px){.fc{height:196px}}
+.fi{position:relative;display:block;width:100%;height:100%;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.3,.1,.2,1)}
+.fc.fl .fi{transform:rotateY(180deg)}
+.ff{position:absolute;inset:0;border-radius:20px;padding:16px 15px;display:flex;flex-direction:column;gap:8px;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.ff.front{background:#F5F3EE;border:1px solid #E7E2D7;color:var(--text)}
+.ff.back{background:var(--green);color:var(--white);transform:rotateY(180deg);justify-content:center}
+.ff .ic{width:36px;height:36px;border-radius:11px;background:var(--white);display:flex;align-items:center;justify-content:center;color:var(--red)}
+.ff b{font-size:clamp(16px, 1.7vw, 19px);letter-spacing:-.02em;line-height:1.3}
+.ff span{font-size:13.5px;line-height:1.5;color:var(--body)}
+.ff.back small{font-size:11.5px;font-weight:800;letter-spacing:.06em;color:var(--gold-hi)}
+.ff.back span{color:var(--white);font-weight:600;font-size:14.5px}
+.an .in .fc:not(.touched) .fi{animation:peek 2.2s cubic-bezier(.3,.1,.2,1) 1 both}
+.fc:nth-child(1) .fi{animation-delay:.3s}.fc:nth-child(2) .fi{animation-delay:.5s}.fc:nth-child(3) .fi{animation-delay:.7s}
+.fc:nth-child(4) .fi{animation-delay:.9s}.fc:nth-child(5) .fi{animation-delay:1.1s}.fc:nth-child(6) .fi{animation-delay:1.3s}
+@keyframes peek{0%{transform:none}30%,70%{transform:rotateY(180deg)}100%{transform:none}}
+.honest{margin:18px 0 0;padding:16px 18px;border-radius:16px;background:var(--mint);font-size:14.5px;line-height:1.65;color:var(--text)}
 .honest b{color:var(--green)}
 
-/* ── 5. 믿을 수 있게 ── */
-.trust{background:#050E0A}
-.trio p{margin:0;font-size:clamp(38px, 7.4vw, 92px);line-height:1.12;letter-spacing:-.05em;font-weight:800}
-.facts{display:grid;grid-template-columns:minmax(0,1fr);gap:0;margin-top:44px}
-@media (min-width:900px){.facts{grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin-top:64px}}
-.fact{padding:20px 0;border-top:1px solid rgba(255,255,255,.14)}
-.fact h3{margin:0;font-size:clamp(18px, 1.9vw, 22px);letter-spacing:-.02em}
-.fact p{margin:6px 0 0;font-size:15px;line-height:1.65;color:rgba(255,255,255,.7)}
+/* ━━ 6. 믿음 ━━ */
+.trust{background:#030806}
+.beat{padding-block:18px;border-top:1px solid var(--faint)}
+.beat:first-of-type{border-top:0}
+.fill{display:inline-block;margin:0;font-size:clamp(42px, 8.4vw, 104px);line-height:1.1;letter-spacing:-.05em;font-weight:800;color:var(--white)}
+.fill.g{color:var(--gold)}
+.an .fill{color:transparent;background:linear-gradient(90deg, var(--white) calc(var(--p, 0) * 100%), rgba(255,255,255,.16) calc(var(--p, 0) * 100%));-webkit-background-clip:text;background-clip:text}
+.an .fill.g{background:linear-gradient(90deg, var(--gold) calc(var(--p, 0) * 100%), rgba(226,194,127,.18) calc(var(--p, 0) * 100%));-webkit-background-clip:text;background-clip:text}
+.proof{margin:10px 0 0;font-size:clamp(15px, 1.5vw, 18px);line-height:1.65;color:var(--dim);max-width:36em}
+.models{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.model{min-height:34px;padding:6px 13px;border-radius:999px;border:1px solid rgba(255,255,255,.2);color:var(--dim);font-weight:600;display:inline-flex;align-items:center;font-size:13px}
 
-/* ── 6. 비전·함께하기·문의 ── */
-.vis{background:var(--forest)}
+/* ━━ 7. 함께 (BM) ━━ */
+.with{background:var(--forest)}
 .vh{font-family:var(--serif);font-size:clamp(28px, 4.6vw, 56px);line-height:1.4;letter-spacing:-.03em;font-weight:700;margin:0}
-.vis .lead{margin-top:20px}
-.road{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:28px;font-size:14px;font-weight:700}
-.road span{padding:8px 14px;border-radius:999px;border:1px solid rgba(226,194,127,.45);color:var(--gold-hi)}
-.road span.now{background:var(--gold);color:var(--ink);border-color:var(--gold)}
-.road i{font-style:normal;color:rgba(226,194,127,.6)}
-.with{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin-top:52px}
-@media (min-width:900px){.with{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:72px}}
-.wc{padding:20px;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12)}
-.wc small{font-size:12px;font-weight:800;color:var(--gold);letter-spacing:.06em}
-.wc b{display:block;margin-top:6px;font-size:17px}
-.wc p{margin:6px 0 0;font-size:14.5px;line-height:1.6;color:rgba(255,255,255,.72)}
-.contact{margin-top:16px;border-radius:26px;background:var(--gold);color:var(--ink);padding:28px 24px;display:grid;grid-template-columns:minmax(0,1fr);gap:18px;align-items:center}
-@media (min-width:900px){.contact{grid-template-columns:minmax(0,1fr) minmax(0,360px);padding:40px 44px}}
-.contact h2{margin:0;font-size:clamp(24px, 3vw, 34px);line-height:1.3;letter-spacing:-.03em}
-.contact p{margin:8px 0 0;font-size:15px;line-height:1.6;color:#3D3826}
-.cmail{display:flex;align-items:center;justify-content:center;min-height:56px;padding:0 20px;border-radius:999px;background:var(--ink);color:var(--gold-hi);font-weight:700;font-size:17px;text-decoration:none;user-select:all;text-align:center}
+.vh em{font-style:normal;color:var(--gold)}
+.path{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:24px;font-size:13.5px;font-weight:700}
+.path span{padding:7px 13px;border-radius:999px;border:1px solid rgba(226,194,127,.45);color:var(--gold-hi)}
+.path span.now{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.path i{font-style:normal;color:rgba(226,194,127,.6)}
+.plans-t{margin:56px 0 0;font-size:clamp(20px, 2.2vw, 26px);letter-spacing:-.02em}
+.plans{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:18px}
+@media (min-width:900px){.plans{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}}
+.pl{border-radius:22px;padding:22px 20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);display:flex;flex-direction:column;gap:8px;min-width:0}
+.pl.main{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.pl small{font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--gold)}
+.pl.main small{color:var(--deep)}
+.pl b{font-size:19px;letter-spacing:-.02em;line-height:1.35}
+.pl p{margin:0;font-size:14.5px;line-height:1.6;color:var(--dim)}
+.pl.main p{color:#3D3826}
+.pl ul{margin:6px 0 0;padding:12px 0 0;border-top:1px solid rgba(255,255,255,.14);list-style:none;display:flex;flex-direction:column;gap:7px;font-size:14px;font-weight:600}
+.pl.main ul{border-top-color:rgba(7,20,15,.15)}
+.pl li{display:flex;gap:8px;align-items:flex-start}
+.pl li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold);margin-top:8px;flex:none}
+.pl.main li::before{background:var(--deep)}
+.an .plans .pl{opacity:0;transform:translateY(40px) rotate(-2deg);transition:opacity .7s ease, transform .9s cubic-bezier(.2,.9,.2,1)}
+.an .in .plans .pl{opacity:1;transform:none}
+.an .in .plans .pl:nth-child(2){transition-delay:.15s}.an .in .plans .pl:nth-child(3){transition-delay:.3s}
 
-/* ── 바닥 ── */
-.foot{background:var(--ink);color:rgba(255,255,255,.6);padding-block:40px 32px;font-size:14px}
-.fgrid{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
-.fnote{margin:20px 0 0;font-size:12.5px;line-height:1.7;color:rgba(255,255,255,.48);max-width:48em}
-.fbot{margin-top:14px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:rgba(255,255,255,.48)}
+/* ━━ 8. 영상 · 문의 ━━ */
+.end{background:var(--ink)}
+.endg{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+@media (min-width:900px){.endg{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:18px}}
+.film{position:relative;display:block;width:100%;aspect-ratio:16/9;max-width:100%;border-radius:24px;overflow:hidden;border:0;padding:0;cursor:pointer;background:radial-gradient(ellipse at 30% 30%, #12503A, #07140F 70%);text-align:left}
+.film .fbg{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-around;opacity:.5;pointer-events:none}
+.film .fbg i{display:block;font-style:normal;white-space:nowrap;font-size:22px;font-weight:800;color:rgba(255,255,255,.07)}
+.film .play{position:absolute;left:50%;top:50%;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 0 rgba(226,194,127,.5);animation:pulse 2.4s ease-out infinite}
+.film .play svg{margin-left:4px}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(226,194,127,.55)}100%{box-shadow:0 0 0 22px rgba(226,194,127,0)}}
+.film .cap{position:absolute;left:18px;bottom:16px;right:18px;color:var(--white)}
+.film .cap b{display:block;font-size:18px}
+.film .cap span{font-size:13px;color:var(--dim)}
+.film .wm{position:absolute;left:18px;top:16px;font-size:20px}
+.contact{border-radius:24px;background:var(--gold);color:var(--ink);padding:26px 22px;display:flex;flex-direction:column;gap:14px}
+.contact h2{margin:0;font-size:clamp(24px, 2.8vw, 32px);line-height:1.3;letter-spacing:-.03em}
+.contact p{margin:0;font-size:15px;line-height:1.6;color:#3D3826}
+.mailrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+.mail{flex:1 1 100%;display:flex;align-items:center;justify-content:center;min-height:54px;padding:0 18px;border-radius:999px;background:var(--ink);color:var(--gold-hi);font-weight:700;font-size:16px;text-decoration:none;user-select:all;white-space:nowrap;text-align:center}
+@media (min-width:1100px){.mail{flex:1 1 auto}}
+.copy{flex:1 1 auto;min-height:48px;padding:0 18px;border-radius:999px;border:1.5px solid rgba(7,20,15,.35);background:transparent;color:var(--ink);font-weight:700;cursor:pointer}
+
+/* 바닥 */
+.foot{background:var(--ink);color:rgba(255,255,255,.6);padding-block:8px 32px;font-size:14px;border-top:1px solid rgba(255,255,255,.07)}
+.fgrid{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding-top:28px}
+.foot .wm{font-size:22px}
+.fnote{margin:18px 0 0;font-size:12.5px;line-height:1.7;color:rgba(255,255,255,.48);max-width:48em}
+.fbot{margin-top:12px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:rgba(255,255,255,.48)}
 
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none !important;transition:none !important;scroll-behavior:auto !important}
-  .bub .q{opacity:0}.bub .a{opacity:1}.mk{opacity:1}.rsheet{transform:none}.beam,.qm{display:none}
-  .hl::after{transform:none}.st .s1{opacity:0}.st .s2{opacity:1}
+  .bub .q{opacity:0}.bub .a{opacity:1}.mk{opacity:1}.rsheet{transform:none}.beam,.qm{display:none}.st .s1{opacity:0}.st .s2{opacity:1}
 }
 </style>
 </head>
 <body>
+
+<div class="intro" aria-hidden="true" data-intro>
+<div class="intro-in">
+<svg class="intro-logo" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" viewBox="142 122 1205 1347">
+
+<defs><linearGradient id="lgold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#DDBE7C"/><stop offset="1" stop-color="#B8914F"/></linearGradient></defs>
+<path d="M746.6,1461.8 C710.9,1456.5 689.5,1356.7 710.2,1292.1 C723.7,1249.7 761.8,1225.6 773.8,1251.8 C776.2,1257.1 776.3,1258.5 777.1,1283.9 C777.9,1312.8 779.2,1324.0 784.5,1347.0 C799.6,1412.6 781.6,1467.1 746.6,1461.8 Z M892.5,1415.5 C875.5,1410.4 869.1,1399.0 864.1,1364.5 C863.0,1356.8 861.2,1344.7 860.1,1337.5 C852.5,1286.5 855.8,1263.2 873.0,1245.9 C883.8,1235.1 889.2,1233.1 927.0,1226.0 C990.6,1214.1 1030.0,1194.9 1062.0,1160.1 C1104.8,1113.8 1126.3,1041.6 1109.8,1000.0 C1097.9,970.1 1074.8,957.1 1014.0,946.4 C970.3,938.7 955.5,930.8 932.9,902.8 C916.8,882.9 911.8,877.7 895.9,863.9 C870.1,841.6 866.2,834.6 862.6,804.0 C856.4,752.1 849.3,732.4 832.7,721.6 C820.7,713.7 810.6,713.3 787.5,720.1 C754.0,729.9 746.0,720.5 747.3,673.1 C747.9,652.2 748.6,648.9 754.2,642.5 C765.0,630.2 779.2,636.0 821.5,670.1 C828.9,676.1 839.0,684.1 843.9,687.9 C860.2,700.6 926.8,747.9 943.8,758.8 C970.1,775.7 1028.9,817.9 1055.2,838.8 C1065.1,846.6 1082.0,859.6 1092.8,867.7 C1103.7,875.7 1116.7,885.5 1121.8,889.3 C1150.4,910.7 1153.7,924.2 1151.0,1008.0 C1150.3,1031.3 1149.7,1109.4 1149.5,1205.5 C1149.1,1379.8 1149.5,1369.3 1143.2,1382.0 C1138.8,1391.0 1126.1,1403.1 1115.9,1407.9 C1099.3,1415.8 1100.9,1415.7 970.5,1416.4 C914.7,1416.7 895.5,1416.5 892.5,1415.5 Z M636.4,959.1 C621.3,952.2 618.1,915.7 629.6,881.0 C644.3,836.8 677.9,852.0 678.3,903.0 C678.5,935.7 654.8,967.4 636.4,959.1 Z M400.0,679.9 C391.5,676.4 387.2,667.1 386.0,649.5 C383.0,607.0 384.4,454.0 388.0,432.0 C395.7,385.8 415.0,335.3 438.1,301.0 C477.8,242.1 494.1,224.5 538.5,192.3 C563.8,173.9 573.2,168.9 606.0,156.2 C653.4,137.9 667.0,134.3 698.5,131.5 C707.9,130.7 723.4,129.2 733.0,128.0 C827.1,117.1 949.2,167.0 1012.9,242.5 C1060.8,299.2 1084.1,346.3 1095.5,408.9 C1105.7,465.7 1106.4,475.8 1105.7,563.3 C1104.9,658.1 1103.6,669.8 1093.1,676.3 C1082.6,682.8 1073.8,678.4 1021.5,640.5 C977.7,608.8 976.5,606.3 977.3,551.5 C978.6,465.7 974.3,431.3 958.1,398.5 C912.7,306.8 853.8,267.7 748.5,259.5 C730.8,258.1 691.9,264.5 668.1,272.7 C603.4,294.8 547.1,356.0 526.9,426.0 C519.6,451.5 519.5,452.1 519.5,526.0 C519.5,612.7 523.1,604.2 469.4,645.6 C431.3,675.1 411.6,684.8 400.0,679.9 Z M439.3,421.2 C442.7,417.6 445.4,411.5 450.5,395.0 C479.9,301.1 552.3,224.9 642.8,193.0 C667.2,184.3 696.5,177.9 722.3,175.5 C743.5,173.6 750.0,170.4 750.0,162.1 C750.0,151.0 720.5,145.6 697.0,152.4 C692.3,153.8 682.9,155.8 676.0,157.0 C642.4,162.6 619.3,171.8 579.5,195.5 C543.1,217.2 524.7,233.3 482.6,280.9 C458.0,308.7 419.6,401.7 425.9,418.3 C428.3,424.6 434.7,426.0 439.3,421.2 Z" fill="url(#lgold)" class="lg-g" pathLength="1" fill-rule="evenodd"/>
+<path d="M942.5,1465.0 C875.0,1464.3 871.7,1464.0 865.8,1459.9 C855.1,1452.2 860.0,1429.1 873.9,1422.1 C880.1,1418.9 883.9,1418.8 993.4,1418.1 C1099.4,1417.4 1100.6,1417.3 1107.0,1415.2 C1127.1,1408.6 1143.5,1391.8 1149.7,1371.5 C1151.4,1365.8 1151.5,1358.5 1151.7,1233.5 C1151.7,1160.9 1152.1,1070.7 1152.5,1033.0 C1153.8,915.0 1152.9,910.7 1124.0,889.2 C1117.1,884.1 1093.7,866.7 1072.0,850.6 C1016.2,809.0 976.5,780.5 943.0,757.9 C909.5,735.2 845.3,688.6 817.9,667.0 C772.1,630.9 749.9,620.2 734.0,626.6 C729.2,628.5 731.2,627.1 647.0,688.5 C580.2,737.2 476.6,811.9 455.0,827.0 C440.7,836.9 386.7,875.9 369.0,889.1 C350.1,903.1 345.1,909.7 343.0,923.6 C341.0,936.5 342.1,1210.7 344.2,1215.0 C350.8,1229.0 365.6,1229.3 392.2,1215.9 C451.4,1186.1 479.7,1145.1 509.9,1045.5 C517.3,1020.8 521.5,1010.5 533.1,988.2 C544.5,966.0 546.5,960.2 548.4,941.9 C556.4,868.9 580.3,816.8 628.5,767.1 C670.6,723.8 696.7,722.7 713.0,763.6 C721.8,785.8 725.7,792.0 732.4,794.5 C740.6,797.7 744.4,795.5 764.6,775.9 C806.4,735.7 826.6,740.1 830.5,790.5 C830.9,794.9 832.2,807.7 833.6,819.0 C838.8,863.1 838.6,862.6 862.5,880.5 C882.6,895.5 892.6,906.1 907.0,927.5 C930.7,962.8 942.4,969.1 999.0,977.5 C1056.9,986.0 1075.2,994.7 1082.0,1016.8 C1091.2,1046.6 1067.1,1110.7 1034.4,1143.4 C1003.7,1174.1 971.3,1186.8 894.6,1198.0 C863.3,1202.6 844.3,1215.2 831.6,1239.9 C819.9,1262.6 818.5,1284.0 826.0,1325.4 C837.1,1386.8 831.0,1445.2 812.0,1458.9 C802.3,1465.9 785.5,1464.8 781.5,1456.9 C779.2,1452.5 779.7,1446.6 783.5,1434.9 C792.7,1406.5 792.4,1380.1 782.1,1320.0 C778.5,1298.6 777.5,1282.0 779.0,1268.0 C781.8,1241.2 781.6,1235.4 777.7,1231.5 C764.7,1218.5 723.5,1249.1 698.1,1290.8 C674.5,1329.3 665.4,1380.6 673.9,1427.4 C678.0,1450.1 675.9,1458.5 665.3,1462.7 C658.9,1465.1 400.4,1465.5 384.5,1463.1 C337.3,1456.0 302.5,1420.8 293.3,1371.0 C291.7,1362.2 291.5,1346.3 291.0,1166.5 C290.4,951.7 290.9,967.2 284.5,962.2 C279.4,958.2 275.0,959.1 257.8,967.8 C237.5,978.1 230.5,980.3 216.3,980.8 C175.7,982.3 147.7,956.2 146.2,915.5 C145.2,886.3 153.9,872.5 188.9,848.0 C197.9,841.7 217.7,827.3 233.0,816.0 C296.7,769.0 308.3,760.6 324.5,749.3 C352.1,730.0 366.8,719.2 379.0,709.5 C391.9,699.3 397.6,695.4 423.5,678.9 C434.1,672.2 462.0,652.2 491.5,630.1 C519.0,609.5 547.8,588.1 555.5,582.5 C715.0,467.6 713.5,468.5 738.9,466.4 C767.3,464.0 783.9,472.8 867.5,534.5 C875.8,540.6 894.4,553.9 908.9,564.0 C923.5,574.2 946.9,590.9 960.9,601.2 C995.2,626.3 1037.7,656.7 1074.4,682.3 C1090.9,693.9 1114.2,710.6 1126.0,719.5 C1153.7,740.3 1172.2,753.6 1211.0,780.5 C1335.3,866.8 1343.4,875.0 1343.4,914.0 C1343.4,951.8 1321.9,976.6 1285.2,981.0 C1266.1,983.4 1251.5,979.4 1228.7,965.7 C1212.8,956.2 1206.7,956.0 1201.8,965.2 C1199.5,969.5 1199.5,969.5 1198.9,1170.0 C1198.4,1376.7 1198.4,1375.0 1194.4,1390.4 C1186.7,1420.1 1156.7,1450.4 1125.6,1459.9 C1106.3,1465.8 1082.5,1466.5 942.5,1465.0 Z M617.5,1416.9 C629.6,1413.6 631.8,1408.4 633.6,1379.6 C638.0,1307.9 666.3,1249.6 716.0,1209.7 C743.6,1187.5 792.0,1167.1 827.7,1162.6 C852.8,1159.3 875.3,1157.0 894.5,1155.5 C954.9,1150.8 988.4,1137.1 1012.1,1107.2 C1030.5,1084.2 1031.2,1071.3 1015.3,1053.1 C1010.7,1047.9 1005.0,1040.2 1002.7,1036.0 C992.9,1018.2 988.8,1016.1 944.1,1006.5 C911.5,999.5 894.9,987.7 879.6,960.5 C867.8,939.5 861.5,931.7 847.5,920.3 C822.3,899.9 794.0,890.6 749.0,887.9 C709.9,885.6 710.1,885.9 701.5,851.8 C686.2,791.5 679.7,780.5 663.5,787.9 C652.0,793.1 625.4,828.4 611.0,857.4 C593.4,893.1 588.1,920.6 589.5,970.7 C590.4,1004.5 590.0,1006.0 577.5,1012.2 C562.6,1019.7 561.4,1022.0 546.5,1070.5 C509.7,1190.5 468.8,1238.8 378.4,1269.3 C353.9,1277.6 348.6,1281.2 344.3,1292.1 C341.7,1298.8 341.7,1355.9 344.3,1367.3 C350.4,1393.1 372.1,1413.0 398.5,1417.0 C406.9,1418.3 612.9,1418.2 617.5,1416.9 Z M799.5,1003.9 C781.7,1002.2 775.9,996.4 782.1,986.4 C792.2,970.1 824.5,971.4 834.6,988.5 C842.6,1002.2 831.7,1007.0 799.5,1003.9 Z M230.1,930.5 C238.1,927.3 251.7,918.1 271.0,903.0 C279.5,896.4 294.8,885.0 305.0,877.8 C342.4,851.1 370.1,831.2 394.5,813.5 C444.5,777.1 492.1,742.9 520.5,723.0 C536.5,711.8 560.8,694.5 574.5,684.5 C588.2,674.5 606.2,661.6 614.5,656.0 C640.1,638.3 693.3,600.5 711.5,587.1 C744.0,563.1 746.0,563.1 778.7,587.3 C788.0,594.1 806.5,607.3 820.0,616.5 C850.8,637.7 888.7,664.2 914.0,682.4 C924.7,690.0 942.3,702.4 953.0,709.8 C973.3,723.9 1005.0,747.0 1035.0,769.5 C1044.6,776.8 1057.7,786.3 1064.0,790.7 C1070.3,795.1 1090.3,809.0 1108.5,821.6 C1126.7,834.1 1148.9,849.9 1158.0,856.5 C1167.1,863.2 1183.7,875.2 1195.0,883.2 C1206.3,891.2 1222.7,903.3 1231.5,909.9 C1252.5,925.9 1261.5,930.5 1271.9,930.5 C1285.0,930.5 1293.0,924.2 1293.8,913.2 C1294.7,901.1 1288.0,893.6 1256.9,872.1 C1246.2,864.7 1226.2,850.5 1212.5,840.5 C1198.8,830.5 1169.5,809.5 1147.5,793.8 C1125.5,778.2 1100.4,760.1 1091.7,753.6 C1083.0,747.2 1063.0,732.8 1047.2,721.7 C1031.4,710.7 1011.8,696.7 1003.5,690.6 C995.2,684.6 979.0,672.9 967.5,664.6 C956.0,656.4 938.0,643.5 927.5,636.0 C917.0,628.5 892.3,610.9 872.5,597.0 C852.7,583.1 823.7,562.6 808.0,551.5 C768.8,523.7 766.5,522.2 758.1,518.2 C745.1,512.0 735.2,513.6 719.2,524.8 C714.7,527.9 702.8,536.1 692.8,543.0 C669.9,558.8 647.8,574.6 607.6,604.0 C590.0,616.8 567.1,633.1 556.6,640.3 C546.1,647.4 524.5,663.0 508.5,674.9 C465.4,707.2 396.7,757.2 356.3,785.8 C336.6,799.7 309.9,818.5 297.0,827.7 C240.3,867.8 207.7,891.9 202.2,897.9 C183.9,917.7 204.0,941.1 230.1,930.5 Z M792.7,842.9 C803.6,832.8 796.4,812.1 784.2,818.4 C773.3,824.1 770.5,839.7 779.5,844.9 C782.6,846.7 789.7,845.6 792.7,842.9 Z" fill="#F7FAF5" class="lg-w" pathLength="1" fill-rule="evenodd"/>
+</svg>
+<div class="wm">전세<i>AI</i>프</div>
+<p class="intro-tag">전세를 AI로 안전하게</p>
+</div>
+</div>
+<div class="progress" aria-hidden="true"><i></i></div>
 
 <header class="nav">
 <div class="wrap navin">
@@ -274,18 +460,19 @@ h1,h2,h3{text-wrap:balance}
 <span class="wm">전세<i>AI</i>프</span>
 </a>
 <nav class="links" aria-label="섹션">
-<a href="#fear">왜 불안할까</a>
-<a href="#how">어떻게 돕나</a>
+<a href="#now">전세사기 현실</a>
+<a href="#how">하는 일</a>
 <a href="#catch">잡는 사기</a>
-<a href="#vision">비전</a>
+<a href="#trust">믿을 수 있게</a>
+<a href="#with">함께하기</a>
 </nav>
-<a class="btn btn-gold btn-s" href="#contact">문의하기</a>
+<a class="btn btn-gold btn-s" href="#contact">도입 문의</a>
 </div>
 </header>
 
 <main>
-<!-- 1. 첫 화면 -->
-<section id="top" class="hero in">
+<!-- ━━ 1막 · 문제 ━━ -->
+<section id="top" class="hero" data-hero>
 <div class="hbg" aria-hidden="true">
 <div class="blob bl1"></div><div class="blob bl2"></div>
 <div class="drift" data-drift></div>
@@ -293,12 +480,12 @@ h1,h2,h3{text-wrap:balance}
 </div>
 <div class="wrap herog">
 <div>
-<span class="kick rv">전세사기 예방 AI · 전세이프</span>
-<h1 class="h1 rv d1">불안한 전세 계약,<br><span class="hl">찍어서</span> 확인하세요</h1>
-<p class="lead rv d2">등기부등본을 찍으면 전세이프가 위험한 줄을 짚고, 쉬운 말로 알려 드려요. 계약부터 입주 다음 날까지 함께 확인해요.</p>
+<span class="kick rv">등기부등본 분석 AI · 전세이프</span>
+<h1 class="h1"><span class="ln"><span>어렵고 무서운</span></span><span class="ln"><span>전세 계약,</span></span><span class="ln"><span><span class="hl">찍으면 보여요</span></span></span></h1>
+<p class="lead rv d2">등기부등본을 찍으면 위험한 곳을 짚고, 쉬운 말로 알려 드려요. 잔금 보내는 날, 이사 다음 날까지 함께 확인해요.</p>
 <div class="ctas rv d3">
-<a class="btn btn-gold" href="#how">어떻게 돕나요</a>
-<a class="btn btn-line" href="#contact">문의하기</a>
+<a class="btn btn-gold" href="#film"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>소개 영상 보기</a>
+<a class="btn btn-line" href="#contact">도입 문의</a>
 </div>
 </div>
 <div class="rv d2">
@@ -319,7 +506,7 @@ h1,h2,h3{text-wrap:balance}
 <span class="grade">위험</span>
 <h4>신탁 1건 · 근저당 2건</h4>
 <p>서류상 주인이 신탁회사예요. 계약하기 전에 신탁원부로 세를 놓을 권한을 확인하세요.</p>
-<p class="src">판정 · 규칙 기반 &nbsp;|&nbsp; 설명 · AI</p>
+<p class="sx">판정 · 규칙 기반 &nbsp;|&nbsp; 설명 · AI</p>
 </div>
 </div>
 </div>
@@ -334,114 +521,190 @@ h1,h2,h3{text-wrap:balance}
 </div>
 </section>
 
-<!-- 2. 왜 불안할까 -->
-<section id="fear" class="sec fear" data-count>
+<div class="ticker" aria-label="전세이프를 만든 근거">
+<div class="tk" data-ticker>
+<span>외부 AI 호출 100% 국내 모델</span><span>시세 데이터 1,807만 행</span><span>내 사진 위 근거 표시 14종</span><span>판례 원문 161건 분석</span><span>현직 공인중개사 97분 인터뷰</span><span>2026 AI ROOKIE 국내 AI 트랙 결선</span>
+</div>
+</div>
+
+<section id="now" class="sec now">
+<div class="wrap">
+<span class="kick rv">전세사기, 지금</span>
+<h2 class="h2"><span class="ln"><span>피해 인정만</span></span><span class="ln"><span>4만 1천 건을 넘었어요</span></span></h2>
+<p class="lead rv d2">특별법이 시행된 2023년 6월부터 지금까지 쌓인 숫자예요. 최근 9개월에도 한 달에 평균 628건씩 늘었어요.</p>
+<figure class="chart-card rv d2" style="margin-inline: 0">
+<p class="ch-t">전세사기 피해자 결정 누적 건수</p>
+<p class="ch-s">2023.6 특별법 시행 ~ 2026.9 · 국토교통부 발표</p>
+<div class="chart" data-chart role="img" aria-label="전세사기 피해자 결정 누적 건수 선그래프. 2023년 6월 0건에서 2023년 11월 약 9,100건, 2024년 4월 15,433건, 2024년 12월 25,578건, 2025년 6월 31,437건, 2025년 12월 35,909건, 2026년 9월 41,559건으로 계속 늘었어요."><div class="tip" data-tip></div></div>
+<details class="ch-table">
+<summary>숫자와 출처 보기</summary>
+<div class="ch-wrap">
+<table data-table><thead><tr><th>시점</th><th style="text-align: right">누적 건수</th><th>출처</th></tr></thead><tbody></tbody></table>
+</div>
+</details>
+</figure>
+<div class="duo">
+<div class="box rv d1" data-dots>
+<h3><b>100명 중 76명</b>은<br>40세 미만이에요</h3>
+<p>30대 50.7% · 20대 25.2%</p>
+<div class="dots" aria-hidden="true"></div>
+</div>
+<div class="box rv d2">
+<h3>보증금 3억 원 이하</h3>
+<span class="big">97.7<small>%</small></span>
+<div class="meter" aria-hidden="true"><i></i></div>
+<p style="margin-top: 12px">피해자 대부분이 3억 원 이하의 보증금을 맡겼어요</p>
+</div>
+</div>
+<p class="src rv">출처: 국토교통부 전세사기피해지원위원회 심의 결과(2026.10.12 발표, 9월까지 누적) · 시점별 누적은 국토부 발표를 인용한 보도 · 한 달 평균은 2025.12(35,909건)~2026.9(41,559건) 차이를 9로 나눈 값</p>
+</div>
+</section>
+
+<section id="why" class="sec why">
 <div class="wall" aria-hidden="true" data-wall></div>
 <div class="wfade" aria-hidden="true"></div>
 <div class="wrap">
-<span class="kick rv">왜 불안할까</span>
-<h2 class="h2 rv d1">전세사기,<br>아직 끝나지 않았어요</h2>
-<div class="big rv d2"><span id="count">41,559</span><small>건</small></div>
-<p class="bigcap rv d2">전세사기 피해자로 인정된 누적 건수 (2026년 9월 기준)</p>
-<div class="pills rv d3">
-<span class="pill"><b>75.9%</b>40세 미만 청년</span>
-<span class="pill"><b>97.7%</b>보증금 3억 원 이하</span>
+<div class="whyg">
+<div>
+<span class="kick rv">왜 막기 어려울까</span>
+<h2 class="h2"><span class="ln"><span>정보가 없어서가 아니라,</span></span><span class="ln"><span><em>읽을 수 없어서</em></span></span></h2>
+<p class="lead rv d2">사기는 대부분 계약서를 쓰는 그 순간 일어나요. 그런데 그 순간 봐야 할 등기부는, 한국어인데 읽히지 않죠.</p>
 </div>
-<p class="turn rv">사기는 대부분 <em>계약서를 쓰는 그 순간</em> 일어나요.<br>그런데 그 순간 봐야 할 등기부는, 한국어인데 읽히지 않죠.</p>
-<p class="src rv">출처: 국토교통부 전세사기피해지원위원회 심의 결과(2026.10.12 발표) · 현직 공인중개사 심층 인터뷰(2026.7)</p>
+<div class="tr" aria-label="등기부 말을 쉬운 말로 바꾼 예">
+<div class="trow"><span class="tw reg">채권최고액<small>금360,000,000원</small></span><i class="arr" aria-hidden="true"></i><span class="tw ez">빌린 돈의 최대 한도예요</span></div>
+<div class="trow"><span class="tw reg">신탁원부<small>제2024-1234호</small></span><i class="arr" aria-hidden="true"></i><span class="tw ez">서류상 주인이 신탁회사예요</span></div>
+<div class="trow"><span class="tw reg">임차권등기명령<small>주택임차권</small></span><i class="arr" aria-hidden="true"></i><span class="tw ez">전 세입자가 보증금을 못 받았어요</span></div>
+</div>
+</div>
+<p class="src rv">"대부분 계약서를 쓰는 시점에 일어난다" — 현직 공인중개사 심층 인터뷰(2026.7, 약 97분)</p>
 </div>
 </section>
 
-<!-- 3. 어떻게 덜어 주나 -->
-<section id="how" class="sec lt">
+<!-- ━━ 2막 · 해결 ━━ -->
+<section id="how" class="how">
+<div class="panel on-light" data-grow>
 <div class="wrap">
-<span class="kick rv">어떻게 돕나</span>
-<h2 class="h2 rv d1">계약부터 입주까지,<br>불안한 순간마다 곁에서</h2>
-<div class="moments">
-<div class="mo rv d1">
-<span class="when">계약 전</span>
+<span class="kick rv">전세이프가 하는 일</span>
+<h2 class="h2"><span class="ln"><span>분석 한 번으로</span></span><span class="ln"><span>끝나지 않아요</span></span></h2>
+<p class="lead rv d2">계약서 쓰는 날부터 이사 다음 날까지. 불안한 순간마다 지금 확인할 것을 알려 드려요.</p>
+<div class="road rv d2" data-road>
+<i class="fillr"></i>
+<button class="stop on" type="button" data-go="0"><i>1</i><span>집 보러<br>간 날</span></button>
+<button class="stop" type="button" data-go="1"><i>2</i><span>계약서<br>쓰는 날</span></button>
+<button class="stop" type="button" data-go="2"><i>3</i><span>잔금<br>보내는 날</span></button>
+<button class="stop" type="button" data-go="3"><i>4</i><span>이사<br>다음 날</span></button>
+</div>
+<div class="stations" data-stations>
+<article class="stn">
+<span class="when">집 보러 간 날</span>
 <h3>찍으면, 위험부터 알려요</h3>
-<p>등기부 사진 몇 장, 약 30초. 출처 있는 규칙이 양호 · 확인 필요 · 위험으로 나누고, 위험한 줄을 내 사진 위에 짚어요.</p>
-<div class="mock" aria-hidden="true">
-<div class="mcard"><span class="grade">위험</span><b>신탁 1건 · 근저당 2건</b><small>서류상 주인이 신탁회사예요</small></div>
-<div class="mcard hlt"><small>근저당권설정 · 채권최고액 금360,000,000원</small></div>
-</div>
-</div>
-<div class="mo rv d2">
-<span class="when">계약할 때</span>
+<p>등기부 사진 몇 장, 약 30초. 위험한 줄을 내 사진 위에 형광펜으로 짚어요.</p>
+<div class="mini" aria-hidden="true"><div class="ms"><div>
+<div class="mc"><span class="grade">위험</span><b>신탁 1건 · 근저당 2건</b>서류상 주인이 신탁회사예요</div>
+<div class="mc hlt">근저당권설정 · 채권최고액 금360,000,000원</div>
+<span class="chip">내 사진에서 보기</span>
+</div></div></div>
+</article>
+<article class="stn">
+<span class="when">계약서 쓰는 날</span>
 <h3>무엇을 물어볼지 알려요</h3>
-<p>위험 신호에 맞춰 중개사에게 물어볼 질문을 줘요. 비슷한 실제 대법원 판례도 함께 보여 줘요.</p>
-<div class="mock" aria-hidden="true">
-<div class="ask"><em>중개사에게 물어보세요</em>신탁원부(신탁 내용을 적은 서류)를 보여주실 수 있나요?</div>
-<div class="warn">이런 답이면 멈추세요 · 보여줄 수 없다거나 얼버무린다</div>
+<p>위험 신호에 맞춘 질문을 중개사에게 그대로 보여 주세요. 비슷한 판례도 함께 찾아 드려요.</p>
+<div class="mini" aria-hidden="true"><div class="ms"><div>
+<div class="mc ask"><em>중개사에게 물어보세요</em>신탁원부(신탁 내용을 적은 서류)를 보여주실 수 있나요?</div>
+<div class="mc warn">이런 답이면 멈추세요 · 보여줄 수 없다거나 얼버무린다</div>
+<span class="chip">대법원 판례 2건</span>
+</div></div></div>
+</article>
+<article class="stn">
+<span class="when">잔금 보내는 날</span>
+<h3>돈 보내기 전, 다시 대조해요</h3>
+<p>아침 8시에 알려 드려요. 같은 집을 다시 찍으면 새로 생긴 빚만 골라 보여 줘요.</p>
+<div class="mini" aria-hidden="true"><div class="ms"><div>
+<div class="mc noti"><img src="assets/logo.png" alt=""><div><small>전세이프 · 오전 8:00</small><b>오늘 잔금 보내는 날이에요</b>입금 전 마지막 확인 — 오늘 뗀 등기부로 대조해 주세요</div></div>
+<div class="mc diff"><b>새로 생김</b> · 근저당권설정 · 금120,000,000원</div>
+<div class="mc warn">잔금 보내기 전에 멈추세요</div>
+</div></div></div>
+</article>
+<article class="stn">
+<span class="when">이사 다음 날</span>
+<h3>끝까지 확인해요</h3>
+<p>전입신고를 했다면 다음 날 0시부터 대항력이 생겨요. 그 사이 새 빚이 없는지 한 번 더 봐요.</p>
+<div class="mini" aria-hidden="true"><div class="ms"><div>
+<div class="mc noti"><img src="assets/logo.png" alt=""><div><small>전세이프 · 오전 8:00</small><b>입주 다음 날 등기부 확인</b>이삿날 이후 새 빚이 없는지 다시 떼서 대조해 주세요</div></div>
+<div class="mc ok">등기부 변동 없음</div>
+<span class="chip">계약 여정 끝</span>
+</div></div></div>
+</article>
 </div>
-</div>
-<div class="mo rv d3">
-<span class="when">잔금 · 입주</span>
-<h3>끝까지 함께 확인해요</h3>
-<p>계약 날짜를 넣으면 확인할 날 아침 8시에 알려요. 같은 집을 다시 찍으면 새로 생긴 빚만 골라 보여 줘요.</p>
-<div class="mock" aria-hidden="true">
-<div class="noti"><img src="assets/logo.png" alt=""><div><small>전세이프 · 오전 8:00</small><b>오늘 잔금 보내는 날이에요</b></div></div>
-<div class="diff"><b>새로 생김</b> · 근저당권설정 · 금120,000,000원<br>잔금 보내기 전에 멈추세요</div>
-</div>
+<div class="chat rv">
+<span class="cb" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-5.1A8 8 0 1 1 21 12z"/></svg></span>
+<p><b>모르는 말은 언제든.</b> 글자를 꾹 누르면 챗봇이 쉬운 말로 풀어 줘요.</p>
 </div>
 </div>
 </div>
 </section>
 
-<!-- 4. 잡는 사기 -->
-<section id="catch" class="sec lt" style="padding-top: 0">
+<section id="catch" class="sec catch on-light">
 <div class="wrap">
 <span class="kick rv">잡는 사기</span>
-<h2 class="h2 rv d1">등기부에서 잡는 6가지</h2>
-<div class="catch">
-<div class="cc rv d1"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/></svg></span><h3>깡통전세</h3><p>빚과 내 보증금을 더하면 집값보다 커요</p></div>
-<div class="cc rv d2"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span><h3>신탁 사기</h3><p>서류상 주인은 신탁회사인데 몰래 세를 놓아요</p></div>
-<div class="cc rv d3"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14 5 5 5"/><path d="m4 20 8-8"/><path d="m11 8 5 5"/></svg></span><h3>경매가 시작된 집</h3><p>이미 경매가 시작됐거나 다툼으로 묶여 있어요</p></div>
-<div class="cc rv d1"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.3 2.7-6 6-6"/><path d="m15 15 5 5"/><path d="m20 15-5 5"/></svg></span><h3>보증금 못 받은 세입자</h3><p>전 세입자가 보증금을 못 돌려받은 기록이 있어요</p></div>
-<div class="cc rv d2"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M8 3v4"/><path d="M16 3v4"/></svg></span><h3>잔금 직전 새 빚</h3><p>계약과 잔금 사이에 몰래 근저당을 잡아요</p></div>
-<div class="cc rv d3"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v6c0 4.4 3 7.8 7 9 4-1.2 7-4.6 7-9V6z"/><path d="m9 12 2 2 4-4"/></svg></span><h3>보증보험 안 되는 집</h3><p>보증금을 지켜 줄 보험 가입이 막힐 수 있어요</p></div>
-</div>
+<h2 class="h2"><span class="ln"><span>등기부에서 잡는</span></span><span class="ln"><span>6가지 수법</span></span></h2>
+<p class="hint rv d2">카드를 누르면 잡는 방법이 보여요</p>
+<div class="fr rv d2" data-flips></div>
 <p class="honest rv"><b>등기부에 안 보이는 위험</b>(세금 체납, 대리인 이중계약 등)은 확인할 방법을 알려 드려요. 가짜 매물 광고처럼 <b>못 잡는 것</b>은 못 잡는다고 리포트에 그대로 적어요.</p>
 </div>
 </section>
 
-<!-- 5. 믿을 수 있게 -->
+<!-- ━━ 3막 · 믿음 ━━ -->
 <section id="trust" class="sec trust">
 <div class="wrap">
 <span class="kick rv">믿을 수 있게</span>
-<div class="trio">
-<p class="rv d1">판정은 규칙이</p>
-<p class="rv d2" style="color: var(--gold)">설명은 AI가</p>
-<p class="rv d3">검증은 사용자가</p>
+<div class="beat">
+<p class="fill" data-fill>판정은 규칙이</p>
+<p class="proof rv">위험 등급은 출처 있는 기준으로만 정해요. 같은 서류를 5번 넣어도 판정에 쓰는 값은 5번 모두 같았어요.</p>
 </div>
-<div class="facts">
-<div class="fact rv d1"><h3>AI는 등급을 못 바꿔요</h3><p>위험 등급은 출처 있는 규칙이 정해요. 같은 서류를 5번 넣어도 판정에 쓰는 값은 5번 모두 같았어요.</p></div>
-<div class="fact rv d2"><h3>원본 사진·실명은 남기지 않아요</h3><p>서버는 원본 사진과 실명을 저장하지 않아요. 원본은 내 폰에만 있어요.</p></div>
-<div class="fact rv d3"><h3>한국 서류는 한국 AI로</h3><p>읽기부터 설명까지 국내 AI(업스테이지)만 써요. 두 갈래로 따로 읽고 서로 검산해요.</p></div>
+<div class="beat">
+<p class="fill g" data-fill>설명은 AI가</p>
+<p class="proof rv">한국 서류는 한국 AI로. 외부 AI 호출은 모두 국내 모델이고, 두 갈래로 따로 읽어 서로 검산해요.</p>
+<div class="models rv d1"><span class="model">Upstage Information Extract</span><span class="model">Document OCR</span><span class="model">Solar Pro 2</span><span class="model">Embeddings</span></div>
+</div>
+<div class="beat">
+<p class="fill" data-fill>검증은 사용자가</p>
+<p class="proof rv">판정 근거를 내가 찍은 사진 위에서 직접 확인해요. 원본 사진과 실명은 서버에 남기지 않아요.</p>
 </div>
 </div>
 </section>
 
-<!-- 6. 비전 · 함께하기 · 문의 -->
-<section id="vision" class="sec vis">
+<!-- ━━ 4막 · 함께 ━━ -->
+<section id="with" class="sec with">
 <div class="wrap">
 <span class="kick rv">우리가 바라는 것</span>
-<h2 class="vh rv d1">피해 뒤의 구제보다,<br>계약 전의 확인이<br><span style="color: var(--gold)">당연한 세상</span></h2>
-<p class="lead rv d2">누구나 자기 서류 위에서 근거를 확인하고, 질문을 들고 계약하러 가는 것. 전세이프는 확인을 습관으로 만들려고 해요.</p>
-<div class="road rv d3"><span class="now">전세사기 예방</span><i>→</i><span>청년 주거 안전</span><i>→</i><span>청년 생활 안전</span><i>→</i><span>AI Safety Net</span></div>
-<div class="with" id="partner">
-<div class="wc rv d1"><small>개인</small><b>계약을 앞둔 누구나</b><p>기본 위험 진단은 무료로</p></div>
-<div class="wc rv d2"><small>기관</small><b>대학 · 청년센터 · 공공기관 · 기업</b><p>구성원에게 전월세 안전 서비스를</p></div>
-<div class="wc rv d3"><small>플랫폼</small><b>부동산 · 금융 · 보증</b><p>계약 과정 안에 위험 분석 API를</p></div>
+<h2 class="vh"><span class="ln"><span>피해 뒤의 구제보다,</span></span><span class="ln"><span>계약 전의 확인이</span></span><span class="ln"><span><em>당연한 세상</em></span></span></h2>
+<div class="path rv d2" aria-label="성장 방향"><span class="now">전세사기 예방</span><i>→</i><span>청년 주거 안전</span><i>→</i><span>청년 생활 안전</span><i>→</i><span>AI Safety Net</span></div>
+<h3 class="plans-t rv">전세이프를 만나는 방법</h3>
+<div class="plans">
+<div class="pl"><small>개인</small><b>계약을 앞둔 누구나</b><p>대학생, 사회초년생, 신혼부부. 첫 전월세 계약 앞에서.</p><ul><li>기본 위험 분석 무료</li><li>계약 지킴이 패스 — 계약 1건 동안 알림과 다시 대조</li></ul></div>
+<div class="pl main"><small>기관</small><b>대학 · 청년센터 · 공공기관 · 기업</b><p>구성원에게 전월세 안전 서비스를 드려요.</p><ul><li>구성원 대상 전월세 안전 진단</li><li>청년 주거 지원 사업과 연계</li></ul></div>
+<div class="pl"><small>플랫폼</small><b>부동산 · 금융 · 보증</b><p>매물 찾기부터 보증 가입까지, 계약 흐름 안에.</p><ul><li>위험 분석 API</li><li>판정 근거까지 함께 제공</li></ul></div>
 </div>
-<div class="contact rv" id="contact">
-<div>
-<h2>오픈 베타를 준비하고 있어요</h2>
-<p>도입, 제휴, 오픈 베타 참여 모두 편하게 연락 주세요.</p>
 </div>
-<!-- 문의 메일이 정해지면 아래 span 을 <a class="cmail" href="mailto:주소">주소</a> 로 바꾼다 -->
-<span class="cmail">[문의 메일 주소]</span>
+</section>
+
+<section id="film" class="sec end">
+<div class="wrap endg">
+<!-- 영상 주소가 생기면 아래 VIDEO_URL 에 넣는다 (스크립트 맨 위) -->
+<button class="film rv" type="button" data-film aria-label="전세이프 소개 영상 보기">
+<span class="fbg" aria-hidden="true"><i>근저당권설정 · 채권최고액 · 신탁원부 · 임차권등기명령 · 공동담보목록</i><i>가처분 · 경매개시결정 · 토지 별도등기 · 신청사건 처리중 · 갑구 · 을구</i><i>소유권이전 · 전세권설정 · 말소사항 포함 · 열람일시 · 접수</i></span>
+<span class="wm">전세<i>AI</i>프</span>
+<span class="play" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="#07140F"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+<span class="cap"><b>전세이프 소개 영상</b><span>사진 몇 장으로 위험을 확인하는 과정을 영상으로 보세요</span></span>
+</button>
+<div class="contact rv d1" id="contact">
+<h2>전세이프와<br>함께하세요</h2>
+<p>도입, 제휴, 취재 문의 모두 편하게 연락 주세요.</p>
+<div class="mailrow">
+<a class="mail" href="mailto:raccoon205@konkuk.ac.kr">raccoon205@konkuk.ac.kr</a>
+<button class="copy" type="button" data-copy="raccoon205@konkuk.ac.kr">복사</button>
+</div>
 </div>
 </div>
 </section>
@@ -449,7 +712,7 @@ h1,h2,h3{text-wrap:balance}
 
 <footer class="foot">
 <div class="wrap">
-<div class="fgrid"><span class="wm" style="font-size: 22px">전세<i>AI</i>프</span><span>전세를 AI로 안전하게 · 팀 동크크</span></div>
+<div class="fgrid"><span class="wm">전세<i>AI</i>프</span><span>전세를 AI로 안전하게 · 팀 동크크 · raccoon205@konkuk.ac.kr</span></div>
 <p class="fnote">전세이프는 등기부에 적힌 내용을 공개된 기준으로 풀어 드리는 정보 서비스예요. 법률 자문이 아니며, 최종 판단은 전문가와 함께 해 주세요.</p>
 <div class="fbot"><span>© 2026 팀 동크크</span><span>2026 AI ROOKIE 국내 AI 트랙</span></div>
 </div>
@@ -457,44 +720,233 @@ h1,h2,h3{text-wrap:balance}
 
 <script>
 (function () {
+  var VIDEO_URL = ''; // 유튜브 주소가 생기면 여기에 넣는다 (예: 'https://youtu.be/xxxx')
+  var root = document.documentElement;
+  var AN = root.classList.contains('an');
+
   var PHRASES = ['근저당권설정', '채권최고액 금360,000,000원', '공동담보목록 제2023-567호', '신탁원부 제2024-1234호', '임차권등기명령', '토지 별도등기 있음', '신청사건 처리중', '경매개시결정', '가처분', '전세권설정', '존속기간', '등기원인 설정계약', '접수 제12345호', '근저당권자', '채무자', '수탁자', '말소사항 포함', '대지권의 목적인 토지의 표시', '소유권이전', '전세금', '열람일시', '갑구', '을구'];
+  // 누적 피해자 결정 건수 (특별법 시행 2023.6 = 0). m = 2023.6부터 지난 달 수
+  var SERIES = [
+    { m: 0,  t: '2023.6',  v: 0,     s: '특별법 시행' },
+    { m: 5,  t: '2023.11', v: 9100,  s: 'YTN 2023.12.5 (약 9,100건)', approx: true },
+    { m: 10, t: '2024.4',  v: 15433, s: '뉴스토마토 2024.4.18' },
+    { m: 18, t: '2024.12', v: 25578, s: '시대일보 2024.12.20' },
+    { m: 20, t: '2025.2',  v: 27372, s: 'SBS Biz 2025.3.10' },
+    { m: 24, t: '2025.6',  v: 31437, s: 'SBS Biz 2025.7.3' },
+    { m: 28, t: '2025.10', v: 34481, s: '헤럴드경제 2025.11.3' },
+    { m: 30, t: '2025.12', v: 35909, s: '머니투데이 2026.1.1' },
+    { m: 36, t: '2026.6',  v: 39669, s: '파이낸셜뉴스 2026.7.8' },
+    { m: 39, t: '2026.9',  v: 41559, s: '국토교통부 2026.10.12 발표' }
+  ];
+  var FRAUDS = [
+    ['깡통전세', '빚과 내 보증금을 더하면 집값보다 커요', '시세를 자동으로 찾아 빚 합계와 보증금을 견줘요'],
+    ['신탁 사기', '서류상 주인은 신탁회사인데 몰래 세를 놓아요', '신탁등기를 찾아 위험으로 알려요'],
+    ['경매가 시작된 집', '이미 경매가 시작됐거나 다툼으로 묶여 있어요', '경매개시결정·가처분 기록을 찾아요'],
+    ['보증금 못 받은 세입자', '전 세입자가 보증금을 못 돌려받고 나갔어요', '임차권등기를 찾아 위험으로 알려요'],
+    ['잔금 직전 새 빚', '계약과 잔금 사이에 몰래 근저당을 잡아요', '다시 찍으면 새로 생긴 빚만 골라 보여 줘요'],
+    ['보증보험 안 되는 집', '보증금을 지켜 줄 보험 가입이 막혀요', 'HUG 가입을 막는 기록이 있는지 찾아요']
+  ];
+
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
   function rotate(list, k) { k = k % list.length; return list.slice(k).concat(list.slice(0, k)); }
-  function fill(box, rows, cls, step) {
-    for (var r = 0; r < rows; r++) {
+  function rows(box, n, cls, step) {
+    if (!box) return;
+    for (var r = 0; r < n; r++) {
       var row = el('div', cls + (r % 2 ? ' rev' : ''));
       var ws = rotate(PHRASES, r * step);
       ws.concat(ws).forEach(function (w) { row.appendChild(el('span', null, w)); });
       box.appendChild(row);
     }
   }
-  fill(document.querySelector('[data-drift]'), 5, 'drow', 4);
-  fill(document.querySelector('[data-wall]'), 9, 'wrow', 5);
+  rows(document.querySelector('[data-drift]'), 5, 'drow', 4);
+  rows(document.querySelector('[data-wall]'), 9, 'wrow', 5);
 
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce || !('IntersectionObserver' in window)) return;
-  document.body.classList.add('an');
+  // 근거 숫자 띠: 끊김 없이 흐르게 한 번 더 붙인다
+  var tk = document.querySelector('[data-ticker]');
+  if (tk) Array.prototype.slice.call(tk.children).forEach(function (s) { var c = s.cloneNode(true); c.setAttribute('aria-hidden', 'true'); tk.appendChild(c); });
 
-  var counted = false;
-  function countUp() {
-    if (counted) return;
-    counted = true;
-    var out = document.getElementById('count'), N = 41559, D = 1600, t0 = performance.now();
-    (function tick(t) {
-      var p = Math.min(1, (t - t0) / D);
-      out.textContent = Math.round(N * (1 - Math.pow(1 - p, 3))).toLocaleString('ko-KR');
-      if (p < 1) requestAnimationFrame(tick);
-    })(t0);
+  // 100명 점 (76명 = 40세 미만 75.9%)
+  var dots = document.querySelector('[data-dots] .dots');
+  if (dots) for (var i = 0; i < 100; i++) { var d = el('i', i < 76 ? 'y' : ''); if (AN) d.style.transitionDelay = (i * 0.012) + 's'; dots.appendChild(d); }
+
+  // 사기 수법 뒤집기 카드
+  var flips = document.querySelector('[data-flips]');
+  var ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 2.4 17.5A2 2 0 0 0 4.1 20.5h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>';
+  FRAUDS.forEach(function (f) {
+    var b = el('button', 'fc'); b.type = 'button'; b.setAttribute('aria-pressed', 'false');
+    b.setAttribute('aria-label', f[0] + ' — 수법: ' + f[1] + ' — 전세이프는: ' + f[2]);
+    var fi = el('span', 'fi');
+    var fr = el('span', 'ff front');
+    var ic = el('span', 'ic'); ic.innerHTML = ICON; fr.appendChild(ic);
+    fr.appendChild(el('b', null, f[0])); fr.appendChild(el('span', null, f[1]));
+    var bk = el('span', 'ff back');
+    bk.appendChild(el('small', null, '전세이프는')); bk.appendChild(el('span', null, f[2]));
+    fi.appendChild(fr); fi.appendChild(bk); b.appendChild(fi);
+    b.addEventListener('click', function () { var on = !b.classList.contains('fl'); b.classList.add('touched'); b.classList.toggle('fl', on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+    flips.appendChild(b);
+  });
+
+  // 누적 피해 그래프
+  var chartBox = document.querySelector('[data-chart]'), tip = document.querySelector('[data-tip]');
+  var NS = 'http://www.w3.org/2000/svg';
+  function svgEl(tag, attrs) { var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); return e; }
+  var chartPts = [];
+  function drawChart() {
+    if (!chartBox) return;
+    var old = chartBox.querySelector('svg'); if (old) old.remove();
+    var W = chartBox.clientWidth, H = chartBox.clientHeight;
+    var padL = 34, padR = 16, padT = 26, padB = 26;
+    var xmax = 40, ymax = 45000;
+    function X(m) { return padL + (W - padL - padR) * (m / xmax); }
+    function Y(v) { return padT + (H - padT - padB) * (1 - v / ymax); }
+    var s = svgEl('svg', { viewBox: '0 0 ' + W + ' ' + H, 'aria-hidden': 'true' });
+    var defs = svgEl('defs', {});
+    var lg = svgEl('linearGradient', { id: 'ar', x1: 0, y1: 0, x2: 0, y2: 1 });
+    lg.appendChild(svgEl('stop', { offset: 0, 'stop-color': '#BD872C', 'stop-opacity': '.35' }));
+    lg.appendChild(svgEl('stop', { offset: 1, 'stop-color': '#BD872C', 'stop-opacity': '0' }));
+    defs.appendChild(lg); s.appendChild(defs);
+    var g = svgEl('g', { 'class': 'grid' }), ax = svgEl('g', { 'class': 'ax' });
+    [10000, 20000, 30000, 40000].forEach(function (v) {
+      g.appendChild(svgEl('line', { x1: padL, x2: W - padR, y1: Y(v), y2: Y(v) }));
+      var t = svgEl('text', { x: padL - 6, y: Y(v) + 4, 'text-anchor': 'end' }); t.textContent = (v / 10000) + '만'; ax.appendChild(t);
+    });
+    g.appendChild(svgEl('line', { x1: padL, x2: W - padR, y1: Y(0), y2: Y(0) }));
+    (W < 560 ? [[7, '2024'], [19, '2025'], [31, '2026']] : [[0, '2023.6'], [7, '2024'], [19, '2025'], [31, '2026']]).forEach(function (a) {
+      var t = svgEl('text', { x: X(a[0]), y: H - 6, 'text-anchor': a[0] === 0 ? 'start' : 'middle' }); t.textContent = a[1]; ax.appendChild(t);
+    });
+    s.appendChild(g); s.appendChild(ax);
+    var dLine = '', dArea = '';
+    chartPts = SERIES.map(function (p) { return { x: X(p.m), y: Y(p.v), p: p }; });
+    chartPts.forEach(function (q, i) { dLine += (i ? 'L' : 'M') + q.x.toFixed(1) + ' ' + q.y.toFixed(1); });
+    dArea = dLine + 'L' + chartPts[chartPts.length - 1].x.toFixed(1) + ' ' + Y(0) + 'L' + chartPts[0].x.toFixed(1) + ' ' + Y(0) + 'Z';
+    s.appendChild(svgEl('path', { d: dArea, 'class': 'area' }));
+    s.appendChild(svgEl('path', { d: dLine, 'class': 'ln2', pathLength: 1 }));
+    chartPts.forEach(function (q, i) {
+      if (i === chartPts.length - 1) return;
+      s.appendChild(svgEl('circle', { cx: q.x, cy: q.y, r: 4, 'class': 'pt' }));
+    });
+    var e = chartPts[chartPts.length - 1];
+    s.appendChild(svgEl('circle', { cx: e.x, cy: e.y, r: 6, 'class': 'end' }));
+    var lab = svgEl('text', { x: e.x - 10, y: e.y - 12, 'text-anchor': 'end', 'class': 'endlab' }); lab.textContent = '41,559건 · 2026.9'; s.appendChild(lab);
+    var rule = svgEl('line', { 'class': 'rule', y1: padT - 8, y2: Y(0), x1: -10, x2: -10, visibility: 'hidden' });
+    var hov = svgEl('circle', { 'class': 'hov', r: 6, cx: -10, cy: -10, visibility: 'hidden' });
+    s.appendChild(rule); s.appendChild(hov);
+    function show(clientX) {
+      var r = s.getBoundingClientRect(), x = clientX - r.left, best = chartPts[0];
+      chartPts.forEach(function (q) { if (Math.abs(q.x - x) < Math.abs(best.x - x)) best = q; });
+      rule.setAttribute('x1', best.x); rule.setAttribute('x2', best.x); rule.setAttribute('visibility', 'visible');
+      hov.setAttribute('cx', best.x); hov.setAttribute('cy', best.y); hov.setAttribute('visibility', 'visible');
+      tip.innerHTML = ''; tip.appendChild(el('b', null, (best.p.approx ? '약 ' : '') + best.p.v.toLocaleString('ko-KR') + '건')); tip.appendChild(document.createTextNode(best.p.t + (best.p.m === 0 ? ' · 특별법 시행' : '')));
+      tip.style.left = Math.min(Math.max(best.x, 70), W - 70) + 'px'; tip.style.top = best.y + 'px'; tip.classList.add('on');
+    }
+    function hide() { rule.setAttribute('visibility', 'hidden'); hov.setAttribute('visibility', 'hidden'); tip.classList.remove('on'); }
+    s.addEventListener('pointermove', function (ev) { show(ev.clientX); });
+    s.addEventListener('pointerdown', function (ev) { show(ev.clientX); });
+    s.addEventListener('pointerleave', hide);
+    chartBox.insertBefore(s, tip);
   }
+  drawChart();
+  var tb = document.querySelector('[data-table] tbody');
+  if (tb) SERIES.forEach(function (p) {
+    var tr = el('tr'); tr.appendChild(el('td', null, p.t)); tr.appendChild(el('td', null, (p.approx ? '약 ' : '') + p.v.toLocaleString('ko-KR') + '건')); tr.appendChild(el('td', null, p.s)); tb.appendChild(tr);
+  });
+  var rz; window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(drawChart, 150); });
+
+  // 여정: 정거장 ↔ 카드
+  var stations = document.querySelector('[data-stations]');
+  var stops = Array.prototype.slice.call(document.querySelectorAll('[data-go]'));
+  var road = document.querySelector('[data-road]');
+  function setStop(n) {
+    stops.forEach(function (s, k) { s.classList.toggle('on', k === n); s.classList.toggle('past', k < n); });
+    if (road) road.style.setProperty('--rp', n / 3);
+  }
+  var cards = stations ? Array.prototype.slice.call(stations.children) : [];
+  function carousel() { return stations && getComputedStyle(stations).display === 'flex'; }
+  stops.forEach(function (s, k) {
+    s.addEventListener('click', function () {
+      setStop(k);
+      if (carousel()) stations.scrollTo({ left: cards[k].offsetLeft - stations.offsetLeft - (stations.clientWidth - cards[k].clientWidth) / 2, behavior: 'smooth' });
+    });
+  });
+  if (stations) {
+    var st;
+    stations.addEventListener('scroll', function () {
+      clearTimeout(st);
+      st = setTimeout(function () {
+        if (!carousel()) return;
+        var c = stations.scrollLeft + stations.clientWidth / 2, best = 0;
+        cards.forEach(function (cd, k) { var mid = cd.offsetLeft - stations.offsetLeft + cd.clientWidth / 2; if (Math.abs(mid - c) < Math.abs(cards[best].offsetLeft - stations.offsetLeft + cards[best].clientWidth / 2 - c)) best = k; });
+        setStop(best);
+      }, 80);
+    }, { passive: true });
+  }
+  if (carousel()) setStop(0); else setStop(3);
+
+  // 영상 / 메일 복사
+  var film = document.querySelector('[data-film]');
+  if (film) film.addEventListener('click', function () { if (VIDEO_URL) window.open(VIDEO_URL, '_blank', 'noopener'); });
+  var copy = document.querySelector('[data-copy]');
+  if (copy) copy.addEventListener('click', function () {
+    var v = copy.getAttribute('data-copy');
+    function done(ok) { copy.textContent = ok ? '복사됨' : '길게 눌러 복사'; setTimeout(function () { copy.textContent = '복사'; }, 1800); }
+    try { navigator.clipboard.writeText(v).then(function () { done(true); }, function () { done(false); }); } catch (e) { done(false); }
+  });
+
+  // 오프닝이 끝나면 첫 화면을 연다
+  var hero = document.querySelector('[data-hero]');
+  var intro = document.querySelector('[data-intro]');
+  function openHero() { if (hero) hero.classList.add('in'); }
+  if (root.classList.contains('intro-on') && intro) {
+    var ended = false;
+    function finish() { if (ended) return; ended = true; intro.classList.add('intro-skip'); root.classList.remove('intro-on'); openHero(); }
+    intro.addEventListener('click', finish);
+    intro.addEventListener('animationend', function (e) { if (e.target === intro) finish(); });
+    setTimeout(function () { openHero(); }, 2300);
+    setTimeout(finish, 3400);
+  } else openHero();
+
+  if (!AN) return;
+
+  // 보이면 .in
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
       if (!e.isIntersecting) return;
-      e.target.classList.add('in');
-      if (e.target.hasAttribute('data-count')) countUp();
-      io.unobserve(e.target);
+      var t = e.target;
+      t.classList.add('in');
+      if (t.hasAttribute('data-chart')) t.classList.add('drawn');
+      if (t.hasAttribute('data-dots')) t.classList.add('lit');
+      io.unobserve(t);
     });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('main > section').forEach(function (s) { io.observe(s); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('main > section:not([data-hero]), .panel, .stn, [data-chart], [data-dots]').forEach(function (s) { io.observe(s); });
+
+  // 스크롤에 따라: 위쪽 읽음 줄, 판이 넓어지며 열림, 큰 글씨 색 차오름
+  var bar = document.querySelector('.progress');
+  var grows = Array.prototype.slice.call(document.querySelectorAll('[data-grow]'));
+  var fills = Array.prototype.slice.call(document.querySelectorAll('[data-fill]'));
+  var ticking = false;
+  function onScroll() {
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(function () {
+      ticking = false;
+      var vh = window.innerHeight, doc = document.documentElement;
+      var max = doc.scrollHeight - vh;
+      if (bar) bar.style.setProperty('--read', max > 0 ? (window.scrollY / max).toFixed(4) : 0);
+      grows.forEach(function (g) {
+        var top = g.getBoundingClientRect().top;
+        var p = Math.min(1, Math.max(0, (vh - top) / (vh * 0.7)));
+        g.style.setProperty('--p', p.toFixed(3));
+      });
+      fills.forEach(function (f) {
+        var top = f.getBoundingClientRect().top;
+        var p = Math.min(1, Math.max(0, (vh * 0.88 - top) / (vh * 0.42)));
+        f.style.setProperty('--p', p.toFixed(3));
+      });
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  onScroll();
 })();
 </script>
 </body>
