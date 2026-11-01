@@ -91,6 +91,9 @@ h1,h2,h3{text-wrap:balance}
 .links{display:none;gap:26px;font-size:15px;font-weight:600}
 .links a{color:var(--dim);text-decoration:none}.links a:hover{color:var(--white)}
 @media (min-width:960px){.links{display:flex}.navin{height:68px}}
+.ls{display:none}
+@media (max-width:959px){.links{display:flex;gap:clamp(10px, 3.6vw, 20px);font-size:clamp(14px, 4vw, 16px)}.links .lf,.links .pc,.nav .ask{display:none}.links .ls{display:inline}.logo .wm{font-size:clamp(20px, 6vw, 24px)}}
+
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 24px;border-radius:999px;border:0;font-weight:700;font-size:16px;text-decoration:none;cursor:pointer;transition:transform .25s ease, background-color .25s ease;white-space:nowrap}
 .btn:hover{transform:translateY(-2px)}
 .btn-gold{background:var(--gold);color:var(--ink)}.btn-gold:hover{background:var(--gold-hi);color:var(--ink)}
@@ -138,10 +141,14 @@ h1,h2,h3{text-wrap:balance}
 .vig{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%, rgba(7,20,15,.35), rgba(7,20,15,.94) 70%)}
 .herog{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;align-items:center;position:relative;z-index:1}
 .h1{font-size:clamp(36px, 6vw, 76px);line-height:1.1;letter-spacing:-.045em;font-weight:800;margin:0}
-.hl{position:relative;display:inline-block;color:var(--gold)}
+.hl{position:relative;display:inline-block;color:var(--gold);isolation:isolate}
 .hl::after{content:"";position:absolute;left:-3px;right:-3px;bottom:.06em;height:.22em;border-radius:4px;background:rgba(226,194,127,.3);transform-origin:0 50%;transform:scaleX(0);z-index:-1;transition:transform 1s cubic-bezier(.6,.1,.2,1) .7s}
 .in .hl::after,html:not(.an) .hl::after{transform:scaleX(1)}
 .hero .lead{margin-top:18px}
+.sen{display:block}
+p,.lead{text-wrap:pretty}
+@media (max-width:959px){.hero .wrap{container-type:inline-size}.h1{font-size:clamp(25px, 8.1vw, 40px);font-size:clamp(25px, 10.5cqi, 40px)}.h1 .ln > span{white-space:nowrap}.hero .lead{margin-top:20px}.hero .ctas{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:24px}.hero .ctas .btn{padding:0 10px;font-size:15px;gap:6px}}
+@media (max-width:379px){.xs-hide{display:none}}
 .ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
 .ctas .btn{flex:1 1 150px}
 @media (min-width:960px){
@@ -150,57 +157,111 @@ h1,h2,h3{text-wrap:balance}
   .ctas .btn{flex:0 0 auto}
 }
 
-/* 폰 장면: 12초 반복 — 물음이 튀어나옴 → 초록 빛이 훑음 → 쉬운 말 답 + 결과 카드 */
+/* 폰 장면: 14초 반복 — 속마음 걱정이 떠오름 → 등기부를 찍음(번쩍) → 빛이 훑고 위험한 줄에 표시 → 결과 카드 + 전세이프의 답 */
 .stage{position:relative;height:500px;width:100%;max-width:540px;margin:0 auto}
-.phone{position:absolute;left:50%;top:50%;width:280px;height:580px;margin:-290px 0 0 -140px;border-radius:44px;background:#111915;padding:11px;box-shadow:0 60px 120px -40px rgba(0,0,0,.85), inset 0 0 0 2px #2A3530;transform:scale(.8)}
-.phone::before{content:"";position:absolute;left:50%;top:18px;width:84px;height:22px;margin-left:-42px;border-radius:12px;background:#111915;z-index:5}
-.phone::after{content:"";position:absolute;inset:11px;border-radius:34px;background:linear-gradient(115deg, rgba(255,255,255,0) 40%, rgba(255,255,255,.35) 50%, rgba(255,255,255,0) 60%);background-size:250% 100%;background-position:120% 0;animation:glare 12s ease-in-out infinite;pointer-events:none;z-index:7}
-@keyframes glare{0%,58%{background-position:120% 0}66%,100%{background-position:-60% 0}}
-@media (min-width:420px){.stage{height:560px}.phone{transform:scale(.9)}}
-@media (min-width:960px){.stage{height:620px}.phone{transform:none}}
-.scr{position:relative;height:100%;border-radius:34px;background:var(--white);overflow:hidden;color:var(--text)}
-.abar{display:flex;align-items:center;justify-content:space-between;padding:46px 16px 10px}
-.abar .wm{font-size:17px;color:var(--deep)}
-.abar .wm i{color:#B8914F}
-.st{position:relative;display:inline-grid;font-size:11px;font-weight:700}
-.st span{grid-area:1/1;padding:4px 9px;border-radius:999px;background:var(--mint);color:var(--green);text-align:center}
-.st .s1{animation:s1 12s infinite}.st .s2{opacity:0;animation:s2 12s infinite}
-@keyframes s1{0%,48%{opacity:1}52%,100%{opacity:0}}
-@keyframes s2{0%,48%{opacity:0}52%,92%{opacity:1}96%,100%{opacity:0}}
-.mp{margin:4px 12px 0;padding:10px 10px 12px;background:var(--sheet);border:1px solid #E5DFD2;border-radius:12px;font-size:10px;line-height:1.5;color:#2A2A24;position:relative;overflow:hidden}
-.mp .t{font-weight:700;text-align:center;padding:4px 0;border-block:1px solid #2A2A24;margin-bottom:4px}
-.mr{display:grid;grid-template-columns:52px minmax(0,1fr);gap:6px;padding:6px 2px;border-bottom:1px solid #E5DFD2;position:relative}
-.mr:last-child{border-bottom:0}
-.mr .x{text-decoration:line-through;text-decoration-color:#E53935;color:#8A867C}
-.mk{position:absolute;inset:2px -2px;border-radius:5px;opacity:0;animation:mk 12s infinite;transform-origin:0 50%}
-.mk.a{background:rgba(255,212,0,.38);outline:1.5px solid var(--amber)}
-.mk.r{background:rgba(211,47,47,.12);outline:1.5px solid var(--red)}
-.mk.k2{animation-delay:.25s}.mk.k3{animation-delay:.5s}
-@keyframes mk{0%,49%{opacity:0;transform:scaleX(.2)}53%,90%{opacity:1;transform:scaleX(1)}95%,100%{opacity:0}}
-.beam{position:absolute;left:0;right:0;height:60px;top:-60px;background:linear-gradient(180deg, rgba(47,163,111,0), rgba(47,163,111,.25) 70%, rgba(47,163,111,.75));border-bottom:2px solid #2FA36F;animation:beam 12s cubic-bezier(.45,0,.55,1) infinite;z-index:2}
-@keyframes beam{0%,30%{top:-60px;opacity:1}48%{top:100%;opacity:1}49%,100%{top:100%;opacity:0}}
-.rsheet{position:absolute;left:8px;right:8px;bottom:8px;border-radius:20px;background:var(--white);box-shadow:0 -12px 30px -12px rgba(0,0,0,.3);padding:14px 14px 16px;transform:translateY(120%);animation:rsheet 12s cubic-bezier(.2,.8,.2,1) infinite}
-@keyframes rsheet{0%,56%{transform:translateY(120%)}62%,90%{transform:translateY(0)}95%,100%{transform:translateY(120%)}}
-.grade{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;padding:5px 10px;border-radius:999px;background:var(--red-soft);color:var(--red)}
-.grade::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
-.rsheet h4{margin:10px 0 4px;font-size:15px;letter-spacing:-.02em}
-.rsheet p{margin:0;font-size:12px;line-height:1.6;color:var(--body)}
-.rsheet .sx{margin-top:8px;font-size:10px;color:var(--muted)}
-.bub{position:absolute;z-index:6;max-width:min(205px, 50%);display:grid}
-.bub > span{grid-area:1/1;justify-self:start;display:block;padding:10px 14px;border-radius:18px;font-size:14px;font-weight:700;line-height:1.35;letter-spacing:-.02em;box-shadow:0 18px 36px -14px rgba(0,0,0,.6)}
-.bub.r > span{justify-self:end}
-.bub .q{background:var(--white);color:var(--text);animation:q 12s cubic-bezier(.3,1.6,.5,1) infinite}
-.bub .a{background:var(--green);color:var(--white);font-size:13px;animation:a 12s ease infinite;opacity:0}
-.bub .a em{display:block;font-style:normal;font-size:11px;font-weight:700;color:var(--gold-hi);margin-bottom:2px}
-.bub.l > span{border-bottom-right-radius:6px}.bub.r > span{border-bottom-left-radius:6px}
-.bub.p1{left:0;top:7%}.bub.p2{right:0;top:24%}.bub.p3{left:0;top:62%}.bub.p4{right:0;top:79%}
-.bub.p2 span{animation-delay:.9s}.bub.p3 span{animation-delay:1.8s}.bub.p4 span{animation-delay:2.7s}
-@media (min-width:960px){.bub > span{font-size:16px;padding:12px 16px;border-radius:20px}.bub .a{font-size:15px}.bub .a em{font-size:12px}}
-@keyframes q{0%,4%{opacity:0;transform:scale(.3) translateY(14px)}9%{opacity:1;transform:scale(1.06)}12%,46%{opacity:1;transform:none}52%,100%{opacity:0;transform:scale(.92)}}
-@keyframes a{0%,46%{opacity:0;transform:scale(.9)}53%,86%{opacity:1;transform:none}92%,100%{opacity:0;transform:none}}
-.qm{position:absolute;font-weight:800;color:var(--gold);opacity:0;animation:qm 12s ease-out infinite;z-index:4}
-.qm.m1{left:16%;top:42%;font-size:36px}.qm.m2{right:16%;top:50%;font-size:28px;animation-delay:1.3s}.qm.m3{left:32%;top:3%;font-size:24px;animation-delay:2.2s}
-@keyframes qm{0%,6%{opacity:0;transform:translateY(10px) rotate(-10deg)}12%{opacity:.9;transform:none}40%{opacity:0;transform:translateY(-40px) rotate(12deg)}100%{opacity:0}}
+@media (min-width:420px){.stage{height:560px}}
+@media (min-width:960px){.stage{height:640px}}
+.hs-glow{position:absolute;left:50%;top:50%;width:150%;max-width:620px;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(closest-side, rgba(226,194,127,.26), rgba(20,114,75,.22) 45%, rgba(7,20,15,0) 72%);pointer-events:none}
+.hs-aur{position:absolute;left:50%;top:50%;width:440px;height:440px;margin:-220px 0 0 -220px;border-radius:50%;background:conic-gradient(from 0deg, rgba(47,163,111,0), rgba(47,163,111,.55), rgba(226,194,127,.5), rgba(47,163,111,0) 60%);filter:blur(46px);opacity:.55;animation:hsSpin 16s linear infinite;pointer-events:none}
+@keyframes hsSpin{to{transform:rotate(360deg)}}
+.hs-ring{position:absolute;left:50%;top:50%;width:300px;height:300px;margin:-150px 0 0 -150px;border-radius:50%;border:2px solid rgba(241,221,176,.7);opacity:0;animation:hsRing 14s cubic-bezier(.2,.7,.3,1) infinite;pointer-events:none}
+.hs-ring.r2{animation-delay:.25s;border-color:rgba(47,163,111,.7)}
+@keyframes hsRing{0%,20.5%{opacity:0;transform:scale(.7)}22%{opacity:.8}36%,100%{opacity:0;transform:scale(1.7)}}
+.hs-pw{position:absolute;left:50%;top:50%;width:260px;height:540px;margin:-270px 0 0 -130px;transform:scale(.8);perspective:1400px}
+@media (min-width:420px){.hs-pw{transform:scale(.9)}}
+@media (min-width:960px){.hs-pw{transform:none}}
+.hs-phone{position:relative;width:100%;height:100%;border-radius:46px;padding:9px;background:linear-gradient(145deg,#3B4842,#141B18 38%,#0B100E 70%,#2C3732);box-shadow:0 70px 120px -40px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.08),inset 0 0 0 1.5px rgba(255,255,255,.12);transform:rotateY(-9deg) rotateX(5deg);transform-style:preserve-3d;animation:hsFloat 7s ease-in-out infinite}
+@keyframes hsFloat{0%,100%{transform:rotateY(-9deg) rotateX(5deg) translateY(0)}50%{transform:rotateY(-5deg) rotateX(3deg) translateY(-10px)}}
+.hs-phone::before{content:"";position:absolute;right:-3px;top:120px;width:3px;height:64px;border-radius:0 3px 3px 0;background:#26302B}
+.hs-scr{position:relative;height:100%;border-radius:38px;overflow:hidden;background:#F3F4F1;color:var(--text);isolation:isolate}
+.hs-isl{position:absolute;left:50%;top:10px;width:80px;height:22px;margin-left:-40px;border-radius:12px;background:#0B100E;z-index:20}
+.hs-glare{position:absolute;inset:0;background:linear-gradient(115deg, rgba(255,255,255,0) 42%, rgba(255,255,255,.4) 50%, rgba(255,255,255,0) 58%);background-size:260% 100%;background-position:130% 0;animation:hsGlare 14s ease-in-out infinite;z-index:19;pointer-events:none}
+@keyframes hsGlare{0%,54%{background-position:130% 0}62%,100%{background-position:-70% 0}}
+/* 카메라 모드 */
+.hs-cam{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 35%, #3A423D, #161B19 75%);z-index:1;animation:hsCam 14s ease infinite}
+@keyframes hsCam{0%,20.5%{opacity:1}24%,96%{opacity:0}100%{opacity:1}}
+.hs-hint{position:absolute;left:0;right:0;top:44px;text-align:center;font-size:11px;font-weight:600;color:rgba(255,255,255,.8);z-index:3;animation:hsCam 14s ease infinite}
+.hs-shut{position:absolute;left:50%;bottom:22px;width:54px;height:54px;margin-left:-27px;border-radius:50%;border:3px solid rgba(255,255,255,.9);z-index:3;animation:hsCam 14s ease infinite}
+.hs-shut::after{content:"";position:absolute;inset:4px;border-radius:50%;background:#fff;animation:hsShut 14s ease infinite}
+@keyframes hsShut{0%,19.5%,22%,100%{transform:scale(1)}20.5%{transform:scale(.8)}}
+.hs-vf{position:absolute;left:10px;right:10px;top:68px;height:262px;z-index:4;animation:hsVf 14s ease infinite;pointer-events:none}
+.hs-vf i{position:absolute;width:22px;height:22px;border:3px solid #6EE2A6}
+.hs-vf i:nth-child(1){left:0;top:0;border-right:0;border-bottom:0;border-top-left-radius:8px}
+.hs-vf i:nth-child(2){right:0;top:0;border-left:0;border-bottom:0;border-top-right-radius:8px}
+.hs-vf i:nth-child(3){left:0;bottom:0;border-right:0;border-top:0;border-bottom-left-radius:8px}
+.hs-vf i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0;border-bottom-right-radius:8px}
+@keyframes hsVf{0%{opacity:0;transform:scale(1.12)}5%,19%{opacity:1;transform:scale(1)}21%{opacity:1;transform:scale(.96)}24%,100%{opacity:0;transform:scale(.96)}}
+.hs-flash{position:absolute;inset:0;background:#fff;opacity:0;z-index:18;animation:hsFlash 14s ease-out infinite;pointer-events:none}
+@keyframes hsFlash{0%,20.5%{opacity:0}21.2%{opacity:.95}26%,100%{opacity:0}}
+/* 앱 위쪽 줄 */
+.hs-bar{position:absolute;left:0;right:0;top:0;display:flex;align-items:center;justify-content:space-between;padding:40px 16px 0;z-index:5;animation:hsBar 14s ease infinite}
+@keyframes hsBar{0%,21%{opacity:0}25%,95%{opacity:1}98%,100%{opacity:0}}
+.hs-bar .wm{font-size:16px;color:var(--deep)}.hs-bar .wm i{color:#B8914F}
+.hs-st{position:relative;display:inline-grid;font-size:10.5px;font-weight:700}
+.hs-st span{grid-area:1/1;padding:4px 9px;border-radius:999px;text-align:center;white-space:nowrap}
+.hs-st .s1{background:#E7F3EC;color:var(--green);animation:hsS1 14s infinite}
+.hs-st .s2{background:var(--red-soft);color:var(--red);opacity:0;animation:hsS2 14s infinite}
+@keyframes hsS1{0%,48%{opacity:1}51%,100%{opacity:0}}
+@keyframes hsS2{0%,48%{opacity:0}51%,95%{opacity:1}98%,100%{opacity:0}}
+/* 찍힌 등기부 */
+.hs-doc{position:absolute;left:14px;right:14px;top:74px;padding:10px 10px 8px;background:#FFFDF8;border-radius:10px;box-shadow:0 14px 30px -14px rgba(0,0,0,.45);font-size:9.5px;line-height:1.5;color:#2A2A24;z-index:2;overflow:hidden;animation:hsDoc 14s cubic-bezier(.2,.8,.2,1) infinite}
+@keyframes hsDoc{0%,20%{transform:rotate(-2.2deg) scale(.95)}26%,95%{transform:none}100%{transform:rotate(-2.2deg) scale(.95)}}
+.hs-doc .h{font-weight:800;text-align:center;font-size:10.5px;letter-spacing:.08em;margin-bottom:6px}
+.hs-doc .t{font-weight:700;text-align:center;padding:3px 0;border-block:1px solid #2A2A24;margin:4px 0 2px}
+.hs-row{position:relative;display:grid;grid-template-columns:50px minmax(0,1fr);gap:6px;padding:5px 3px;border-bottom:1px solid #EAE4D6}
+.hs-row:last-child{border-bottom:0}
+.hs-row .x{text-decoration:line-through;text-decoration-color:#E53935;color:#8A867C}
+.hs-row > *{position:relative;z-index:1}
+.hs-hl{position:absolute !important;inset:1px -2px;border-radius:5px;z-index:0 !important;transform-origin:0 50%;opacity:0;animation:hsHl 14s cubic-bezier(.3,.8,.2,1) infinite}
+.hs-hl.red{background:rgba(229,57,53,.16);box-shadow:inset 0 0 0 1.5px rgba(211,47,47,.8)}
+.hs-hl.amb{background:rgba(255,193,7,.22);box-shadow:inset 0 0 0 1.5px rgba(161,98,7,.7)}
+.hs-hl.d2{animation-delay:.35s}.hs-hl.d3{animation-delay:.7s}
+@keyframes hsHl{0%,33%{opacity:0;transform:scaleX(.1)}37%,94%{opacity:1;transform:scaleX(1)}97%,100%{opacity:0;transform:scaleX(1)}}
+.hs-pin{position:absolute !important;right:-2px;top:50%;width:18px;height:18px;margin-top:-9px;border-radius:50%;font-size:10px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center;z-index:2 !important;opacity:0;animation:hsPin 14s cubic-bezier(.3,1.6,.5,1) infinite}
+.hs-pin.red{background:var(--red)}.hs-pin.amb{background:#C9820C}
+.hs-pin.d2{animation-delay:.35s}.hs-pin.d3{animation-delay:.7s}
+@keyframes hsPin{0%,36%{opacity:0;transform:scale(.2)}39%,94%{opacity:1;transform:scale(1)}97%,100%{opacity:0}}
+.hs-scan{position:absolute;left:0;right:0;height:70px;top:-70px;background:linear-gradient(180deg, rgba(47,163,111,0), rgba(47,163,111,.22) 70%, rgba(47,163,111,.6));border-bottom:2px solid #2FA36F;box-shadow:0 6px 18px rgba(47,163,111,.6);z-index:3;opacity:0;animation:hsScan 14s cubic-bezier(.45,0,.55,1) infinite}
+@keyframes hsScan{0%,24%{top:-70px;opacity:0}25%{opacity:1}42%{top:100%;opacity:1}43%,100%{top:100%;opacity:0}}
+/* 결과 카드 */
+.hs-res{position:absolute;left:8px;right:8px;bottom:8px;border-radius:26px;padding:16px 16px 14px;background:linear-gradient(180deg,#FFF1EF,#FFFFFF 46%);box-shadow:0 -18px 40px -16px rgba(0,0,0,.35);z-index:6;transform:translateY(112%);animation:hsRes 14s cubic-bezier(.2,.9,.2,1) infinite}
+@keyframes hsRes{0%,49%{transform:translateY(112%)}55%,93%{transform:none}98%,100%{transform:translateY(112%)}}
+.hs-res .addr{font-size:10px;color:var(--muted)}
+.hs-g{display:flex;align-items:center;gap:8px;margin-top:4px}
+.hs-g b{font-size:30px;font-weight:800;letter-spacing:-.04em;color:#C62828;line-height:1.1;transform-origin:0 70%;animation:hsPop 14s cubic-bezier(.3,1.6,.5,1) infinite}
+@keyframes hsPop{0%,54%{opacity:0;transform:scale(.5)}58%,94%{opacity:1;transform:none}98%,100%{opacity:0}}
+.hs-g span{font-size:10.5px;font-weight:700;color:#C62828;background:#FDE3E0;padding:4px 9px;border-radius:999px}
+.hs-seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin:10px 0 2px}
+.hs-seg i{height:6px;border-radius:9px;background:#E8EEEA}
+.hs-seg i:nth-child(2){background:#F6EBDD}
+.hs-seg i:nth-child(3){background:#E53935;transform-origin:0 50%;animation:hsSeg 14s cubic-bezier(.3,.8,.2,1) infinite}
+@keyframes hsSeg{0%,56%{transform:scaleX(0)}61%,100%{transform:scaleX(1)}}
+.hs-seg+p{display:flex;justify-content:space-between;margin:0 0 8px;font-size:9.5px;color:#9AA39E}
+.hs-seg+p em{font-style:normal;font-weight:800;color:#C62828}
+.hs-it{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:12px;background:#F5F6F4;font-size:11.5px;font-weight:700;margin-top:6px;opacity:0;animation:hsIt 14s ease infinite}
+.hs-it i{width:17px;height:17px;border-radius:50%;flex:none;background:var(--red);color:#fff;font-style:normal;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.hs-it small{margin-left:auto;white-space:nowrap;font-size:10px;font-weight:600;color:var(--muted)}
+.hs-it.d2{animation-delay:.3s}.hs-it.d3{animation-delay:.6s}
+@keyframes hsIt{0%,58%{opacity:0;transform:translateY(8px)}62%,94%{opacity:1;transform:none}98%,100%{opacity:0}}
+/* 속마음 걱정 · 전세이프의 답 */
+.hs-w{position:absolute;z-index:8;max-width:178px;opacity:0;animation:hsWorry 14s cubic-bezier(.3,1.4,.5,1) infinite}
+.hs-w > span{position:relative;display:block;padding:11px 15px;border-radius:20px;background:rgba(14,26,21,.78);-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3);border:1px solid rgba(255,255,255,.2);color:var(--white);font-size:14.5px;font-weight:700;line-height:1.38;letter-spacing:-.02em;box-shadow:0 20px 40px -16px rgba(0,0,0,.7);animation:hsBob 4.5s ease-in-out infinite}
+.hs-w > span::before,.hs-w > span::after{content:"";position:absolute;border-radius:50%;background:rgba(14,26,21,.78);border:1px solid rgba(255,255,255,.22)}
+.hs-w > span::before{width:11px;height:11px;bottom:-14px}
+.hs-w > span::after{width:6px;height:6px;bottom:-22px}
+.hs-w.l > span::before{right:22px}.hs-w.l > span::after{right:14px}
+.hs-w.r > span::before{left:22px}.hs-w.r > span::after{left:14px}
+.hs-w.w1{left:0;top:9%}.hs-w.w2{right:0;top:30%;animation-delay:.8s}.hs-w.w3{left:0;top:89%;animation-delay:1.6s}
+.hs-w.w2 > span{animation-delay:-1.5s}.hs-w.w3 > span{animation-delay:-3s}
+@keyframes hsWorry{0%{opacity:0;transform:scale(.6) translateY(16px);filter:blur(0)}4%{opacity:1;transform:scale(1.05)}6.5%{transform:none}47%{opacity:1;transform:none;filter:blur(0)}51%,100%{opacity:0;transform:scale(.9);filter:blur(6px)}}
+@keyframes hsBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.hs-ans{position:absolute;z-index:9;display:flex;align-items:center;gap:9px;max-width:200px;padding:9px 13px 9px 9px;border-radius:20px;background:linear-gradient(135deg,#1A8457,#0F5E3E);color:#fff;box-shadow:0 22px 44px -16px rgba(0,0,0,.75),0 0 0 1px rgba(255,255,255,.12);opacity:0;animation:hsAns 14s cubic-bezier(.3,1.5,.5,1) infinite}
+.hs-ans img{width:28px;height:28px;padding:4px;border-radius:9px;background:var(--paper);object-fit:contain;flex:none}
+.hs-ans b{display:block;font-size:13px;white-space:nowrap;line-height:1.35;letter-spacing:-.02em}
+.hs-ans small{display:block;font-size:10.5px;font-weight:700;color:var(--gold-hi);margin-bottom:1px}
+.hs-ans.a1{left:0;top:9%;border-bottom-right-radius:6px}.hs-ans.a2{right:0;top:30%;border-bottom-left-radius:6px;animation-delay:.8s}.hs-ans.a3{left:0;top:89%;border-bottom-right-radius:6px;animation-delay:1.6s}
+@keyframes hsAns{0%,50%{opacity:0;transform:scale(.8)}53.5%{opacity:1;transform:scale(1.05)}55.5%,88%{opacity:1;transform:none}93%,100%{opacity:0;transform:translateY(-10px)}}
+@media (min-width:960px){.hs-w{max-width:210px}.hs-w > span{font-size:16px;padding:13px 17px}.hs-ans{max-width:240px}.hs-ans b{font-size:14.5px}.hs-w.w1{left:-4%}.hs-w.w3{left:-2%}.hs-ans.a1{left:-4%}.hs-ans.a3{left:-2%}}
 .hnote{margin:0;text-align:center;font-size:12px;color:rgba(255,255,255,.45)}
 
 /* 근거 숫자 띠 (흐름) */
@@ -263,42 +324,100 @@ h1,h2,h3{text-wrap:balance}
 /* ━━ 3. 원인 ━━ */
 .why{background:#06110D}
 .wall{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-around;padding-block:16px;pointer-events:none;overflow:hidden}
-.wrow{display:flex;gap:30px;width:max-content;white-space:nowrap;font-size:15px;font-weight:600;color:rgba(255,255,255,.06);animation:slide 70s linear infinite}
+.wrow{display:flex;gap:30px;width:max-content;white-space:nowrap;font-size:15px;font-weight:600;color:rgba(255,255,255,.08);animation:slide 60s linear infinite}
 .wrow.rev{animation-direction:reverse}
 .wrow:nth-child(3n){font-size:24px;animation-duration:48s}
 .wrow:nth-child(4n+2){font-size:19px;animation-duration:90s}
 .wrow:nth-child(5n){font-size:32px;font-weight:800;animation-duration:38s}
-.wrow span:nth-child(5n+2){animation:glow 6s ease-in-out infinite}
+.wrow span:nth-child(4n+2){animation:glow 6s ease-in-out infinite}
 .wrow:nth-child(2n) span:nth-child(5n+2){animation-delay:-2s}
 .wrow:nth-child(3n) span:nth-child(5n+2){animation-delay:-4s}
 @keyframes glow{0%,100%{color:rgba(255,255,255,.06);text-shadow:none}45%,55%{color:rgba(226,194,127,.7);text-shadow:0 0 20px rgba(226,194,127,.4)}}
 .wfade{position:absolute;inset:0;background:linear-gradient(180deg, rgba(6,17,13,.55), rgba(6,17,13,.9) 55%);pointer-events:none}
-@media (min-width:960px){.wfade{background:linear-gradient(90deg, rgba(6,17,13,.96), rgba(6,17,13,.7) 50%, rgba(6,17,13,.3))}}
+@media (min-width:960px){.wfade{background:radial-gradient(ellipse at 30% 40%, rgba(6,17,13,.92), rgba(6,17,13,.6) 70%)}}
 .why .h2 em{font-style:normal;color:var(--gold)}
-.tr{display:flex;flex-direction:column;gap:10px;margin-top:34px;max-width:620px}
-.whyg{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;align-items:center}
-@media (min-width:960px){.whyg{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:56px}.whyg .tr{margin-top:0}.tw{font-size:15.5px;padding:15px 16px}}
-.trow{display:grid;grid-template-columns:minmax(0,1fr) 28px minmax(0,1fr);align-items:center;gap:8px}
-.tw{padding:12px 14px;border-radius:14px;font-size:14px;line-height:1.45;min-width:0}
-.tw.reg{background:var(--sheet);color:#2A2A24;font-weight:700}
-.tw.reg small{display:block;font-weight:400;font-size:12px;color:#7A766C;margin-top:2px}
-.tw.ez{background:var(--green);color:var(--white);font-weight:700}
-.arr{height:2px;background:var(--gold);position:relative;transform-origin:0 50%}
-.arr::after{content:"";position:absolute;right:-1px;top:-4px;border:5px solid transparent;border-left:7px solid var(--gold);border-right:0}
-.an .trow .arr{transform:scaleX(0);transition:transform .5s ease}
-.an .trow .ez{opacity:0;transform:translateX(-10px) scale(.96);transition:opacity .5s ease, transform .5s cubic-bezier(.3,1.4,.5,1)}
-.an .in .trow .arr{transform:none}
-.an .in .trow .ez{opacity:1;transform:none}
-.an .in .trow:nth-child(1) .arr{transition-delay:.5s}.an .in .trow:nth-child(1) .ez{transition-delay:.85s}
-.an .in .trow:nth-child(2) .arr{transition-delay:1.1s}.an .in .trow:nth-child(2) .ez{transition-delay:1.45s}
-.an .in .trow:nth-child(3) .arr{transition-delay:1.7s}.an .in .trow:nth-child(3) .ez{transition-delay:2.05s}
+/* 왜 막기 어려울까 — 벽 3개: 수법이 많고 · 서류는 어렵고 · 단계마다 볼 게 달라요 (카드가 보이면 각자 움직임) */
+.why .whd{max-width:640px}
+.wcs{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;margin-top:34px}
+@media (min-width:960px){.wcs{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:48px}}
+.wc{position:relative;border-radius:24px;padding:20px 18px 18px;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.11);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);overflow:hidden}
+.wc .no{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;margin-right:10px;border-radius:9px;background:rgba(226,194,127,.16);font-size:13px;font-weight:800;color:var(--gold);vertical-align:2px;letter-spacing:0}
+.wc h3{margin:0 0 6px;font-size:21px;line-height:1.3;letter-spacing:-.03em}
+.wc p{margin:0;font-size:14px;line-height:1.6;color:var(--dim)}
+.wv{position:relative;height:190px;margin-top:16px;border-radius:16px;background:rgba(0,0,0,.25);overflow:hidden}
+/* ② 어려운 말투성이 서류 */
+.dc-p{position:absolute;left:14px;right:14px;top:14px;bottom:-10px;border-radius:10px 10px 0 0;background:var(--sheet);padding:10px 12px;color:#2A2A24;font-size:11px;line-height:1.75}
+.dc-p .ttl{display:block;text-align:center;font-weight:800;border-block:1px solid #2A2A24;margin-bottom:4px;font-size:10.5px}
+.dc-p mark{position:relative;background:transparent;color:#2A2A24;font-weight:700}
+.dc-p mark{margin-right:9px}
+.dc-p mark::after{content:"?";position:absolute;right:-11px;top:-7px;width:13px;height:13px;border-radius:50%;background:var(--red);color:#fff;font-size:9px;font-weight:800;line-height:13px;text-align:center}
+.an .dc-p mark{background:linear-gradient(transparent 55%,rgba(255,193,7,0) 55%)}
+.an .dc-p mark::after{transform:scale(0)}
+.an .wc.in .dc-p mark{background:linear-gradient(transparent 55%,rgba(255,193,7,.45) 55%);transition:background .4s ease}
+.an .wc.in .dc-p mark::after{transform:scale(1);transition:transform .45s cubic-bezier(.3,1.8,.5,1)}
+.an .wc.in .dc-p mark:nth-of-type(2),.an .wc.in .dc-p mark:nth-of-type(2)::after{transition-delay:.35s}
+.an .wc.in .dc-p mark:nth-of-type(3),.an .wc.in .dc-p mark:nth-of-type(3)::after{transition-delay:.7s}
+.an .wc.in .dc-p mark:nth-of-type(4),.an .wc.in .dc-p mark:nth-of-type(4)::after{transition-delay:1.05s}
+.an .wc.in .dc-p mark:nth-of-type(5),.an .wc.in .dc-p mark:nth-of-type(5)::after{transition-delay:1.4s}
+.wc.in .dc-p{animation:wcShake 4s ease-in-out 2s infinite}
+@keyframes wcShake{0%,88%,100%{transform:none}90%{transform:translateX(-2px)}93%{transform:translateX(2px)}96%{transform:translateX(-1px)}}
+/* ① 수법 이름표가 붙은 집 — 지어졌다가 금이 가고 무너지고, 다시 지어짐 (7초 반복) */
+.wv.hv{height:190px}
+.hz{position:absolute;left:50%;bottom:16px;width:262px;height:168px;margin-left:-131px}
+.hz-g{position:absolute;left:-30px;right:-30px;bottom:-2px;height:2px;border-radius:2px;background:rgba(255,255,255,.2)}
+.hz-roof{position:absolute;left:0;top:0;width:262px;height:66px;transform-origin:20% 100%}
+.hz-roof svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.hz-roof polygon{fill:rgba(226,194,127,.16);stroke:var(--gold);stroke-width:2;stroke-linejoin:round}
+.hz-roof .tags{position:absolute;left:0;right:0;bottom:7px;display:flex;justify-content:center;gap:5px}
+.hz-w{position:absolute;top:64px;bottom:0;width:122px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:rgba(226,194,127,.08);border:2px solid var(--gold)}
+.hz-w.l{left:9px;border-right:0;transform-origin:0 100%}
+.hz-w.r{right:9px;border-left:0;transform-origin:100% 100%}
+.hz-crk{position:absolute;left:50%;top:64px;bottom:0;width:14px;margin-left:-7px;overflow:visible}
+.hz-crk polyline{fill:none;stroke:var(--red);stroke-width:2.5;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1}
+.hz span{display:inline-block;padding:4px 8px;border-radius:999px;font-size:10.5px;font-weight:700;white-space:nowrap;background:#24332C;color:var(--white);border:1px solid rgba(255,255,255,.18)}
+.hz .rd{background:#5A2421;border-color:rgba(239,108,100,.55)}
+.hz .gd{background:#4A3F24;border-color:rgba(226,194,127,.5);color:var(--gold-hi)}
+.wc.in .hz-roof{animation:hzRoof 7s cubic-bezier(.5,0,.5,1) infinite}
+.wc.in .hz-w.l{animation:hzL 7s cubic-bezier(.5,0,.5,1) infinite}
+.wc.in .hz-w.r{animation:hzR 7s cubic-bezier(.5,0,.5,1) infinite}
+.wc.in .hz-crk polyline{animation:hzCrk 7s ease infinite}
+.wc.in .hz-in{animation:hzIn 7s ease infinite}
+@keyframes hzIn{0%{opacity:0}6%,88%{opacity:1}96%,100%{opacity:0}}
+@keyframes hzCrk{0%,28%{stroke-dashoffset:1;opacity:1}38%,44%{stroke-dashoffset:0;opacity:1}48%,100%{stroke-dashoffset:0;opacity:0}}
+@keyframes hzRoof{0%,42%{transform:none}48%{transform:rotate(-5deg)}57%{transform:translate(10px,62px) rotate(9deg)}60%{transform:translate(10px,56px) rotate(7deg)}63%,100%{transform:translate(10px,60px) rotate(8deg)}}
+@keyframes hzL{0%,44%{transform:none}50%{transform:rotate(-4deg)}58%,100%{transform:rotate(-15deg) scaleY(.9)}}
+@keyframes hzR{0%,44%{transform:none}50%{transform:rotate(5deg)}58%,100%{transform:rotate(19deg) scaleY(.9)}}
+/* ③ 단계마다 볼 것 — 잔금 앞에서 빨간 점 */
+.tl{position:absolute;left:18px;right:18px;top:96px;height:3px;border-radius:3px;background:rgba(255,255,255,.14)}
+.tl i{position:absolute;left:0;top:0;height:100%;width:100%;border-radius:3px;background:var(--gold);transform-origin:0 50%;transform:scaleX(var(--tp,1))}
+.an .tl i{--tp:0}
+.an .wc.in .tl i{--tp:1;transition:transform 2.4s cubic-bezier(.4,0,.2,1) .2s}
+.tl b{position:absolute;top:50%;width:13px;height:13px;margin:-6.5px 0 0 -6.5px;border-radius:50%;background:#1A2A23;border:2.5px solid var(--gold)}
+.tl b span{position:absolute;left:50%;top:18px;transform:translateX(-50%);font-size:11px;font-weight:700;color:var(--dim);white-space:nowrap}
+.tl b em{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);font-style:normal;font-size:10px;font-weight:700;color:var(--gold-hi);white-space:nowrap}
+.tl b:nth-child(2){left:0}.tl b:nth-child(3){left:25%}.tl b:nth-child(4){left:50%}.tl b:nth-child(5){left:75%}.tl b:nth-child(6){left:100%}
+.tl b:nth-child(2) span{transform:none;left:-4px}.tl b:nth-child(6) span{transform:none;left:auto;right:-4px}
+.an .tl b{border-color:rgba(255,255,255,.25)}
+.an .wc.in .tl b{border-color:var(--gold);transition:border-color .2s}
+.an .wc.in .tl b:nth-child(3){transition-delay:.7s}.an .wc.in .tl b:nth-child(4){transition-delay:1.3s}.an .wc.in .tl b:nth-child(5){transition-delay:1.9s}.an .wc.in .tl b:nth-child(6){transition-delay:2.5s}
+.tl .alert{position:absolute;left:75%;bottom:30px;transform:translateX(-50%);padding:6px 10px;border-radius:10px;background:var(--red);color:#fff;font-size:11.5px;font-weight:800;white-space:nowrap;box-shadow:0 8px 20px -6px rgba(211,47,47,.7)}
+.tl .alert::after{content:"";position:absolute;left:50%;bottom:-5px;margin-left:-5px;border:5px solid transparent;border-bottom:0;border-top-color:var(--red)}
+.an .tl .alert{opacity:0;transform:translate(-50%,10px) scale(.6)}
+.an .wc.in .tl .alert{opacity:1;transform:translateX(-50%);transition:opacity .3s ease 2.1s, transform .5s cubic-bezier(.3,1.7,.5,1) 2.1s}
+.wc.in .tl .alert{animation:wcPulse 2s ease-in-out 3s infinite}
+@keyframes wcPulse{50%{box-shadow:0 0 0 8px rgba(211,47,47,0),0 8px 20px -6px rgba(211,47,47,.7)}}
+.an .wc{opacity:0;transform:translateY(24px)}
+.an .wc.in{opacity:1;transform:none;transition:opacity .6s ease, transform .6s cubic-bezier(.2,.8,.2,1)}
+.wnext{margin:28px 0 0;font-size:19px;font-weight:700;color:var(--white);letter-spacing:-.02em}
+.wnext em{font-style:normal;color:var(--gold)}
+
 
 /* ━━ 4. 여정 (메인) ━━ */
 .how{background:#06110D;padding-block:0}
 .panel{background:var(--paper);color:var(--text);padding-block:clamp(64px, 9vw, 120px);transform-origin:50% 0;transform:scale(calc(.9 + .1 * var(--p, 1)));border-radius:calc(44px * (1 - var(--p, 1)))}
-.road{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin-top:30px}
-.road::before{content:"";position:absolute;left:12.5%;right:12.5%;top:13px;height:2px;background:#D8D2C4}
-.road .fillr{position:absolute;left:12.5%;top:13px;height:2px;width:75%;background:var(--green);transform-origin:0 50%;transform:scaleX(var(--rp, 1));transition:transform .5s ease}
+.road{position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px;margin-top:30px;max-width:720px}
+.road::before{content:"";position:absolute;left:10%;right:10%;top:13px;height:2px;background:#D8D2C4}
+.road .fillr{position:absolute;left:10%;top:13px;height:2px;width:80%;background:var(--green);transform-origin:0 50%;transform:scaleX(var(--rp, 1));transition:transform .5s ease}
 .stop{appearance:none;border:0;background:transparent;padding:0;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;position:relative;z-index:1}
 .stop i{width:28px;height:28px;border-radius:50%;background:var(--paper);border:2px solid #CFC8B8;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:12px;font-weight:800;color:var(--muted);transition:all .3s ease}
 .stop span{font-size:12.5px;font-weight:700;color:var(--muted);text-align:center;line-height:1.3}
@@ -307,10 +426,7 @@ h1,h2,h3{text-wrap:balance}
 .stations{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;margin-top:22px;padding:6px var(--gutr) 18px var(--gut);margin-inline:calc(-1 * var(--gut)) calc(-1 * var(--gutr));scrollbar-width:none;overscroll-behavior-x:contain}
 .stations::-webkit-scrollbar{display:none}
 .stn{flex:0 0 min(84%, 340px);scroll-snap-align:center;background:var(--white);border-radius:26px;padding:20px 18px 18px;display:flex;flex-direction:column;gap:8px;box-shadow:0 24px 50px -36px rgba(22,33,27,.55);min-width:0}
-@media (min-width:1100px){
-  .stations{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));overflow:visible;margin-inline:0;padding:6px 0 0}
-  .stn{flex:none}
-}
+
 .when{align-self:flex-start;font-size:12.5px;font-weight:800;color:var(--green);background:var(--mint);padding:5px 11px;border-radius:999px}
 .stn h3{margin:4px 0 0;font-size:20px;letter-spacing:-.025em;line-height:1.3}
 .stn p{margin:0;font-size:14.5px;line-height:1.6;color:var(--body)}
@@ -334,6 +450,129 @@ h1,h2,h3{text-wrap:balance}
 .an .stn .ms > div > *{opacity:0;transform:translateY(10px) scale(.96);transition:opacity .45s ease, transform .45s cubic-bezier(.3,1.5,.5,1)}
 .an .stn.in .ms > div > *{opacity:1;transform:none}
 .an .stn.in .ms > div > :nth-child(2){transition-delay:.25s}.an .stn.in .ms > div > :nth-child(3){transition-delay:.5s}
+.grade{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;padding:5px 10px;border-radius:999px;background:var(--red-soft);color:var(--red)}
+.grade::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.hl-g{color:var(--green)}.hl-g::after{background:rgba(20,114,75,.18)}
+.mc.loss small{display:block;font-size:11px;color:var(--muted)}
+.mc.loss b{font-size:19px;letter-spacing:-.03em;color:var(--text)}
+.mc.loss b span{font-size:12px;font-weight:600;color:var(--muted)}
+.mc .lb{display:flex;height:12px;border-radius:6px;overflow:hidden;background:#F4C9C4;margin-top:10px}
+.mc .lb i{display:block;width:69%;background:var(--green);border-radius:6px 0 0 6px;transform-origin:0 50%}
+.an .stn .mc .lb i{transform:scaleX(0);transition:transform 1s cubic-bezier(.3,.8,.2,1) .4s}.an .stn.in .mc .lb i{transform:none}
+.mc .lg{display:flex;justify-content:space-between;margin-top:5px;font-size:10.5px;font-weight:700}
+.mc .lg em{font-style:normal;color:var(--green)}.mc .lg em+em{color:var(--red)}
+.mc.case{background:var(--white);padding:0;overflow:hidden}
+.mc.case em{display:block;font-style:normal;font-size:11px;font-weight:700;color:var(--gold-hi);background:#2A2F2C;padding:8px 12px}
+.mc.case .tg{display:inline-block;margin:10px 12px 0;font-size:10.5px;font-weight:800;color:var(--red);background:var(--red-soft);padding:3px 8px;border-radius:999px}
+.mc.case b{padding:0 12px;margin-top:6px}
+.mc.case{padding-bottom:12px;line-height:1.55}
+.mc.case > :last-child{padding:0 12px}
+/* 챗봇 — 움직이는 색 번짐 위 입력창에 질문이 한 글자씩 써짐 */
+.askai{position:relative;overflow:hidden;margin-top:18px;border-radius:32px;padding:clamp(52px, 8vw, 96px) 18px;text-align:center;background:#EEE9FF;isolation:isolate;box-shadow:0 30px 60px -40px rgba(60,40,140,.45)}
+.askai .wrap{padding:0}
+.hl-gw{color:#fff}.hl-gw::after{background:rgba(47,163,111,.85);height:.3em}
+.mesh{position:absolute;inset:-20%;z-index:-1;filter:blur(60px) saturate(1.2)}
+.mesh i{position:absolute;border-radius:50%;opacity:.9}
+.mesh .m1{width:60%;height:70%;left:-10%;top:5%;background:#C3B4FF;animation:ms1 14s ease-in-out infinite alternate}
+.mesh .m2{width:55%;height:60%;right:-8%;top:-5%;background:#A996FF;animation:ms2 16s ease-in-out infinite alternate}
+.mesh .m3{width:50%;height:55%;left:25%;bottom:-10%;background:#BFE6D3;animation:ms3 18s ease-in-out infinite alternate}
+.mesh .m4{width:40%;height:45%;right:5%;bottom:5%;background:#FFFFFF;opacity:.8;animation:ms1 20s ease-in-out infinite alternate-reverse}
+.mesh .m5{width:35%;height:40%;left:10%;top:-12%;background:#D9CFFF;animation:ms2 15s ease-in-out infinite alternate-reverse}
+@keyframes ms1{to{transform:translate(18%,12%) scale(1.15)}}
+@keyframes ms2{to{transform:translate(-16%,14%) scale(.9)}}
+@keyframes ms3{to{transform:translate(10%,-18%) scale(1.2)}}
+.askai::after{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 50% 45%, rgba(255,255,255,.35), rgba(255,255,255,0) 70%)}
+.askai .kick{color:#5B48D6}
+.askai .h2{color:var(--text)}
+.askai .lead{margin-inline:auto;color:var(--body);max-width:30em}
+.pill{display:flex;align-items:center;gap:6px;width:min(520px,100%);margin-inline:auto;margin-top:34px;padding:16px 16px 16px 22px;border-radius:999px;background:rgba(255,255,255,.62);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.9);box-shadow:0 20px 50px -24px rgba(60,40,140,.45);transition:width .3s ease}
+.pt{flex:1 1 auto;min-width:0;font-size:15.5px;font-weight:600;color:var(--text);text-align:left;white-space:pre;overflow:hidden;display:flex;align-items:center}
+.pt > span,.pt .nb{white-space:pre;font-style:normal}
+.pt > span{font-weight:800}
+.pt.done{color:rgba(22,33,27,.4);transition:color .6s ease}.pt.done > span{color:var(--green)}.pt.done .cur{opacity:0;animation:none}
+.pt.out{opacity:0;filter:blur(4px);transition:opacity .5s ease, filter .5s ease}
+.cur{width:2px;height:18px;margin-left:2px;background:var(--text);animation:blink 1s steps(1) infinite;flex:none}
+@keyframes blink{50%{opacity:0}}
+.ent{margin-left:auto;padding-left:10px;color:#7A6FD0;display:flex}
+@media (min-width:760px){.pt{font-size:17px}.pill{padding:18px 20px 18px 26px}}
+/* 하는 일 카드 속 미니 화면 — 앱 화면처럼, AI가 한 일은 ✦ 표시 */
+.mx{margin-top:auto;border-radius:26px;background:#0F1613;padding:7px;box-shadow:0 22px 40px -26px rgba(7,20,15,.7)}
+.mx > div{position:relative;border-radius:20px;background:#F3F4F1;padding:12px;display:flex;flex-direction:column;gap:8px;min-height:226px;overflow:hidden}
+.spk{display:inline-block;width:13px;height:13px;flex:none}
+.ai-b{display:inline-flex;align-items:center;gap:5px;align-self:flex-start;font-size:10.5px;font-weight:800;letter-spacing:.02em;padding:4px 9px;border-radius:999px;color:#fff;background:linear-gradient(110deg,#14724B,#2FA36F 45%,#C9A35A 55%,#14724B);background-size:220% 100%;animation:aiSh 4s linear infinite}
+@keyframes aiSh{to{background-position:-220% 0}}
+.mx-hd{display:flex;align-items:center;gap:7px;margin:-12px -12px 2px;padding:11px 12px;background:#123A2A;color:#fff;font-size:11.5px;font-weight:700}
+.mx-hd .spk{color:#7FE0AE}
+.mx-hd.lt{background:transparent;color:var(--muted);padding-bottom:0;font-weight:600}
+/* 1 리포트 */
+.mx-doc{position:relative;background:#FFFDF8;border-radius:10px;padding:6px 8px;font-size:10px;line-height:1.5;color:#2A2A24;box-shadow:0 6px 14px -10px rgba(0,0,0,.5);overflow:hidden}
+.mx-doc .t{font-weight:800;text-align:center;font-size:9.5px;border-block:1px solid #2A2A24;padding:2px 0;margin:3px 0}
+.mx-r{position:relative;display:grid;grid-template-columns:54px minmax(0,1fr);gap:5px;padding:4px 18px 4px 3px}
+.mx-r > *{position:relative;z-index:1}
+.mx-r .hlx{position:absolute;inset:1px 0;border-radius:5px;background:rgba(229,57,53,.16);box-shadow:inset 0 0 0 1.5px rgba(211,47,47,.75);z-index:0;transform-origin:0 50%}
+.mx-r .pn{position:absolute;right:2px;top:50%;margin-top:-8px;width:16px;height:16px;border-radius:50%;background:var(--red);color:#fff;font-size:9.5px;font-weight:800;font-style:normal;display:flex;align-items:center;justify-content:center;z-index:2}
+.mx-scan{position:absolute;left:0;right:0;top:-40px;height:40px;background:linear-gradient(180deg,rgba(47,163,111,0),rgba(47,163,111,.45));border-bottom:2px solid #2FA36F;z-index:3;opacity:0}
+.an .stn .mx-r .hlx{transform:scaleX(0);transition:transform .5s cubic-bezier(.3,.8,.2,1)}
+.an .stn .mx-r .pn{transform:scale(0);transition:transform .4s cubic-bezier(.3,1.7,.5,1)}
+.an .stn.in .mx-r .hlx,.an .stn.in .mx-r .pn{transform:none}
+.an .stn.in .mx-r .hlx{transition-delay:1.1s}.an .stn.in .mx-r .pn{transition-delay:1.4s}
+.an .stn.in .mx-r.r2 .hlx{transition-delay:1.35s}.an .stn.in .mx-r.r2 .pn{transition-delay:1.65s}
+.stn.in .mx-scan{animation:mxScan 1.2s cubic-bezier(.45,0,.55,1) .2s 1 both}
+@keyframes mxScan{0%{top:-40px;opacity:1}90%{opacity:1}100%{top:100%;opacity:0}}
+.mx-res{display:flex;align-items:center;gap:8px;background:#fff;border-radius:12px;padding:9px 10px;box-shadow:0 8px 16px -12px rgba(0,0,0,.4)}
+.mx-res b{font-size:12.5px;color:var(--text)}
+.mx-res .grade{padding:4px 8px;font-size:11px}
+/* 2 손실 */
+.mx-big{font-size:24px;font-weight:800;letter-spacing:-.04em;color:var(--text);line-height:1.1}
+.mx-big small{font-size:12px;font-weight:600;color:var(--muted);margin-left:4px;letter-spacing:0}
+.mx-bar{display:flex;height:16px;border-radius:8px;overflow:hidden;background:#F6D3CF;margin-top:4px}
+.mx-bar i{display:block;height:100%;transform-origin:0 50%}
+.mx-bar .a{width:20%;background:#0E5A3B}.mx-bar .b{width:49%;background:#2FA36F}
+.an .stn .mx-bar i{transform:scaleX(0);transition:transform .8s cubic-bezier(.3,.8,.2,1)}
+.an .stn.in .mx-bar i{transform:none}.an .stn.in .mx-bar .a{transition-delay:.3s}.an .stn.in .mx-bar .b{transition-delay:.9s}
+.mx-lg{display:grid;gap:4px;font-size:11px;font-weight:600;color:var(--body)}
+.mx-lg span{display:flex;align-items:center;gap:6px}
+.mx-lg span::before{content:"";width:9px;height:9px;border-radius:3px;background:var(--c)}
+.mx-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:auto}
+.mx-chips span{font-size:10.5px;font-weight:700;padding:4px 9px;border-radius:999px;background:#E7ECE9;color:#3B4A43}
+/* 3 판례 */
+.mx-cs{position:relative;margin-top:4px}
+.mx-cs::before{content:"";position:absolute;left:10px;right:10px;top:-6px;height:20px;border-radius:12px;background:#DADFDB}
+.mx-c{position:relative;background:#fff;border-radius:14px;padding:11px 12px;box-shadow:0 10px 20px -14px rgba(0,0,0,.5);font-size:11.5px;line-height:1.5;color:var(--body)}
+.mx-c .rk{display:flex;gap:5px;margin-bottom:6px}
+.mx-c .rk span{font-size:10px;font-weight:800;padding:3px 7px;border-radius:999px;background:#E7F3EC;color:var(--green)}
+.mx-c .rk span.r{background:var(--red-soft);color:var(--red)}
+.mx-c b{display:block;font-size:13px;color:var(--text);margin-bottom:4px;letter-spacing:-.02em}
+.mx-c mark{background:linear-gradient(transparent 55%,rgba(47,163,111,.3) 55%);color:inherit;font-weight:700}
+.mx-c .lk{display:block;margin-top:7px;font-size:10.5px;font-weight:700;color:var(--green)}
+/* 4 질문 */
+.mx-q{align-self:flex-end;max-width:92%;background:#123A2A;color:#fff;border-radius:16px 16px 4px 16px;padding:10px 12px;font-size:12px;font-weight:600;line-height:1.5}
+.mx-q small{display:block;font-size:10px;color:#9FE3BF;font-weight:700;margin-bottom:2px}
+.mx-stop{display:flex;gap:8px;align-items:flex-start;background:#fff;border-radius:12px;padding:9px 10px;font-size:11.5px;line-height:1.45;color:var(--body);box-shadow:0 8px 16px -12px rgba(0,0,0,.4)}
+.mx-stop i{flex:none;width:18px;height:18px;border-radius:50%;background:var(--red);color:#fff;font-style:normal;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.mx-stop b{color:var(--red)}
+.an .stn .mx-q,.an .stn .mx-stop{opacity:0;transform:translateY(10px)}
+.an .stn.in .mx-q,.an .stn.in .mx-stop{opacity:1;transform:none;transition:opacity .4s ease .3s, transform .5s cubic-bezier(.3,1.5,.5,1) .3s}
+.an .stn.in .mx-stop{transition-delay:.9s}
+/* 5 여정 */
+.mx-nt{display:flex;gap:9px;align-items:flex-start;background:rgba(255,255,255,.92);border-radius:14px;padding:9px 10px;box-shadow:0 10px 20px -14px rgba(0,0,0,.5);font-size:11px;line-height:1.45;color:var(--body)}
+.mx-nt img{width:26px;height:26px;border-radius:7px;background:var(--paper);padding:3px;flex:none}
+.mx-nt small{display:block;font-size:9.5px;color:var(--muted)}
+.mx-nt b{display:block;font-size:12px;color:var(--text)}
+.an .stn .mx-nt{transform:translateY(-120%);opacity:0}
+.an .stn.in .mx-nt{transform:none;opacity:1;transition:transform .6s cubic-bezier(.3,1.4,.5,1) .2s, opacity .3s ease .2s}
+.mx-cmp{background:#fff;border-radius:12px;padding:8px 10px;display:grid;gap:5px;font-size:11px;color:var(--body);box-shadow:0 8px 16px -12px rgba(0,0,0,.4)}
+.mx-cmp .rw{display:flex;align-items:center;gap:6px}
+.mx-cmp .rw em{margin-left:auto;font-style:normal;font-weight:800;font-size:10px;padding:2px 7px;border-radius:999px;background:#E7ECE9;color:#5E6B64}
+.mx-cmp .rw.new{color:#7A1F17;font-weight:700}
+.mx-cmp .rw.new em{background:var(--red);color:#fff}
+.an .stn .mx-cmp .rw.new{opacity:0}
+.an .stn.in .mx-cmp .rw.new{opacity:1;transition:opacity .4s ease 1.1s}
+.mx-warn{background:var(--red);color:#fff;border-radius:10px;padding:8px 10px;font-size:11.5px;font-weight:800;text-align:center}
+.an .stn .mx-warn{opacity:0;transform:scale(.9)}
+.an .stn.in .mx-warn{opacity:1;transform:none;transition:opacity .3s ease 1.5s, transform .45s cubic-bezier(.3,1.7,.5,1) 1.5s}
+.stn .when{display:inline-flex;align-items:center;gap:6px}
+.stn .tagrow{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .chat{display:flex;gap:12px;align-items:center;margin-top:18px;padding:14px 16px;border-radius:18px;background:var(--white);border:1px solid var(--line)}
 .chat .cb{width:40px;height:40px;border-radius:12px;background:var(--deep);color:var(--gold);display:flex;align-items:center;justify-content:center;flex:none}
 .chat p{margin:0;font-size:14.5px;line-height:1.55;color:var(--body)}
@@ -363,44 +602,63 @@ h1,h2,h3{text-wrap:balance}
 .honest{margin:18px 0 0;padding:16px 18px;border-radius:16px;background:var(--mint);font-size:14.5px;line-height:1.65;color:var(--text)}
 .honest b{color:var(--green)}
 
-/* ━━ 6. 믿음 ━━ */
+/* ━━ 6. 믿음 — 스크롤하면 큰 글씨가 차오름 ━━ */
 .trust{background:#030806}
-.beat{padding-block:18px;border-top:1px solid var(--faint)}
+.beat{padding-block:22px;border-top:1px solid var(--faint)}
 .beat:first-of-type{border-top:0}
 .fill{display:inline-block;margin:0;font-size:clamp(42px, 8.4vw, 104px);line-height:1.1;letter-spacing:-.05em;font-weight:800;color:var(--white)}
 .fill.g{color:var(--gold)}
 .an .fill{color:transparent;background:linear-gradient(90deg, var(--white) calc(var(--p, 0) * 100%), rgba(255,255,255,.16) calc(var(--p, 0) * 100%));-webkit-background-clip:text;background-clip:text}
 .an .fill.g{background:linear-gradient(90deg, var(--gold) calc(var(--p, 0) * 100%), rgba(226,194,127,.18) calc(var(--p, 0) * 100%));-webkit-background-clip:text;background-clip:text}
-.proof{margin:10px 0 0;font-size:clamp(15px, 1.5vw, 18px);line-height:1.65;color:var(--dim);max-width:36em}
-.models{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.model{min-height:34px;padding:6px 13px;border-radius:999px;border:1px solid rgba(255,255,255,.2);color:var(--dim);font-weight:600;display:inline-flex;align-items:center;font-size:13px}
+.proof{margin:12px 0 0;font-size:clamp(15px, 1.5vw, 18px);line-height:1.65;color:var(--dim);max-width:34em}
+.upst{margin-top:20px;display:grid;gap:14px}
+.uplogo{height:20px;width:auto;display:block}
+.mq{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.mqt{display:flex;gap:10px;width:max-content;padding-block:10px;animation:slide 22s linear infinite}
+.model{flex:none;min-height:36px;padding:6px 15px;border-radius:999px;background:#EEE9FF;color:#4B3BC4;font-weight:800;display:inline-flex;align-items:center;font-size:13.5px;box-shadow:0 8px 20px -10px rgba(123,97,255,.9);white-space:nowrap}
+@media (min-width:960px){.uplogo{height:24px}}
 
 /* ━━ 7. 함께 (BM) ━━ */
 .with{background:var(--forest)}
 .vh{font-family:var(--serif);font-size:clamp(28px, 4.6vw, 56px);line-height:1.4;letter-spacing:-.03em;font-weight:700;margin:0}
 .vh em{font-style:normal;color:var(--gold)}
-.path{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:24px;font-size:13.5px;font-weight:700}
-.path span{padding:7px 13px;border-radius:999px;border:1px solid rgba(226,194,127,.45);color:var(--gold-hi)}
-.path span.now{background:var(--gold);color:var(--ink);border-color:var(--gold)}
-.path i{font-style:normal;color:rgba(226,194,127,.6)}
-.plans-t{margin:56px 0 0;font-size:clamp(20px, 2.2vw, 26px);letter-spacing:-.02em}
-.plans{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:18px}
-@media (min-width:900px){.plans{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}}
-.pl{border-radius:22px;padding:22px 20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);display:flex;flex-direction:column;gap:8px;min-width:0}
-.pl.main{background:var(--gold);color:var(--ink);border-color:var(--gold)}
-.pl small{font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--gold)}
-.pl.main small{color:var(--deep)}
-.pl b{font-size:19px;letter-spacing:-.02em;line-height:1.35}
-.pl p{margin:0;font-size:14.5px;line-height:1.6;color:var(--dim)}
-.pl.main p{color:#3D3826}
-.pl ul{margin:6px 0 0;padding:12px 0 0;border-top:1px solid rgba(255,255,255,.14);list-style:none;display:flex;flex-direction:column;gap:7px;font-size:14px;font-weight:600}
-.pl.main ul{border-top-color:rgba(7,20,15,.15)}
-.pl li{display:flex;gap:8px;align-items:flex-start}
-.pl li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold);margin-top:8px;flex:none}
-.pl.main li::before{background:var(--deep)}
-.an .plans .pl{opacity:0;transform:translateY(40px) rotate(-2deg);transition:opacity .7s ease, transform .9s cubic-bezier(.2,.9,.2,1)}
-.an .in .plans .pl{opacity:1;transform:none}
-.an .in .plans .pl:nth-child(2){transition-delay:.15s}.an .in .plans .pl:nth-child(3){transition-delay:.3s}
+/* 꿈꾸는 세상: 개인 · 기관 · 나라 세 꼭짓점이 가운데 전세이프로 이어지는 삼각형 */
+.tri{display:grid;grid-template-columns:minmax(0,1fr);gap:28px;margin-top:36px;align-items:center}
+@media (min-width:900px){.tri{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;margin-top:48px}}
+.tri-d{position:relative;width:100%;max-width:430px;margin-inline:auto;aspect-ratio:340/300}
+.tri-d > svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.tri-e{fill:rgba(226,194,127,.05);stroke:rgba(226,194,127,.55);stroke-width:1.5;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.tri-s{stroke:rgba(226,194,127,.28);stroke-width:1.5;vector-effect:non-scaling-stroke}
+.tri-f{stroke:var(--gold-hi);stroke-width:2;stroke-linecap:round;stroke-dasharray:3 14;vector-effect:non-scaling-stroke;animation:triFlow 1.6s linear infinite;opacity:.9}
+@keyframes triFlow{to{stroke-dashoffset:-17}}
+.tri-c{position:absolute;left:50%;top:60%;width:30%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle at 50% 40%,#1D5A41,#0B2A1F 70%);border:2px solid var(--gold);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;box-shadow:0 0 40px rgba(226,194,127,.35),inset 0 0 20px rgba(0,0,0,.3);z-index:2}
+.tri-c img{width:38%;aspect-ratio:1;object-fit:contain;border-radius:22%;background:var(--paper);padding:5%}
+.tri-c b{font-family:var(--mark);font-weight:400;font-size:clamp(13px, 3.6vw, 16px);color:var(--gold-hi)}
+.tri-c i{position:absolute;inset:-2px;border-radius:50%;border:1.5px solid rgba(226,194,127,.6);animation:triWave 3s ease-out infinite}
+.tri-c i.w2{animation-delay:1.5s}
+@keyframes triWave{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.7);opacity:0}}
+.tri-n{position:absolute;width:22%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:var(--forest);border:2px solid var(--gold);color:var(--gold-hi);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;z-index:2;box-shadow:0 0 0 6px var(--forest)}
+.tri-n b{font-size:clamp(12px, 3.4vw, 15px);font-weight:800;letter-spacing:.04em;color:var(--white)}
+.tri-n svg{width:38%;height:auto}
+.tri-n.n1{left:50%;top:15.3%}.tri-n.n2{left:12.4%;top:82%}.tri-n.n3{left:87.6%;top:82%}
+.tri-l{display:grid;gap:12px}
+.tri-l article{border-radius:20px;padding:16px 18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)}
+.tri-l small{display:block;font-size:11.5px;font-weight:800;letter-spacing:.06em;color:var(--gold)}
+.tri-l b{display:block;margin-top:3px;font-size:17px;line-height:1.35;letter-spacing:-.02em;color:var(--white)}
+.tri-l p{margin:5px 0 0;font-size:14px;line-height:1.6;color:var(--dim)}
+.rq{display:inline-flex;margin-top:10px;font-size:13px;font-weight:700;color:var(--ink);background:var(--gold);padding:6px 12px;border-radius:999px;text-decoration:none}
+.rq:hover{background:var(--gold-hi);color:var(--ink)}
+.rend{margin:34px 0 0;font-size:clamp(18px, 2.2vw, 24px);font-weight:700;letter-spacing:-.02em;color:var(--white)}
+.rend em{font-style:normal;color:var(--gold)}
+.an .tri .tri-e{stroke-dasharray:1;stroke-dashoffset:1}
+.an .tri.in .tri-e{stroke-dashoffset:0;transition:stroke-dashoffset 1.6s cubic-bezier(.4,0,.2,1) .2s}
+.an .tri .tri-n,.an .tri .tri-c{opacity:0;scale:.6}
+.an .tri.in .tri-n,.an .tri.in .tri-c{opacity:1;scale:1;transition:opacity .4s ease, scale .6s cubic-bezier(.3,1.6,.5,1)}
+.an .tri.in .tri-n.n1{transition-delay:.3s}.an .tri.in .tri-n.n2{transition-delay:.8s}.an .tri.in .tri-n.n3{transition-delay:1.3s}.an .tri.in .tri-c{transition-delay:1.9s}
+.an .tri .tri-f{opacity:0}.an .tri.in .tri-f{opacity:.9;transition:opacity .6s ease 2.2s}
+.an .tri .tri-l article{opacity:0;transform:translateY(14px)}
+.an .tri.in .tri-l article{opacity:1;transform:none;transition:opacity .5s ease, transform .6s cubic-bezier(.2,.9,.2,1)}
+.an .tri.in .tri-l article:nth-child(1){transition-delay:.4s}.an .tri.in .tri-l article:nth-child(2){transition-delay:.9s}.an .tri.in .tri-l article:nth-child(3){transition-delay:1.4s}
 
 /* ━━ 8. 영상 · 문의 ━━ */
 .end{background:var(--ink)}
@@ -409,20 +667,29 @@ h1,h2,h3{text-wrap:balance}
 .film{position:relative;display:block;width:100%;aspect-ratio:16/9;max-width:100%;border-radius:24px;overflow:hidden;border:0;padding:0;cursor:pointer;background:radial-gradient(ellipse at 30% 30%, #12503A, #07140F 70%);text-align:left}
 .film .fbg{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-around;opacity:.5;pointer-events:none}
 .film .fbg i{display:block;font-style:normal;white-space:nowrap;font-size:22px;font-weight:800;color:rgba(255,255,255,.07)}
-.film .play{position:absolute;left:50%;top:50%;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 0 rgba(226,194,127,.5);animation:pulse 2.4s ease-out infinite}
+@media (max-width:420px){.film{aspect-ratio:4/3}.end .film .play{top:40%}}
+.film .play{position:absolute;left:50%;top:50%;width:72px;height:50px;margin:-25px 0 0 -36px;border-radius:14px;background:#FF0033;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 0 rgba(255,0,51,.45);animation:pulse 2.4s ease-out infinite;transition:transform .25s ease}
+.film:hover .play{transform:scale(1.08)}
+.film .ytgo{position:absolute;right:16px;top:16px;font-size:12px;font-weight:700;color:var(--white);background:rgba(0,0,0,.45);padding:6px 10px;border-radius:999px}
 .film .play svg{margin-left:4px}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(226,194,127,.55)}100%{box-shadow:0 0 0 22px rgba(226,194,127,0)}}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,0,51,.45)}100%{box-shadow:0 0 0 20px rgba(255,0,51,0)}}
+.btn-yt{background:var(--white);color:var(--ink)}.btn-yt:hover{background:#F3F3F3;color:var(--ink)}
+.ytb{width:28px;height:20px;border-radius:6px;background:#FF0033;display:inline-flex;align-items:center;justify-content:center}
+.ytb svg{margin-left:1px}
+.lead b{color:var(--white);font-weight:700}
+
 .film .cap{position:absolute;left:18px;bottom:16px;right:18px;color:var(--white)}
 .film .cap b{display:block;font-size:18px}
 .film .cap span{font-size:13px;color:var(--dim)}
 .film .wm{position:absolute;left:18px;top:16px;font-size:20px}
-.contact{border-radius:24px;background:var(--gold);color:var(--ink);padding:26px 22px;display:flex;flex-direction:column;gap:14px}
-.contact h2{margin:0;font-size:clamp(24px, 2.8vw, 32px);line-height:1.3;letter-spacing:-.03em}
-.contact p{margin:0;font-size:15px;line-height:1.6;color:#3D3826}
-.mailrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
-.mail{flex:1 1 100%;display:flex;align-items:center;justify-content:center;min-height:54px;padding:0 18px;border-radius:999px;background:var(--ink);color:var(--gold-hi);font-weight:700;font-size:16px;text-decoration:none;user-select:all;white-space:nowrap;text-align:center}
-@media (min-width:1100px){.mail{flex:1 1 auto}}
-.copy{flex:1 1 auto;min-height:48px;padding:0 18px;border-radius:999px;border:1.5px solid rgba(7,20,15,.35);background:transparent;color:var(--ink);font-weight:700;cursor:pointer}
+.endh{margin-bottom:24px}
+.contact{display:flex;flex-direction:column;gap:12px;padding:30px 0 0}
+.contact h2{margin:0;font-size:clamp(26px, 3.2vw, 38px);line-height:1.3;letter-spacing:-.03em;color:var(--white);white-space:nowrap}
+.contact p{margin:0;font-size:15px;line-height:1.6;color:var(--dim)}
+.mail{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;padding:18px 2px 16px;border-top:1px solid rgba(226,194,127,.35);border-bottom:1px solid rgba(226,194,127,.35);color:var(--gold-hi);font-weight:700;font-size:clamp(17px, 4.6vw, 22px);text-decoration:none;letter-spacing:-.01em}
+.mail span{min-width:0;overflow-wrap:anywhere}
+.mail i{flex:none;width:44px;height:44px;border-radius:50%;background:var(--gold);color:var(--ink);display:flex;align-items:center;justify-content:center;transition:transform .3s cubic-bezier(.3,1.5,.5,1)}
+.mail:hover{color:var(--white)}.mail:hover i{transform:rotate(45deg)}
 
 /* 바닥 */
 .foot{background:var(--ink);color:rgba(255,255,255,.6);padding-block:8px 32px;font-size:14px;border-top:1px solid rgba(255,255,255,.07)}
@@ -433,7 +700,8 @@ h1,h2,h3{text-wrap:balance}
 
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none !important;transition:none !important;scroll-behavior:auto !important}
-  .bub .q{opacity:0}.bub .a{opacity:1}.mk{opacity:1}.rsheet{transform:none}.beam,.qm{display:none}.st .s1{opacity:0}.st .s2{opacity:1}
+  .an .wc,.an .tri .tri-l article{opacity:1;transform:none}.an .tri .tri-n,.an .tri .tri-c{opacity:1;scale:1}.an .tri .tri-e{stroke-dashoffset:0}.an .tl .alert{opacity:1;transform:translateX(-50%)}.an .tl i{--tp:1}
+  .hs-cam,.hs-hint,.hs-shut,.hs-vf,.hs-flash,.hs-scan,.hs-ring,.hs-w{display:none}.hs-bar,.hs-hl,.hs-pin,.hs-g b,.hs-it,.hs-ans{opacity:1}.hs-res,.hs-doc,.hs-seg i{transform:none !important}.hs-st .s1{opacity:0}.hs-st .s2{opacity:1}
 }
 </style>
 </head>
@@ -460,13 +728,12 @@ h1,h2,h3{text-wrap:balance}
 <span class="wm">전세<i>AI</i>프</span>
 </a>
 <nav class="links" aria-label="섹션">
-<a href="#now">전세사기 현실</a>
-<a href="#how">하는 일</a>
-<a href="#catch">잡는 사기</a>
-<a href="#trust">믿을 수 있게</a>
-<a href="#with">함께하기</a>
+<a href="#now"><span class="lf">전세사기 현실</span><span class="ls">현실</span></a>
+<a href="#how"><span class="lf">하는 일</span><span class="ls">기능</span></a>
+<a href="#trust"><span class="lf">믿을 수 있게</span><span class="ls">신뢰</span></a>
+<a href="#with"><span class="lf">함께하기</span><span class="ls">함께</span></a>
 </nav>
-<a class="btn btn-gold btn-s" href="#contact">도입 문의</a>
+<a class="btn btn-gold btn-s ask" href="#contact">도입 문의</a>
 </div>
 </header>
 
@@ -482,39 +749,50 @@ h1,h2,h3{text-wrap:balance}
 <div>
 <span class="kick rv">AI 전세사기 예방 서비스</span>
 <h1 class="h1"><span class="ln"><span>내 보증금,</span></span><span class="ln"><span>돌려받을 수 있을까요?</span></span><span class="ln"><span><span class="hl">찍어서 확인하세요</span></span></span></h1>
-<p class="lead rv d2">등기부등본을 찍으면 위험한 곳을 짚고, 쉬운 말로 알려 드려요. 잔금 보내는 날, 이사 다음 날까지 함께 확인해요.</p>
+<p class="lead rv d2"><span class="sen"><b>놓치기 쉬운 위험</b>은 먼저 찾고,</span><span class="sen"><b>어려운 말</b>은 쉽게 풀어요.</span></p>
 <div class="ctas rv d3">
-<a class="btn btn-gold" href="#film"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>소개 영상 보기</a>
+<a class="btn btn-yt" href="#film" data-yt><span class="ytb" aria-hidden="true"><svg width="10" height="10" viewBox="0 0 24 24" fill="#fff"><path d="M6 3.5v17l15-8.5z"/></svg></span><span class="xs-hide">소개 </span>영상 보기</a>
 <a class="btn btn-line" href="#contact">도입 문의</a>
 </div>
 </div>
 <div class="rv d2">
-<div class="stage" role="img" aria-label="휴대폰에 찍힌 등기부 위로 '근저당?', '채권최고액은 또 뭐지', '신탁원부?' 같은 물음이 튀어나오고, 초록 빛이 훑은 뒤 물음이 쉬운 말 답으로 바뀌며 '위험' 결과 카드가 올라오는 장면">
-<div class="phone">
-<div class="scr">
-<div class="abar"><span class="wm">전세<i>AI</i>프</span><span class="st"><span class="s1">읽는 중</span><span class="s2">분석 끝</span></span></div>
-<div class="mp">
-<div class="beam"></div>
+<div class="stage" role="img" aria-label="'어렵게 모은 보증금인데…', '첫 계약인데, 괜찮을까?', '근저당, 신탁… 다 무슨 말이야' 같은 걱정이 떠오른 뒤, 휴대폰으로 등기부를 찍으면 위험한 줄 두 곳에 번호가 붙고 '위험' 결과 카드가 올라오며, 걱정이 있던 자리에 전세이프의 답이 하나씩 뜨는 장면">
+<div class="hs-glow"></div><div class="hs-aur"></div>
+<div class="hs-ring"></div><div class="hs-ring r2"></div>
+<div class="hs-pw"><div class="hs-phone"><div class="hs-scr">
+<div class="hs-isl"></div>
+<div class="hs-cam"></div>
+<p class="hs-hint">등기부등본을 네모 안에 맞춰 주세요</p>
+<div class="hs-bar"><span class="wm">전세<i>AI</i>프</span><span class="hs-st"><span class="s1">읽는 중</span><span class="s2">위험 2곳</span></span></div>
+<div class="hs-doc">
+<div class="hs-scan"></div>
+<div class="h">등기사항전부증명서</div>
 <div class="t">【 갑 구 】 소유권</div>
-<div class="mr"><b>소유권이전</b><span>수탁자 ○○신탁<br>신탁원부 제2024-1234호</span><i class="mk r"></i></div>
+<div class="hs-row"><i class="hs-hl red"></i><b>소유권이전</b><span>수탁자 ○○신탁<br>신탁원부 제2024-1234호</span><i class="hs-pin red">1</i></div>
 <div class="t">【 을 구 】 소유권 이외의 권리</div>
-<div class="mr"><b>근저당권설정</b><span>채권최고액 금360,000,000원<br>공동담보목록 제2023-567호</span><i class="mk a k2"></i></div>
-<div class="mr"><b class="x">질권설정</b><span class="x">채권액 금20,000,000원</span></div>
-<div class="mr"><b>근저당권설정</b><span>채권최고액 금120,000,000원</span><i class="mk a k3"></i></div>
+<div class="hs-row"><i class="hs-hl red d2"></i><b>근저당권설정</b><span>채권최고액 금360,000,000원<br>근저당권자 ○○캐피탈</span><i class="hs-pin red d2">2</i></div>
+<div class="hs-row"><b class="x">질권설정</b><span class="x">채권액 금20,000,000원</span></div>
+<div class="hs-row"><b>근저당권설정</b><span>채권최고액 금120,000,000원</span></div>
 </div>
-<div class="rsheet">
-<span class="grade">위험</span>
-<h4>신탁 1건 · 근저당 2건</h4>
-<p>서류상 주인이 신탁회사예요. 계약하기 전에 신탁원부로 세를 놓을 권한을 확인하세요.</p>
-<p class="sx">판정 · 규칙 기반 &nbsp;|&nbsp; 설명 · AI</p>
+<div class="hs-vf"><i></i><i></i><i></i><i></i></div>
+<div class="hs-shut"></div>
+<div class="hs-res">
+<span class="addr">예시 집 · ○○빌라 301호</span>
+<div class="hs-g"><b>위험</b><span>잔금 전에 꼭 확인해요</span></div>
+<div class="hs-seg"><i></i><i></i><i></i></div>
+<p><span>양호</span><span>확인 필요</span><em>위험</em></p>
+<div class="hs-it"><i>1</i>서류상 주인이 신탁회사<small>신탁</small></div>
+<div class="hs-it d2"><i>2</i>먼저 받아 갈 빚<small>최대 3.6억</small></div>
 </div>
-</div>
-</div>
-<span class="qm m1">?</span><span class="qm m2">?</span><span class="qm m3">?</span>
-<div class="bub l p1"><span class="q">근저당?</span><span class="a"><em>근저당</em>집을 담보로 빌린 돈이에요</span></div>
-<div class="bub r p2"><span class="q">채권최고액은 또 뭐지…</span><span class="a"><em>채권최고액</em>빌린 돈의 최대 한도예요</span></div>
-<div class="bub l p3"><span class="q">신탁원부?</span><span class="a"><em>신탁</em>서류상 주인이 신탁회사예요</span></div>
-<div class="bub r p4"><span class="q">이 집, 계약해도 되는 거야?</span><span class="a"><em>전세이프</em>근거와 함께 짚어 드려요</span></div>
+<div class="hs-flash"></div>
+<div class="hs-glare"></div>
+</div></div></div>
+<div class="hs-w l w1"><span>어렵게 모은 보증금인데…</span></div>
+<div class="hs-w r w2"><span>첫 계약인데, 괜찮을까?</span></div>
+<div class="hs-w l w3"><span>근저당, 신탁…<br>다 무슨 말이야</span></div>
+<div class="hs-ans a1"><img src="assets/logo.png" alt=""><span><small>전세이프</small><b>돌려받기 어려운 신호,<br>먼저 찾았어요</b></span></div>
+<div class="hs-ans a2"><img src="assets/logo.png" alt=""><span><small>전세이프</small><b>잔금 날까지<br>같이 확인해요</b></span></div>
+<div class="hs-ans a3"><img src="assets/logo.png" alt=""><span><small>전세이프</small><b>근저당은<br>'집에 잡힌 빚'이에요</b></span></div>
 </div>
 <p class="hnote">예시 등기부예요. 실제 사람·회사·주소가 아니에요.</p>
 </div>
@@ -523,15 +801,15 @@ h1,h2,h3{text-wrap:balance}
 
 <div class="ticker" aria-label="전세이프를 만든 근거">
 <div class="tk" data-ticker>
-<span>외부 AI 호출 100% 국내 모델</span><span>시세 데이터 1,807만 행</span><span>내 사진 위 근거 표시 14종</span><span>판례 원문 161건 분석</span><span>현직 공인중개사 97분 인터뷰</span><span>2026 AI ROOKIE 국내 AI 트랙 결선</span>
+<span>국내 AI · 업스테이지 Solar</span><span>2026 공시가격 1,585만 건</span><span>17개 시·도 경매 매각가율</span><span>HUG 악성임대인 1,978명 대조</span><span>판례 원문 분석</span><span>잔금 전날 · 입주 다음 날 알림</span><span>내 집을 아는 챗봇</span><span>집주인에게 물어볼 질문</span>
 </div>
 </div>
 
 <section id="now" class="sec now">
 <div class="wrap">
 <span class="kick rv">전세사기, 지금</span>
-<h2 class="h2"><span class="ln"><span>피해 인정만</span></span><span class="ln"><span>4만 1천 건을 넘었어요</span></span></h2>
-<p class="lead rv d2">특별법이 시행된 2023년 6월부터 지금까지 쌓인 숫자예요. 최근 9개월에도 한 달에 평균 628건씩 늘었어요.</p>
+<h2 class="h2"><span class="ln"><span>피해 인정만</span></span><span class="ln"><span><span class="hl">4만 1천 건</span>을 넘었어요</span></span></h2>
+<p class="lead rv d2">2023년 6월 특별법 시행 뒤 쌓인 숫자예요.</p>
 <figure class="chart-card rv d2" style="margin-inline: 0">
 <p class="ch-t">전세사기 피해자 결정 누적 건수</p>
 <p class="ch-s">2023.6 특별법 시행 ~ 2026.9 · 국토교통부 발표</p>
@@ -550,13 +828,12 @@ h1,h2,h3{text-wrap:balance}
 <div class="dots" aria-hidden="true"></div>
 </div>
 <div class="box rv d2">
-<h3>보증금 3억 원 이하</h3>
-<span class="big">97.7<small>%</small></span>
-<div class="meter" aria-hidden="true"><i></i></div>
-<p style="margin-top: 12px">피해자 대부분이 3억 원 이하의 보증금을 맡겼어요</p>
+<h3>지금도 한 달에</h3>
+<span class="big">628<small>건씩</small></span>
+<p style="margin-top: 12px">최근 9개월 평균, 계속 늘고 있어요</p>
 </div>
 </div>
-<p class="src rv">출처: 국토교통부 전세사기피해지원위원회 심의 결과(2026.10.12 발표, 9월까지 누적) · 시점별 누적은 국토부 발표를 인용한 보도 · 한 달 평균은 2025.12(35,909건)~2026.9(41,559건) 차이를 9로 나눈 값</p>
+<p class="src rv">출처: 국토교통부 발표(2026.10.12) · 언론 보도</p>
 </div>
 </section>
 
@@ -564,19 +841,43 @@ h1,h2,h3{text-wrap:balance}
 <div class="wall" aria-hidden="true" data-wall></div>
 <div class="wfade" aria-hidden="true"></div>
 <div class="wrap">
-<div class="whyg">
-<div>
+<div class="whd">
 <span class="kick rv">왜 막기 어려울까</span>
-<h2 class="h2"><span class="ln"><span>정보가 없어서가 아니라,</span></span><span class="ln"><span><em>읽을 수 없어서</em></span></span></h2>
-<p class="lead rv d2">사기는 대부분 계약서를 쓰는 그 순간 일어나요. 그런데 그 순간 봐야 할 등기부는, 한국어인데 읽히지 않죠.</p>
+<h2 class="h2"><span class="ln"><span>혼자 막기엔,</span></span><span class="ln"><span><span class="hl">챙길 게 너무 많아요</span></span></span></h2>
 </div>
-<div class="tr" aria-label="등기부 말을 쉬운 말로 바꾼 예">
-<div class="trow"><span class="tw reg">채권최고액<small>금360,000,000원</small></span><i class="arr" aria-hidden="true"></i><span class="tw ez">빌린 돈의 최대 한도예요</span></div>
-<div class="trow"><span class="tw reg">신탁원부<small>제2024-1234호</small></span><i class="arr" aria-hidden="true"></i><span class="tw ez">서류상 주인이 신탁회사예요</span></div>
-<div class="trow"><span class="tw reg">임차권등기명령<small>주택임차권</small></span><i class="arr" aria-hidden="true"></i><span class="tw ez">전 세입자가 보증금을 못 받았어요</span></div>
+<div class="wcs">
+<article class="wc">
+<h3><span class="no">01</span>수법은 계속 늘어요</h3>
+<p>하나를 알면, 또 다른 수법이 나와요.</p>
+<div class="wv hv" aria-hidden="true"><div class="hz"><div class="hz-in">
+<div class="hz-g"></div>
+<div class="hz-w l"><span class="gd">경매 넘어간 집</span><span class="rd">압류 걸린 집</span><span>잔금 직전 새 빚</span></div>
+<div class="hz-w r"><span class="rd">악성임대인 집주인</span><span>보증보험 안 되는 집</span><span class="gd">못 돌려받은 전 세입자</span></div>
+<svg class="hz-crk" viewBox="0 0 14 100" preserveAspectRatio="none"><polyline pathLength="1" points="7,0 2,18 11,34 3,52 10,70 4,86 8,100"/></svg>
+<div class="hz-roof"><svg viewBox="0 0 262 66" preserveAspectRatio="none"><polygon points="131,3 258,64 4,64"/></svg><div class="tags"><span class="rd">깡통전세</span><span class="gd">신탁 사기</span></div></div>
+</div></div></div>
+</article>
+<article class="wc">
+<h3><span class="no">02</span>서류는 읽히지 않아요</h3>
+<p>단서는 등기부에 있는데, 온통 낯선 말이에요.</p>
+<div class="wv" aria-hidden="true"><div class="dc-p">
+<span class="ttl">【 을 구 】 소유권 이외의 권리</span>
+<mark>근저당권설정</mark> 채권최고액 금360,000,000원<br>
+<mark>공동담보목록</mark> 제2023-567호 · <mark>신탁원부</mark><br>
+<mark>임차권등기명령</mark> 주택임차권<br>
+<mark>가처분</mark> 신청사건 처리중
+</div></div>
+</article>
+<article class="wc">
+<h3><span class="no">03</span>단계마다 볼 게 달라요</h3>
+<p>계약한 날 괜찮아도, 잔금 날 달라질 수 있어요.</p>
+<div class="wv" aria-hidden="true"><div class="tl"><i></i>
+<b><span>집 보기</span></b><b><span>가계약</span></b><b><span>계약서</span></b><b><span>잔금</span></b><b><span>이사</span></b>
+<div class="alert">새 빚이 생겼다면?</div>
+</div></div>
+</article>
 </div>
-</div>
-<p class="src rv">"대부분 계약서를 쓰는 시점에 일어난다" — 현직 공인중개사 심층 인터뷰(2026.7, 약 97분)</p>
+<p class="wnext rv">그래서, <em>전세이프가 같이 챙겨요</em></p>
 </div>
 </section>
 
@@ -585,91 +886,110 @@ h1,h2,h3{text-wrap:balance}
 <div class="panel on-light" data-grow>
 <div class="wrap">
 <span class="kick rv">전세이프가 하는 일</span>
-<h2 class="h2"><span class="ln"><span>분석 한 번으로</span></span><span class="ln"><span>끝나지 않아요</span></span></h2>
-<p class="lead rv d2">계약서 쓰는 날부터 이사 다음 날까지. 불안한 순간마다 지금 확인할 것을 알려 드려요.</p>
+<h2 class="h2"><span class="ln"><span>사진 몇 장으로,</span></span><span class="ln"><span><span class="hl hl-g">다섯 가지</span>를 챙겨요</span></span></h2>
 <div class="road rv d2" data-road>
 <i class="fillr"></i>
-<button class="stop on" type="button" data-go="0"><i>1</i><span>집 보러<br>간 날</span></button>
-<button class="stop" type="button" data-go="1"><i>2</i><span>계약서<br>쓰는 날</span></button>
-<button class="stop" type="button" data-go="2"><i>3</i><span>잔금<br>보내는 날</span></button>
-<button class="stop" type="button" data-go="3"><i>4</i><span>이사<br>다음 날</span></button>
+<button class="stop on" type="button" data-go="0"><i>1</i><span>리포트<br>분석</span></button>
+<button class="stop" type="button" data-go="1"><i>2</i><span>손실<br>계산</span></button>
+<button class="stop" type="button" data-go="2"><i>3</i><span>판례<br>매칭</span></button>
+<button class="stop" type="button" data-go="3"><i>4</i><span>물어볼<br>질문</span></button>
+<button class="stop" type="button" data-go="4"><i>5</i><span>계약<br>여정</span></button>
 </div>
 <div class="stations" data-stations>
 <article class="stn">
-<span class="when">집 보러 간 날</span>
-<h3>찍으면, 위험부터 알려요</h3>
-<p>등기부 사진 몇 장, 약 30초. 위험한 줄을 내 사진 위에 형광펜으로 짚어요.</p>
-<div class="mini" aria-hidden="true"><div class="ms"><div>
-<div class="mc"><span class="grade">위험</span><b>신탁 1건 · 근저당 2건</b>서류상 주인이 신탁회사예요</div>
-<div class="mc hlt">근저당권설정 · 채권최고액 금360,000,000원</div>
-<span class="chip">내 사진에서 보기</span>
-</div></div></div>
+<div class="tagrow"><span class="when">리포트 분석</span><span class="ai-b"><svg class="spk" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1.5c.6 4.9 2.6 8.9 10.5 10.5-7.9 1.6-9.9 5.6-10.5 10.5-.6-4.9-2.6-8.9-10.5-10.5C9.4 10.4 11.4 6.4 12 1.5z"/></svg>AI 분석</span></div>
+<h3>찍으면, 위험부터 짚어요</h3>
+<p>등기부 사진 몇 장, 약 30초. 위험한 줄을 내 사진 위에 형광펜으로 표시해요.</p>
+<div class="mx" aria-hidden="true"><div>
+<div class="mx-hd"><svg class="spk" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1.5c.6 4.9 2.6 8.9 10.5 10.5-7.9 1.6-9.9 5.6-10.5 10.5-.6-4.9-2.6-8.9-10.5-10.5C9.4 10.4 11.4 6.4 12 1.5z"/></svg>AI가 내 등기부에 형광펜 2곳</div>
+<div class="mx-doc"><i class="mx-scan"></i>
+<div class="t">【 갑 구 】 소유권</div>
+<div class="mx-r"><i class="hlx"></i><b>소유권이전</b><span>수탁자 ○○신탁</span><i class="pn">1</i></div>
+<div class="t">【 을 구 】 소유권 이외의 권리</div>
+<div class="mx-r r2"><i class="hlx"></i><b>근저당권설정</b><span>채권최고액 금360,000,000원</span><i class="pn">2</i></div>
+<div class="mx-r"><b>근저당권설정</b><span>채권최고액 금120,000,000원</span></div>
+</div>
+<div class="mx-res"><span class="grade">위험</span><b>보증금을 지키기 어려운 신호</b></div>
+</div></div>
 </article>
 <article class="stn">
-<span class="when">계약서 쓰는 날</span>
-<h3>무엇을 물어볼지 알려요</h3>
-<p>위험 신호에 맞춘 질문을 중개사에게 그대로 보여 주세요. 비슷한 판례도 함께 찾아 드려요.</p>
-<div class="mini" aria-hidden="true"><div class="ms"><div>
-<div class="mc ask"><em>중개사에게 물어보세요</em>신탁원부(신탁 내용을 적은 서류)를 보여주실 수 있나요?</div>
-<div class="mc warn">이런 답이면 멈추세요 · 보여줄 수 없다거나 얼버무린다</div>
-<span class="chip">대법원 판례 2건</span>
-</div></div></div>
+<span class="when">손실 시뮬레이터</span>
+<h3>경매로 넘어가면, 얼마 돌려받을까</h3>
+<p>이 지역 실제 경매 매각가율로 계산해요. 먼저 받는 최우선변제까지 넣어요.</p>
+<div class="mx" aria-hidden="true"><div>
+<div class="mx-hd lt">경매로 넘어가면</div>
+<div class="mx-big">1억 3,877만 원<small>돌려받아요</small></div>
+<div class="mx-bar"><i class="a"></i><i class="b"></i></div>
+<div class="mx-lg"><span style="--c:#0E5A3B">최우선변제로 먼저 받는 돈</span><span style="--c:#2FA36F">배당으로 돌려받는 돈</span><span style="--c:#F6D3CF">못 받을 수 있는 돈</span></div>
+<div class="mx-chips"><span>실제 경매 매각가율</span><span>최우선변제</span></div>
+</div></div>
 </article>
 <article class="stn">
-<span class="when">잔금 보내는 날</span>
-<h3>돈 보내기 전, 다시 대조해요</h3>
-<p>아침 8시에 알려 드려요. 같은 집을 다시 찍으면 새로 생긴 빚만 골라 보여 줘요.</p>
-<div class="mini" aria-hidden="true"><div class="ms"><div>
-<div class="mc noti"><img src="assets/logo.png" alt=""><div><small>전세이프 · 오전 8:00</small><b>오늘 잔금 보내는 날이에요</b>입금 전 마지막 확인 — 오늘 뗀 등기부로 대조해 주세요</div></div>
-<div class="mc diff"><b>새로 생김</b> · 근저당권설정 · 금120,000,000원</div>
-<div class="mc warn">잔금 보내기 전에 멈추세요</div>
-</div></div></div>
+<div class="tagrow"><span class="when">판례 매칭</span><span class="ai-b"><svg class="spk" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1.5c.6 4.9 2.6 8.9 10.5 10.5-7.9 1.6-9.9 5.6-10.5 10.5-.6-4.9-2.6-8.9-10.5-10.5C9.4 10.4 11.4 6.4 12 1.5z"/></svg>AI 매칭</span></div>
+<h3>닮은 판례를 찾아 드려요</h3>
+<p>AI가 실제 판례 중 이 집과 닮은 사건을 골라, 이 집 숫자로 설명해요.</p>
+<div class="mx" aria-hidden="true"><div>
+<div class="mx-hd"><svg class="spk" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1.5c.6 4.9 2.6 8.9 10.5 10.5-7.9 1.6-9.9 5.6-10.5 10.5-.6-4.9-2.6-8.9-10.5-10.5C9.4 10.4 11.4 6.4 12 1.5z"/></svg>AI가 실제 판례 중 이 집에 맞춰 골랐어요</div>
+<div class="mx-cs"><div class="mx-c">
+<div class="rk"><span>1순위</span><span class="r">신탁</span></div>
+<b>서류상 주인이 신탁회사였던 사건</b>
+닮은 점 · <mark>수탁자 동의 없이 맺은 임대차</mark>, 이 집도 신탁등기가 있어요
+<span class="lk">판례 원문 보기 ›</span>
+</div></div>
+</div></div>
 </article>
 <article class="stn">
-<span class="when">이사 다음 날</span>
-<h3>끝까지 확인해요</h3>
-<p>전입신고를 했다면 다음 날 0시부터 대항력이 생겨요. 그 사이 새 빚이 없는지 한 번 더 봐요.</p>
-<div class="mini" aria-hidden="true"><div class="ms"><div>
-<div class="mc noti"><img src="assets/logo.png" alt=""><div><small>전세이프 · 오전 8:00</small><b>입주 다음 날 등기부 확인</b>이삿날 이후 새 빚이 없는지 다시 떼서 대조해 주세요</div></div>
-<div class="mc ok">등기부 변동 없음</div>
-<span class="chip">계약 여정 끝</span>
-</div></div></div>
+<span class="when">물어볼 질문</span>
+<h3>중개사에게 뭘 물을지 알려요</h3>
+<p>위험 신호에 맞춘 질문을 그대로 보여 주세요. 멈춰야 할 답도 함께 알려요.</p>
+<div class="mx" aria-hidden="true"><div>
+<div class="mx-hd lt">중개사에게 이렇게 물어보세요</div>
+<div class="mx-q"><small>이 집 위험 신호에 맞춘 질문</small>신탁원부(신탁 내용을 적은 서류)를 보여주실 수 있나요?</div>
+<div class="mx-stop"><i>!</i><span><b>이런 답이면 멈추세요</b><br>보여줄 수 없다거나 얼버무린다</span></div>
+<div class="mx-chips"><span>화면 그대로 보여 주기</span></div>
+</div></div>
+</article>
+<article class="stn">
+<div class="tagrow"><span class="when">계약 여정</span><span class="ai-b"><svg class="spk" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1.5c.6 4.9 2.6 8.9 10.5 10.5-7.9 1.6-9.9 5.6-10.5 10.5-.6-4.9-2.6-8.9-10.5-10.5C9.4 10.4 11.4 6.4 12 1.5z"/></svg>AI 대조</span></div>
+<h3>잔금 날까지, 다시 대조해요</h3>
+<p>잔금 날 아침에 알려 드려요. 같은 집을 다시 찍으면 새로 생긴 빚만 골라 보여 줘요.</p>
+<div class="mx" aria-hidden="true"><div>
+<div class="mx-nt"><img src="assets/logo.png" alt=""><div><small>전세이프 · 오전 8:00</small><b>오늘 잔금 보내는 날이에요</b>입금 전, 오늘 뗀 등기부로 대조해 주세요</div></div>
+<div class="mx-cmp"><span class="ai-b"><svg class="spk" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1.5c.6 4.9 2.6 8.9 10.5 10.5-7.9 1.6-9.9 5.6-10.5 10.5-.6-4.9-2.6-8.9-10.5-10.5C9.4 10.4 11.4 6.4 12 1.5z"/></svg>AI가 다시 읽고 바뀐 줄만</span>
+<div class="rw">근저당 3억 6천<em>그대로</em></div>
+<div class="rw new">근저당 1억 2천<em>새로 생김</em></div></div>
+<div class="mx-warn">잔금 보내기 전에 멈추세요</div>
+</div></div>
 </article>
 </div>
-<div class="chat rv">
-<span class="cb" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-5.1A8 8 0 1 1 21 12z"/></svg></span>
-<p><b>모르는 말은 언제든.</b> 글자를 꾹 누르면 챗봇이 쉬운 말로 풀어 줘요.</p>
-</div>
-</div>
-</div>
-</section>
-
-<section id="catch" class="sec catch on-light">
+<div class="askai" data-askai>
+<div class="mesh" aria-hidden="true"><i class="m1"></i><i class="m2"></i><i class="m3"></i><i class="m4"></i><i class="m5"></i></div>
 <div class="wrap">
-<span class="kick rv">잡는 사기</span>
-<h2 class="h2"><span class="ln"><span>등기부에서 잡는</span></span><span class="ln"><span>6가지 수법</span></span></h2>
-<p class="hint rv d2">카드를 누르면 잡는 방법이 보여요</p>
-<div class="fr rv d2" data-flips></div>
-<p class="honest rv"><b>등기부에 안 보이는 위험</b>(세금 체납, 대리인 이중계약 등)은 확인할 방법을 알려 드려요. 가짜 매물 광고처럼 <b>못 잡는 것</b>은 못 잡는다고 리포트에 그대로 적어요.</p>
+<span class="kick rv">그리고, 언제든</span>
+<h2 class="h2"><span class="ln"><span>나만의 부동산 비서,</span></span><span class="ln"><span><span class="hl hl-g">맞춤형 챗봇</span></span></span></h2>
+<p class="lead rv d2"><span class="sen">업스테이지 Solar가 쉬운 말로 답해요.</span><span class="sen">내 리포트와 계약 일정까지 알고 답해요.</span></p>
+<div class="pill rv d3"><span class="pt" data-typing aria-live="off"><span>확정일자</span>는 언제 받아야 해?<i class="cur" aria-hidden="true"></i></span><span class="ent" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 10l-5 5 5 5"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/></svg></span></div>
+</div>
+</div>
+</div>
 </div>
 </section>
-
 <!-- ━━ 3막 · 믿음 ━━ -->
 <section id="trust" class="sec trust">
 <div class="wrap">
 <span class="kick rv">믿을 수 있게</span>
 <div class="beat">
 <p class="fill" data-fill>판정은 규칙이</p>
-<p class="proof rv">위험 등급은 출처 있는 기준으로만 정해요. 같은 서류를 5번 넣어도 판정에 쓰는 값은 5번 모두 같았어요.</p>
+<p class="proof rv">위험 등급은 HUG 전세보증 가입 요건과 한국부동산원 전세가율 기준으로만 정해요. AI는 등급을 바꾸지 못해요.</p>
 </div>
 <div class="beat">
 <p class="fill g" data-fill>설명은 AI가</p>
-<p class="proof rv">한국 서류는 한국 AI로. 외부 AI 호출은 모두 국내 모델이고, 두 갈래로 따로 읽어 서로 검산해요.</p>
-<div class="models rv d1"><span class="model">Upstage Information Extract</span><span class="model">Document OCR</span><span class="model">Solar Pro 2</span><span class="model">Embeddings</span></div>
+<p class="proof rv">한국 부동산 문제는 한국 AI로 풀어요. 두 갈래로 따로 읽고 서로 맞춰 봐서, 놓치는 줄 없이 꼼꼼하게 분석해요.</p>
+<div class="upst rv d1"><img class="uplogo" src="assets/upstage.png" alt="Upstage"><div class="mq" aria-label="사용하는 업스테이지 모델: Information Extract, Document OCR, Solar Pro 2, Embeddings"><div class="mqt" aria-hidden="true"><span class="model">Information Extract</span><span class="model">Document OCR</span><span class="model">Solar Pro 2</span><span class="model">Embeddings</span><span class="model">Information Extract</span><span class="model">Document OCR</span><span class="model">Solar Pro 2</span><span class="model">Embeddings</span><span class="model">Information Extract</span><span class="model">Document OCR</span><span class="model">Solar Pro 2</span><span class="model">Embeddings</span><span class="model">Information Extract</span><span class="model">Document OCR</span><span class="model">Solar Pro 2</span><span class="model">Embeddings</span></div></div></div>
 </div>
 <div class="beat">
 <p class="fill" data-fill>검증은 사용자가</p>
-<p class="proof rv">판정 근거를 내가 찍은 사진 위에서 직접 확인해요. 원본 사진과 실명은 서버에 남기지 않아요.</p>
+<p class="proof rv">판정 근거를 내가 찍은 사진 위에서 직접 확인해요. 못 잡는 위험은 못 잡는다고 그대로 적어요.</p>
 </div>
 </div>
 </section>
@@ -677,34 +997,47 @@ h1,h2,h3{text-wrap:balance}
 <!-- ━━ 4막 · 함께 ━━ -->
 <section id="with" class="sec with">
 <div class="wrap">
-<span class="kick rv">우리가 바라는 것</span>
+<span class="kick rv">우리가 꿈꾸는 세상</span>
 <h2 class="vh"><span class="ln"><span>피해 뒤의 구제보다,</span></span><span class="ln"><span>계약 전의 확인이</span></span><span class="ln"><span><em>당연한 세상</em></span></span></h2>
-<div class="path rv d2" aria-label="성장 방향"><span class="now">전세사기 예방</span><i>→</i><span>청년 주거 안전</span><i>→</i><span>청년 생활 안전</span><i>→</i><span>AI Safety Net</span></div>
-<h3 class="plans-t rv">전세이프를 만나는 방법</h3>
-<div class="plans">
-<div class="pl"><small>개인</small><b>계약을 앞둔 누구나</b><p>대학생, 사회초년생, 신혼부부. 첫 전월세 계약 앞에서.</p><ul><li>기본 위험 분석 무료</li><li>계약 지킴이 패스 — 계약 1건 동안 알림과 다시 대조</li></ul></div>
-<div class="pl main"><small>기관</small><b>대학 · 청년센터 · 공공기관 · 기업</b><p>구성원에게 전월세 안전 서비스를 드려요.</p><ul><li>구성원 대상 전월세 안전 진단</li><li>청년 주거 지원 사업과 연계</li></ul></div>
-<div class="pl"><small>플랫폼</small><b>부동산 · 금융 · 보증</b><p>매물 찾기부터 보증 가입까지, 계약 흐름 안에.</p><ul><li>위험 분석 API</li><li>판정 근거까지 함께 제공</li></ul></div>
+<div class="tri" data-ring>
+<div class="tri-d" aria-hidden="true">
+<svg viewBox="0 0 340 300" preserveAspectRatio="none">
+<polygon class="tri-e" points="170,46 42,246 298,246" pathLength="1"/>
+<line class="tri-s" x1="170" y1="46" x2="170" y2="180" pathLength="1"/><line class="tri-s" x1="42" y1="246" x2="170" y2="180" pathLength="1"/><line class="tri-s" x1="298" y1="246" x2="170" y2="180" pathLength="1"/>
+<line class="tri-f" x1="170" y1="46" x2="170" y2="180"/><line class="tri-f" x1="42" y1="246" x2="170" y2="180"/><line class="tri-f" x1="298" y1="246" x2="170" y2="180"/>
+</svg>
+<span class="tri-c"><i class="w1"></i><i class="w2"></i><img src="assets/logo.png" alt=""><b>전세이프</b></span>
+<span class="tri-n n1"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><b>B2C</b></span>
+<span class="tri-n n2"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-5h6v5"/><path d="M9 11h.01M15 11h.01"/></svg><b>B2B</b></span>
+<span class="tri-n n3"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18"/><path d="M4 10h16"/><path d="M12 3l9 5H3z"/><path d="M6 10v8M10 10v8M14 10v8M18 10v8"/></svg><b>B2G</b></span>
+</div>
+<div class="tri-l">
+<article><small>개인 · B2C</small><b>첫 계약이, 확인하고 하는 계약으로</b><p>신혼부부, 사회초년생, 대학생. 처음 전세를 구하는 누구나.</p></article>
+<article><small>기관 · B2B</small><b>기관 코드 하나로, 구성원 모두에게</b><p>청년센터, 대학, 공공기관, 기업이 구성원의 첫 계약을 함께 지켜요.</p></article>
+<article><small>나라 · B2G</small><b>피해 구제에서, 계약 전 예방으로</b><p>예방이 쌓이면 피해 뒤에 드는 사회적 비용도 줄어요.</p></article>
+</div>
 </div>
 </div>
 </section>
 
 <section id="film" class="sec end">
+<div class="wrap">
+<span class="kick rv">영상으로 보기</span>
+<h2 class="h2 endh"><span class="ln"><span><span class="hl">더 알고</span> 싶다면?</span></span></h2>
+</div>
 <div class="wrap endg">
 <!-- 영상 주소가 생기면 아래 VIDEO_URL 에 넣는다 (스크립트 맨 위) -->
 <button class="film rv" type="button" data-film aria-label="전세이프 소개 영상 보기">
 <span class="fbg" aria-hidden="true"><i>근저당권설정 · 채권최고액 · 신탁원부 · 임차권등기명령 · 공동담보목록</i><i>가처분 · 경매개시결정 · 토지 별도등기 · 신청사건 처리중 · 갑구 · 을구</i><i>소유권이전 · 전세권설정 · 말소사항 포함 · 열람일시 · 접수</i></span>
 <span class="wm">전세<i>AI</i>프</span>
-<span class="play" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="#07140F"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+<span class="play" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M6 3.5v17l15-8.5z"/></svg></span>
 <span class="cap"><b>전세이프 소개 영상</b><span>사진 몇 장으로 위험을 확인하는 과정을 영상으로 보세요</span></span>
+<span class="ytgo" aria-hidden="true">YouTube에서 보기 ↗</span>
 </button>
 <div class="contact rv d1" id="contact">
-<h2>전세이프와<br>함께하세요</h2>
+<h2>전세이프와 함께하세요</h2>
 <p>도입, 제휴, 취재 문의 모두 편하게 연락 주세요.</p>
-<div class="mailrow">
-<a class="mail" href="mailto:raccoon205@konkuk.ac.kr">raccoon205@konkuk.ac.kr</a>
-<button class="copy" type="button" data-copy="raccoon205@konkuk.ac.kr">복사</button>
-</div>
+<a class="mail" href="mailto:namgh3651@gmail.com?subject=%5B%EC%A0%84%EC%84%B8%EC%9D%B4%ED%94%84%5D%20%EB%AC%B8%EC%9D%98"><span>namgh3651@gmail.com</span><i aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></i></a>
 </div>
 </div>
 </section>
@@ -712,7 +1045,7 @@ h1,h2,h3{text-wrap:balance}
 
 <footer class="foot">
 <div class="wrap">
-<div class="fgrid"><span class="wm">전세<i>AI</i>프</span><span>전세를 AI로 안전하게 · 팀 동크크 · raccoon205@konkuk.ac.kr</span></div>
+<div class="fgrid"><span class="wm">전세<i>AI</i>프</span><span>전세를 AI로 안전하게 · 팀 동크크 · namgh3651@gmail.com</span></div>
 <p class="fnote">전세이프는 등기부에 적힌 내용을 공개된 기준으로 풀어 드리는 정보 서비스예요. 법률 자문이 아니며, 최종 판단은 전문가와 함께 해 주세요.</p>
 <div class="fbot"><span>© 2026 팀 동크크</span><span>2026 AI ROOKIE 국내 AI 트랙</span></div>
 </div>
@@ -724,7 +1057,7 @@ h1,h2,h3{text-wrap:balance}
   var root = document.documentElement;
   var AN = root.classList.contains('an');
 
-  var PHRASES = ['근저당권설정', '채권최고액 금360,000,000원', '공동담보목록 제2023-567호', '신탁원부 제2024-1234호', '임차권등기명령', '토지 별도등기 있음', '신청사건 처리중', '경매개시결정', '가처분', '전세권설정', '존속기간', '등기원인 설정계약', '접수 제12345호', '근저당권자', '채무자', '수탁자', '말소사항 포함', '대지권의 목적인 토지의 표시', '소유권이전', '전세금', '열람일시', '갑구', '을구'];
+  var PHRASES = ['근저당권설정', '채권최고액 금360,000,000원', '공동담보목록 제2023-567호', '신탁원부 제2024-1234호', '임차권등기명령', '토지 별도등기 있음', '신청사건 처리중', '경매개시결정', '가처분', '전세권설정', '존속기간', '등기원인 설정계약', '접수 제12345호', '근저당권자', '채무자', '수탁자', '말소사항 포함', '대지권의 목적인 토지의 표시', '소유권이전', '전세금', '열람일시', '갑구', '을구', '확정일자', '전입신고', '대항력', '우선변제권', '선순위 보증금', '가압류', '압류', '국세 체납', '공동담보', '근저당권자', '임차권등기', '보증보험 가입 거절'];
   // 누적 피해자 결정 건수 (특별법 시행 2023.6 = 0). m = 2023.6부터 지난 달 수
   var SERIES = [
     { m: 0,  t: '2023.6',  v: 0,     s: '특별법 시행' },
@@ -759,7 +1092,7 @@ h1,h2,h3{text-wrap:balance}
     }
   }
   rows(document.querySelector('[data-drift]'), 5, 'drow', 4);
-  rows(document.querySelector('[data-wall]'), 9, 'wrow', 5);
+  rows(document.querySelector('[data-wall]'), 15, 'wrow', 5);
 
   // 근거 숫자 띠: 끊김 없이 흐르게 한 번 더 붙인다
   var tk = document.querySelector('[data-ticker]');
@@ -772,7 +1105,7 @@ h1,h2,h3{text-wrap:balance}
   // 사기 수법 뒤집기 카드
   var flips = document.querySelector('[data-flips]');
   var ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 2.4 17.5A2 2 0 0 0 4.1 20.5h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>';
-  FRAUDS.forEach(function (f) {
+  if (flips) FRAUDS.forEach(function (f) {
     var b = el('button', 'fc'); b.type = 'button'; b.setAttribute('aria-pressed', 'false');
     b.setAttribute('aria-label', f[0] + ' — 수법: ' + f[1] + ' — 전세이프는: ' + f[2]);
     var fi = el('span', 'fi');
@@ -858,7 +1191,7 @@ h1,h2,h3{text-wrap:balance}
   var road = document.querySelector('[data-road]');
   function setStop(n) {
     stops.forEach(function (s, k) { s.classList.toggle('on', k === n); s.classList.toggle('past', k < n); });
-    if (road) road.style.setProperty('--rp', n / 3);
+    if (road) road.style.setProperty('--rp', n / (stops.length - 1));
   }
   var cards = stations ? Array.prototype.slice.call(stations.children) : [];
   function carousel() { return stations && getComputedStyle(stations).display === 'flex'; }
@@ -880,11 +1213,36 @@ h1,h2,h3{text-wrap:balance}
       }, 80);
     }, { passive: true });
   }
-  if (carousel()) setStop(0); else setStop(3);
+  setStop(0);
+
+  // 챗봇 입력창: 질문을 한 글자씩 쓰고, 중요한 말만 밝게 남긴 뒤 다음 질문으로
+  var tp = document.querySelector('[data-typing]');
+  var QS = [[['확정일자', 1], ['는 언제 받아야 해?', 0]], [['이 집 ', 0], ['근저당', 1], ['이 왜 ', 0], ['위험', 1], ['해?', 0]], [['잔금 전날', 1], ['엔 뭘 확인해야 해?', 0]], [['내 집 지역 ', 0], ['매각가율', 1], [' 알려줘', 0]], [['보증보험', 1], [' 가입할 수 있어?', 0]]];
+  if (tp && AN) {
+    var qi = 0;
+    var typeQ = function () {
+      var q = QS[qi % QS.length]; qi++;
+      tp.className = 'pt'; tp.textContent = ''; var cu = el('i', 'cur'); tp.appendChild(cu);
+      var chars = []; q.forEach(function (seg) { seg[0].split('').forEach(function (c) { chars.push([c, seg[1]]); }); });
+      var k = 0, cur = null, curB = -1;
+      var step = function () {
+        if (k >= chars.length) { setTimeout(function () { tp.classList.add('done'); }, 250); setTimeout(function () { tp.classList.add('out'); }, 2600); setTimeout(typeQ, 3200); return; }
+        var c = chars[k++];
+        if (c[1] !== curB) { cur = c[1] ? el('span') : el('i', 'nb'); tp.insertBefore(cur, cu); curB = c[1]; }
+        cur.textContent += c[0];
+        setTimeout(step, 70 + Math.random() * 60);
+      };
+      setTimeout(step, 400);
+    };
+    var tio = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { tio.disconnect(); typeQ(); } }, { threshold: 0.3 });
+    tio.observe(tp);
+  }
 
   // 영상 / 메일 복사
   var film = document.querySelector('[data-film]');
   if (film) film.addEventListener('click', function () { if (VIDEO_URL) window.open(VIDEO_URL, '_blank', 'noopener'); });
+  var yt = document.querySelector('[data-yt]');
+  if (yt && VIDEO_URL) { yt.href = VIDEO_URL; yt.target = '_blank'; yt.rel = 'noopener'; }
   var copy = document.querySelector('[data-copy]');
   if (copy) copy.addEventListener('click', function () {
     var v = copy.getAttribute('data-copy');
@@ -918,7 +1276,7 @@ h1,h2,h3{text-wrap:balance}
       io.unobserve(t);
     });
   }, { threshold: 0.15 });
-  document.querySelectorAll('main > section:not([data-hero]), .panel, .stn, [data-chart], [data-dots]').forEach(function (s) { io.observe(s); });
+  document.querySelectorAll('main > section:not([data-hero]), .panel, .stn, .wc, .tri, [data-chart], [data-dots]').forEach(function (s) { io.observe(s); });
 
   // 스크롤에 따라: 위쪽 읽음 줄, 판이 넓어지며 열림, 큰 글씨 색 차오름
   var bar = document.querySelector('.progress');
