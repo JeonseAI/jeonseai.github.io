@@ -89,7 +89,10 @@ h1,h2,h3{text-wrap:balance}
 .logo img{width:24px;height:26px;object-fit:contain}
 .logo .wm{font-size:24px}
 .links{display:none;gap:26px;font-size:15px;font-weight:600}
-.links a{color:var(--dim);text-decoration:none}.links a:hover{color:var(--white)}
+.links a{position:relative;color:var(--dim);text-decoration:none;transition:color .25s ease}.links a:hover{color:var(--white)}
+.links a.on{color:var(--white);font-weight:800}
+.links a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;border-radius:2px;background:var(--gold);transform:scaleX(0);transition:transform .3s ease}
+.links a.on::after{transform:scaleX(1)}
 @media (min-width:960px){.links{display:flex}.navin{height:68px}}
 .ls{display:none}
 @media (max-width:959px){.links{display:flex;gap:clamp(10px, 3.6vw, 20px);font-size:clamp(14px, 4vw, 16px)}.links .lf,.links .pc,.nav .ask{display:none}.links .ls{display:inline}.logo .wm{font-size:clamp(20px, 6vw, 24px)}}
@@ -1262,6 +1265,19 @@ p,.lead{text-wrap:pretty}
     setTimeout(function () { openHero(); }, 2300);
     setTimeout(finish, 3400);
   } else openHero();
+
+  // 스크롤 위치에 맞춰 위쪽 메뉴에 지금 섹션 표시
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.links a'));
+  var spyMap = [['#now', '#now'], ['#why', '#now'], ['#how', '#how'], ['#trust', '#trust'], ['#with', '#with'], ['#film', '#with']];
+  var spyOn = '';
+  function spy() {
+    var line = 90, cur = '';
+    spyMap.forEach(function (m) { var sec = document.querySelector(m[0]); if (sec && sec.getBoundingClientRect().top <= line) cur = m[1]; });
+    if (cur === spyOn) return; spyOn = cur;
+    navLinks.forEach(function (a) { var on = a.getAttribute('href') === cur; a.classList.toggle('on', on); if (on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
+  }
+  window.addEventListener('scroll', spy, { passive: true });
+  spy();
 
   if (!AN) return;
 
