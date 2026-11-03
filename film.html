@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>전세이프 · 부스 영상</title>
+<link rel="icon" href="favicon.png">
+<style>
+/* 부스 노트북에서 무한 반복하는 영상용 랜딩. index.html 과 파일을 나누지 않는다(이 파일만 고친다).
+   1920×1080 무대를 창에 맞춰 늘리고 줄인다. 장면은 시간에 맞춰 저절로 넘어간다. */
+@font-face{font-family:"Pretendard";font-weight:400;font-display:block;src:url(assets/fonts/Pretendard-Regular.subset.woff2) format("woff2")}
+@font-face{font-family:"Pretendard";font-weight:600;font-display:block;src:url(assets/fonts/Pretendard-SemiBold.subset.woff2) format("woff2")}
+@font-face{font-family:"Pretendard";font-weight:700;font-display:block;src:url(assets/fonts/Pretendard-Bold.subset.woff2) format("woff2")}
+@font-face{font-family:"Pretendard";font-weight:800;font-display:block;src:url(assets/fonts/Pretendard-ExtraBold.subset.woff2) format("woff2")}
+@font-face{font-family:"Jua";font-weight:400;font-display:block;src:url(film/fonts/Jua.film.woff2) format("woff2")}
+@font-face{font-family:"Noto Serif KR";font-weight:700;font-display:block;src:url(film/fonts/NotoSerifKR-Bold.film.woff2) format("woff2")}
+:root{
+  --ink:#07140F; --night:#0A1E16; --deep:#0B2A1F; --forest:#0E3526; --green:#14724B; --mint:#E7F3EC;
+  --gold:#E2C27F; --gold-hi:#F1DDB0; --paper:#F2EEE5; --sheet:#FFFDF8; --white:#FFFFFF;
+  --text:#16211B; --body:#3C4842; --muted:#5E6B64; --red:#D32F2F; --red-soft:#FBEAE8; --amber:#A16207;
+  --dim:rgba(255,255,255,.72);
+  --sans:"Pretendard",-apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
+  --serif:"Noto Serif KR","Apple SD Gothic Neo",serif;
+  --mark:"Jua","Pretendard",sans-serif;
+  --in:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--bg,#07140F);transition:background-color .6s ease;cursor:none}
+body{font-family:var(--sans);color:var(--white);word-break:keep-all;-webkit-font-smoothing:antialiased}
+.stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;margin:-540px 0 0 -960px;transform:scale(var(--k,1));overflow:hidden}
+/* 장면: 안전 영역 = 좌우 96px · 위아래 54px */
+.sc{position:absolute;inset:0;padding:54px 96px;display:flex;flex-direction:column;justify-content:center;opacity:0;visibility:hidden;transition:opacity .5s ease, visibility 0s linear .5s}
+.sc.on{opacity:1;visibility:visible;transition:opacity .5s ease}
+.sc.out{opacity:0;transition:opacity .5s ease}
+.dark{background:radial-gradient(ellipse at 30% 30%,#0F3A2A,#07140F 65%)}
+.paper{background:var(--paper);color:var(--text)}
+.lav{background:radial-gradient(ellipse at 20% 20%,#D9CFFF,#EEE9FF 45%,#E4F3EC 100%);color:var(--text)}
+.forest{background:radial-gradient(ellipse at 70% 30%,#14503A,#0E3526 60%)}
+
+/* 들어오기: .on 이 붙으면 0.8초 안에 제자리 */
+.a{opacity:0;transform:translateY(28px);transition:opacity .55s var(--in), transform .7s var(--in)}
+.on .a{opacity:1;transform:none}
+.on .a.d1{transition-delay:.1s}.on .a.d2{transition-delay:.2s}.on .a.d3{transition-delay:.3s}
+.kick{font-size:34px;font-weight:800;letter-spacing:.08em;color:var(--gold)}
+.paper .kick,.lav .kick{color:var(--green)}
+.h{margin:18px 0 0;font-size:104px;line-height:1.16;letter-spacing:-.045em;font-weight:800}
+.h .g{color:var(--gold)}
+.hl{position:relative;display:inline-block;color:var(--gold);isolation:isolate}
+.hl::after{content:"";position:absolute;left:-6px;right:-6px;bottom:.06em;height:.24em;border-radius:6px;background:rgba(226,194,127,.32);z-index:-1}
+.hl.gr{color:var(--green)}.hl.gr::after{background:rgba(20,114,75,.2)}
+.p{margin:28px 0 0;font-size:44px;line-height:1.45;color:var(--dim);letter-spacing:-.02em}
+.paper .p,.lav .p{color:var(--body)}
+.p b{color:var(--white);font-weight:700}
+.src{position:absolute;left:96px;bottom:54px;font-size:26px;color:rgba(255,255,255,.5)}
+
+/* 1 질문 */
+.s1{display:grid;grid-template-columns:1.15fr .85fr;gap:60px;align-items:center}
+.s1 .h{font-size:112px}
+.doc{background:var(--sheet);color:#2A2A24;border-radius:28px;padding:34px 38px;box-shadow:0 60px 120px -50px rgba(0,0,0,.9);font-size:30px;line-height:1.5}
+.doc .t{font-weight:800;text-align:center;border-block:2px solid #2A2A24;padding:6px 0;margin:10px 0 6px;font-size:28px}
+.doc .h0{font-weight:800;text-align:center;font-size:32px;letter-spacing:.06em}
+.row{position:relative;display:grid;grid-template-columns:190px 1fr;gap:16px;padding:14px 10px;border-bottom:1.5px solid #E5DFD2}
+.row:last-child{border-bottom:0}
+.row > *{position:relative;z-index:1}
+.row .x{text-decoration:line-through;text-decoration-color:#E53935;color:#8A867C}
+.mkr{position:absolute !important;inset:3px -6px;border-radius:12px;background:rgba(229,57,53,.16);box-shadow:inset 0 0 0 3px rgba(211,47,47,.8);z-index:0 !important;transform-origin:0 50%;transform:scaleX(0);opacity:0;transition:transform .6s var(--in), opacity .2s}
+.pin{position:absolute !important;right:-18px;top:50%;width:46px;height:46px;margin-top:-23px;border-radius:50%;background:var(--red);color:#fff;font-weight:800;font-size:26px;display:flex;align-items:center;justify-content:center;z-index:2 !important;transform:scale(0);transition:transform .45s cubic-bezier(.3,1.6,.5,1) .3s}
+.sc[data-step="1"] .r1 .mkr,.sc[data-step="2"] .r1 .mkr,.sc[data-step="2"] .r2 .mkr{transform:none;opacity:1}
+.sc[data-step="1"] .r1 .pin,.sc[data-step="2"] .r1 .pin,.sc[data-step="2"] .r2 .pin{transform:none}
+
+/* 2 현실 */
+.s2 .part{position:absolute;inset:54px 96px;display:flex;flex-direction:column;justify-content:center;transition:opacity .5s ease, transform .6s var(--in)}
+.s2 .p2{opacity:0;transform:translateY(30px)}
+.s2[data-step="1"] .p1{opacity:0;transform:translateY(-30px)}
+.s2[data-step="1"] .p2{opacity:1;transform:none}
+.num{font-size:300px;line-height:1;font-weight:800;letter-spacing:-.05em;color:var(--gold);font-variant-numeric:tabular-nums;margin-top:20px}
+.num small{font-size:120px;margin-left:12px;color:var(--white)}
+.dots{display:grid;grid-template-columns:repeat(20,40px);gap:14px;margin-top:44px}
+.dots i{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.16);transform:scale(.4);opacity:0;transition:transform .3s ease, opacity .3s ease}
+.dots i.y{background:var(--gold)}
+.s2[data-step="1"] .dots i{transform:none;opacity:1}
+
+/* 3 왜 어려운가 */
+.cards3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:36px;margin-top:56px}
+.c3{border-radius:36px;padding:40px 38px;background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.12)}
+.c3 .no{display:inline-flex;width:64px;height:64px;border-radius:18px;align-items:center;justify-content:center;background:rgba(226,194,127,.16);color:var(--gold);font-size:30px;font-weight:800}
+.c3 h3{margin:24px 0 0;font-size:52px;line-height:1.25;letter-spacing:-.03em}
+.c3 p{margin:16px 0 0;font-size:40px;line-height:1.45;color:var(--dim)}
+
+/* 4 하는 일 */
+.s4 .top{display:flex;align-items:flex-end;justify-content:space-between}
+.s4 .h{font-size:96px}
+.five{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:22px;margin-top:40px;padding:0 14px}
+.c5{border-radius:30px;background:var(--white);padding:26px 24px;display:flex;flex-direction:column;gap:12px;box-shadow:0 30px 60px -40px rgba(22,33,27,.6);transition:opacity .4s ease, transform .4s var(--in), box-shadow .4s ease;opacity:0;transform:translateY(40px)}
+.s4.on .c5{opacity:1;transform:none}
+.s4.on .c5:nth-child(2){transition-delay:.08s}.s4.on .c5:nth-child(3){transition-delay:.16s}.s4.on .c5:nth-child(4){transition-delay:.24s}.s4.on .c5:nth-child(5){transition-delay:.32s}
+.s4.on[data-step]:not([data-step="0"]) .c5{opacity:.32;transform:scale(.97);transition-delay:0s}
+.s4.on[data-step="1"] .c5:nth-child(1),.s4.on[data-step="2"] .c5:nth-child(2),.s4.on[data-step="3"] .c5:nth-child(3),.s4.on[data-step="4"] .c5:nth-child(4),.s4.on[data-step="5"] .c5:nth-child(5){opacity:1;transform:translateY(-14px) scale(1.04);box-shadow:0 40px 80px -30px rgba(22,33,27,.55),0 0 0 4px var(--green)}
+.tag{display:flex;gap:8px;flex-wrap:wrap}
+.tag span{font-size:22px;font-weight:800;padding:6px 14px;border-radius:999px;background:var(--mint);color:var(--green)}
+.tag .ai{color:#fff;background:linear-gradient(110deg,#14724B,#2FA36F)}
+.c5 h3{margin:4px 0 0;font-size:36px;line-height:1.28;letter-spacing:-.03em;color:var(--text);min-height:92px}
+.mini{margin-top:auto;border-radius:24px;background:#0F1613;padding:8px}
+.mini > div{border-radius:18px;background:#F3F4F1;padding:14px;min-height:250px;display:flex;flex-direction:column;gap:10px;font-size:20px;line-height:1.4;color:var(--body)}
+.mrow{position:relative;display:flex;justify-content:space-between;gap:8px;padding:8px 10px;border-radius:10px;background:#fff;font-size:18px}
+.mrow.r{background:rgba(229,57,53,.12);box-shadow:inset 0 0 0 2px rgba(211,47,47,.7);color:#7A1F17;font-weight:700}
+.grade{align-self:flex-start;font-size:20px;font-weight:800;padding:6px 12px;border-radius:999px;background:var(--red-soft);color:var(--red)}
+.big2{font-size:34px;font-weight:800;color:var(--text);letter-spacing:-.03em}
+.bar{display:flex;height:22px;border-radius:11px;overflow:hidden;background:#F6D3CF}
+.bar i{display:block;height:100%}
+.case{background:#fff;border-radius:14px;padding:14px;font-size:19px}
+.case b{display:block;font-size:22px;color:var(--text);margin:6px 0 4px}
+.qb{background:#123A2A;color:#fff;border-radius:18px 18px 4px 18px;padding:14px;font-size:21px;font-weight:600}
+.stop{background:#fff;border-radius:12px;padding:10px 12px;font-size:20px;color:var(--red);font-weight:700}
+.noti{background:#fff;border-radius:14px;padding:12px;font-size:19px}
+.noti b{display:block;color:var(--text);font-size:21px}
+.warn{background:var(--red);color:#fff;border-radius:12px;padding:10px;text-align:center;font-weight:800;font-size:21px}
+.cap{position:relative;height:130px;margin-top:34px}
+.cap p{position:absolute;inset:0;margin:0;font-size:44px;line-height:1.45;color:var(--body);letter-spacing:-.02em;opacity:0;transform:translateY(16px);transition:opacity .4s ease, transform .5s var(--in)}
+.cap p b{color:var(--text)}
+.s4[data-step="1"] .cap p:nth-child(1),.s4[data-step="2"] .cap p:nth-child(2),.s4[data-step="3"] .cap p:nth-child(3),.s4[data-step="4"] .cap p:nth-child(4),.s4[data-step="5"] .cap p:nth-child(5){opacity:1;transform:none}
+
+/* 5 챗봇 */
+.s5{align-items:center;text-align:center}
+.s5 .kick{color:#5B48D6}
+.s5 .h{color:var(--text)}
+.bub{margin-top:56px;display:inline-flex;align-items:center;gap:20px;padding:30px 44px;border-radius:999px;background:rgba(255,255,255,.72);border:2px solid #fff;box-shadow:0 30px 60px -30px rgba(60,40,140,.5);font-size:52px;font-weight:700;color:var(--text);transform:scale(.8);opacity:0;transition:transform .6s cubic-bezier(.3,1.5,.5,1) .3s, opacity .3s ease .3s}
+.bub b{color:var(--green)}
+.s5.on .bub{transform:none;opacity:1}
+
+/* 6 철학 */
+.s6 .line{position:absolute;inset:54px 96px;display:flex;flex-direction:column;justify-content:center;opacity:0;transform:translateY(40px);transition:opacity .5s ease, transform .7s var(--in)}
+.s6[data-step="0"] .l1,.s6[data-step="1"] .l2,.s6[data-step="2"] .l3{opacity:1;transform:none}
+.s6 .big{font-size:200px;line-height:1.05;letter-spacing:-.055em;font-weight:800}
+.s6 .big.g{color:var(--gold)}
+.s6 .p{max-width:1400px}
+.ups{display:flex;align-items:center;gap:22px;margin-top:44px;flex-wrap:nowrap}
+.ups img{height:44px;margin-right:10px}
+.chip{padding:12px 26px;border-radius:999px;background:#EEE9FF;color:#4B3BC4;font-size:30px;font-weight:800;white-space:nowrap;box-shadow:0 10px 26px -12px rgba(123,97,255,.9)}
+
+/* 7 비전 */
+.s7 .v{font-family:var(--serif);font-weight:700;font-size:120px;line-height:1.36;letter-spacing:-.03em;margin:0}
+.s7 .v em{font-style:normal;color:var(--gold)}
+
+/* 8 엔딩 */
+.s8{flex-direction:row;align-items:center;justify-content:space-between;gap:80px}
+.brand{display:flex;flex-direction:column;gap:30px}
+.lockup{display:flex;align-items:center;gap:36px}
+.icon{width:180px;height:180px;border-radius:48px;background:var(--paper);display:flex;align-items:center;justify-content:center;box-shadow:0 30px 60px -30px rgba(0,0,0,.8)}
+.icon img{width:66%}
+.wm{font-family:var(--mark);font-size:170px;line-height:1;letter-spacing:-2px;color:var(--white)}
+.wm svg{display:inline-block;width:.715em;height:.81em;margin:0 .025em;vertical-align:-.03em;overflow:visible}
+.qr{display:flex;flex-direction:column;align-items:center;gap:24px}
+.qr .box{width:400px;height:400px;padding:26px;border-radius:36px;background:#fff}
+.qr .box svg{width:100%;height:100%;display:block}
+.qr span{font-size:40px;font-weight:700}
+.qr small{font-size:32px;color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+
+<!-- 1 질문 -->
+<section class="sc dark s1" data-bg="#07140F">
+<div>
+<div class="kick a">AI 전세사기 예방 서비스</div>
+<h1 class="h a d1">내 보증금,<br>돌려받을 수<br>있을까요?<br><span class="hl">찍어서 확인하세요</span></h1>
+</div>
+<div class="doc a d2" aria-hidden="true">
+<div class="h0">등기사항전부증명서</div>
+<div class="t">[ 갑 구 ] 소유권</div>
+<div class="row r1"><i class="mkr"></i><b>소유권이전</b><span>수탁자 ○○신탁<br>신탁원부 제2024-1234호</span><i class="pin">1</i></div>
+<div class="t">[ 을 구 ] 소유권 이외의 권리</div>
+<div class="row r2"><i class="mkr"></i><b>근저당권설정</b><span>채권최고액 금360,000,000원</span><i class="pin">2</i></div>
+<div class="row"><b class="x">질권설정</b><span class="x">채권액 금20,000,000원</span></div>
+<div class="row"><b>근저당권설정</b><span>채권최고액 금120,000,000원</span></div>
+</div>
+</section>
+
+<!-- 2 현실 -->
+<section class="sc dark s2" data-bg="#0A1E16">
+<div class="part p1">
+<div class="kick a">전세사기, 지금</div>
+<div class="h a d1" style="font-size:96px">피해 인정만</div>
+<div class="num a d1"><span data-count="41559">0</span><small>건</small></div>
+<p class="p a d2">2023년 6월 특별법 시행 뒤 쌓인 숫자예요.</p>
+</div>
+<div class="part p2">
+<div class="kick">전세사기, 지금</div>
+<div class="h"><span class="hl">100명 중 76명</span>은<br>40세 미만이에요</div>
+<p class="p">30대 50.7% · 20대 25.2%</p>
+<div class="dots" data-dots></div>
+</div>
+<p class="src">출처: 국토교통부 발표(2026.10.12) · 언론 보도</p>
+</section>
+
+<!-- 3 왜 어려운가 -->
+<section class="sc dark s3" data-bg="#06110D">
+<div class="kick a">왜 막기 어려울까</div>
+<div class="h a d1" style="font-size:96px">혼자 막기엔, <span class="hl">챙길 게 너무 많아요</span></div>
+<div class="cards3">
+<div class="c3 a d1"><span class="no">01</span><h3>수법은 계속 늘어요</h3><p>하나를 알면, 또 다른 수법이 나와요.</p></div>
+<div class="c3 a d2"><span class="no">02</span><h3>서류는 읽히지 않아요</h3><p>단서는 등기부에 있는데, 온통 낯선 말이에요.</p></div>
+<div class="c3 a d3"><span class="no">03</span><h3>단계마다 볼 게 달라요</h3><p>계약한 날 괜찮아도, 잔금 날 달라질 수 있어요.</p></div>
+</div>
+</section>
+
+<!-- 4 하는 일 -->
+<section class="sc paper s4" data-bg="#F2EEE5">
+<div class="kick a">전세이프가 하는 일</div>
+<div class="h a d1">사진 몇 장으로, <span class="hl gr">다섯 가지</span>를 챙겨요</div>
+<div class="five">
+<article class="c5"><div class="tag"><span>리포트 분석</span><span class="ai">AI 분석</span></div><h3>찍으면, 위험부터 짚어요</h3>
+<div class="mini" aria-hidden="true"><div><span class="grade">● 위험</span><div class="mrow r"><span>소유권이전</span><span>신탁</span></div><div class="mrow r"><span>근저당권설정</span><span>3억 6천</span></div><div class="mrow"><span>근저당권설정</span><span>1억 2천</span></div></div></div></article>
+<article class="c5"><div class="tag"><span>손실 시뮬레이터</span></div><h3>경매로 넘어가면, 얼마 돌려받을까</h3>
+<div class="mini" aria-hidden="true"><div><span>경매로 넘어가면</span><span class="big2">1억 3,877만 원</span><span>돌려받아요</span><div class="bar"><i style="width:20%;background:#0E5A3B"></i><i style="width:49%;background:#2FA36F"></i></div><span>실제 경매 매각가율 · 최우선변제</span></div></div></article>
+<article class="c5"><div class="tag"><span>판례 매칭</span><span class="ai">AI 매칭</span></div><h3>닮은 판례를 찾아 드려요</h3>
+<div class="mini" aria-hidden="true"><div><span>AI가 실제 판례 중 이 집에 맞춰 골랐어요</span><div class="case"><span class="grade">신탁</span><b>서류상 주인이 신탁회사였던 사건</b>닮은 점 · 수탁자 동의 없이 맺은 임대차</div></div></div></article>
+<article class="c5"><div class="tag"><span>물어볼 질문</span></div><h3>중개사에게 뭘 물을지 알려요</h3>
+<div class="mini" aria-hidden="true"><div><div class="qb">신탁원부(신탁 내용을 적은 서류)를 보여주실 수 있나요?</div><div class="stop">! 이런 답이면 멈추세요 · 보여줄 수 없다거나 얼버무린다</div></div></div></article>
+<article class="c5"><div class="tag"><span>계약 여정</span><span class="ai">AI 대조</span></div><h3>잔금 날까지, 다시 대조해요</h3>
+<div class="mini" aria-hidden="true"><div><div class="noti">전세이프 · 오전 8:00<b>오늘 잔금 보내는 날이에요</b></div><div class="mrow r"><span>근저당 1억 2천</span><span>새로 생김</span></div><div class="warn">잔금 보내기 전에 멈추세요</div></div></div></article>
+</div>
+<div class="cap">
+<p>등기부 사진 몇 장, 약 30초. <b>위험한 줄을 내 사진 위에</b> 형광펜으로 표시해요.</p>
+<p>이 지역 <b>실제 경매 매각가율</b>로 계산해요. 먼저 받는 최우선변제까지 넣어요.</p>
+<p>AI가 실제 판례 중 <b>이 집과 닮은 사건</b>을 골라, 이 집 숫자로 설명해요.</p>
+<p>위험 신호에 맞춘 <b>질문을 그대로</b> 보여 주세요. 멈춰야 할 답도 함께 알려요.</p>
+<p>잔금 날 아침에 알려 드려요. 다시 찍으면 <b>새로 생긴 빚만</b> 골라 보여 줘요.</p>
+</div>
+</section>
+
+<!-- 5 챗봇 -->
+<section class="sc lav s5" data-bg="#EEE9FF">
+<div class="kick a">그리고, 언제든</div>
+<div class="h a d1">나만의 부동산 비서,<br><span class="hl gr">맞춤형 챗봇</span></div>
+<p class="p a d2">업스테이지 Solar가 쉬운 말로 답해요.</p>
+<div><div class="bub"><span><b>확정일자</b>는 언제 받아야 해?</span></div></div>
+</section>
+
+<!-- 6 철학 -->
+<section class="sc dark s6" data-bg="#030806" style="background:#030806">
+<div class="line l1"><div class="kick">믿을 수 있게</div><div class="big">판정은 규칙이</div><p class="p">위험 등급은 HUG 전세보증 가입 요건과 한국부동산원 전세가율 기준으로만 정해요. AI는 등급을 바꾸지 못해요.</p></div>
+<div class="line l2"><div class="kick">믿을 수 있게</div><div class="big g">설명은 AI가</div><p class="p">한국 부동산 문제는 한국 AI로 풀어요. 두 갈래로 따로 읽고 서로 맞춰 봐서, 놓치는 줄 없이 꼼꼼하게 분석해요.</p>
+<div class="ups"><img src="assets/upstage.png" alt="Upstage"><span class="chip">Information Extract</span><span class="chip">Document OCR</span><span class="chip">Solar Pro 2</span><span class="chip">Embeddings</span></div></div>
+<div class="line l3"><div class="kick">믿을 수 있게</div><div class="big">검증은 사용자가</div><p class="p">판정 근거를 내가 찍은 사진 위에서 직접 확인해요. 못 잡는 위험은 못 잡는다고 그대로 적어요.</p></div>
+</section>
+
+<!-- 7 비전 -->
+<section class="sc forest s7" data-bg="#0E3526">
+<div class="kick a">우리가 꿈꾸는 세상</div>
+<p class="v a d1" style="margin-top:24px">피해 뒤의 구제보다,<br>계약 전의 확인이<br><em>당연한 세상</em></p>
+</section>
+
+<!-- 8 엔딩 -->
+<section class="sc dark s8" data-bg="#07140F">
+<div class="brand">
+<div class="lockup a"><span class="icon"><img src="assets/logo.png" alt=""></span><span class="wm" role="img" aria-label="전세AI프">전세<svg viewBox="0 0 35 40" aria-hidden="true"><defs><linearGradient id="aigf" x1="0" y1="0" x2="0" y2="40" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#C99A3E"/><stop offset="1" stop-color="#A87A22"/></linearGradient></defs><g fill="none" stroke="url(#aigf)" stroke-width="6.2" stroke-linecap="round"><ellipse cx="11" cy="19.8" rx="7.9" ry="16.1"/><line x1="31.3" y1="3.1" x2="31.3" y2="36.9"/><path d="M18.4 30.5C20.5 36.5 27.5 37.5 31.3 34"/></g></svg>프</span></div>
+<p class="p a d1" style="margin-top:0">전세를 AI로 안전하게</p>
+<p class="p a d2" style="margin-top:0;color:var(--gold)">팀 동크크</p>
+</div>
+<div class="qr a d2"><div class="box"><svg viewBox="0 0 29 29" shape-rendering="crispEdges" role="img" aria-label="jeonseai.github.io QR 코드"><path fill="#07140F" d="M0 0h1v1h-1zM1 0h1v1h-1zM2 0h1v1h-1zM3 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h-1zM6 0h1v1h-1zM8 0h1v1h-1zM9 0h1v1h-1zM10 0h1v1h-1zM13 0h1v1h-1zM14 0h1v1h-1zM16 0h1v1h-1zM18 0h1v1h-1zM22 0h1v1h-1zM23 0h1v1h-1zM24 0h1v1h-1zM25 0h1v1h-1zM26 0h1v1h-1zM27 0h1v1h-1zM28 0h1v1h-1zM0 1h1v1h-1zM6 1h1v1h-1zM9 1h1v1h-1zM13 1h1v1h-1zM14 1h1v1h-1zM15 1h1v1h-1zM17 1h1v1h-1zM18 1h1v1h-1zM19 1h1v1h-1zM22 1h1v1h-1zM28 1h1v1h-1zM0 2h1v1h-1zM2 2h1v1h-1zM3 2h1v1h-1zM4 2h1v1h-1zM6 2h1v1h-1zM9 2h1v1h-1zM10 2h1v1h-1zM12 2h1v1h-1zM14 2h1v1h-1zM17 2h1v1h-1zM20 2h1v1h-1zM22 2h1v1h-1zM24 2h1v1h-1zM25 2h1v1h-1zM26 2h1v1h-1zM28 2h1v1h-1zM0 3h1v1h-1zM2 3h1v1h-1zM3 3h1v1h-1zM4 3h1v1h-1zM6 3h1v1h-1zM8 3h1v1h-1zM9 3h1v1h-1zM10 3h1v1h-1zM11 3h1v1h-1zM12 3h1v1h-1zM20 3h1v1h-1zM22 3h1v1h-1zM24 3h1v1h-1zM25 3h1v1h-1zM26 3h1v1h-1zM28 3h1v1h-1zM0 4h1v1h-1zM2 4h1v1h-1zM3 4h1v1h-1zM4 4h1v1h-1zM6 4h1v1h-1zM8 4h1v1h-1zM10 4h1v1h-1zM11 4h1v1h-1zM17 4h1v1h-1zM18 4h1v1h-1zM22 4h1v1h-1zM24 4h1v1h-1zM25 4h1v1h-1zM26 4h1v1h-1zM28 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM8 5h1v1h-1zM10 5h1v1h-1zM11 5h1v1h-1zM16 5h1v1h-1zM17 5h1v1h-1zM19 5h1v1h-1zM20 5h1v1h-1zM22 5h1v1h-1zM28 5h1v1h-1zM0 6h1v1h-1zM1 6h1v1h-1zM2 6h1v1h-1zM3 6h1v1h-1zM4 6h1v1h-1zM5 6h1v1h-1zM6 6h1v1h-1zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h1v1h-1zM23 6h1v1h-1zM24 6h1v1h-1zM25 6h1v1h-1zM26 6h1v1h-1zM27 6h1v1h-1zM28 6h1v1h-1zM8 7h1v1h-1zM11 7h1v1h-1zM13 7h1v1h-1zM15 7h1v1h-1zM16 7h1v1h-1zM17 7h1v1h-1zM0 8h1v1h-1zM4 8h1v1h-1zM6 8h1v1h-1zM7 8h1v1h-1zM8 8h1v1h-1zM9 8h1v1h-1zM10 8h1v1h-1zM11 8h1v1h-1zM12 8h1v1h-1zM13 8h1v1h-1zM17 8h1v1h-1zM20 8h1v1h-1zM21 8h1v1h-1zM22 8h1v1h-1zM23 8h1v1h-1zM24 8h1v1h-1zM25 8h1v1h-1zM28 8h1v1h-1zM0 9h1v1h-1zM1 9h1v1h-1zM2 9h1v1h-1zM3 9h1v1h-1zM4 9h1v1h-1zM5 9h1v1h-1zM8 9h1v1h-1zM9 9h1v1h-1zM10 9h1v1h-1zM11 9h1v1h-1zM13 9h1v1h-1zM14 9h1v1h-1zM16 9h1v1h-1zM17 9h1v1h-1zM18 9h1v1h-1zM21 9h1v1h-1zM22 9h1v1h-1zM23 9h1v1h-1zM24 9h1v1h-1zM25 9h1v1h-1zM26 9h1v1h-1zM27 9h1v1h-1zM28 9h1v1h-1zM0 10h1v1h-1zM1 10h1v1h-1zM2 10h1v1h-1zM3 10h1v1h-1zM6 10h1v1h-1zM9 10h1v1h-1zM10 10h1v1h-1zM16 10h1v1h-1zM17 10h1v1h-1zM21 10h1v1h-1zM22 10h1v1h-1zM23 10h1v1h-1zM24 10h1v1h-1zM28 10h1v1h-1zM1 11h1v1h-1zM2 11h1v1h-1zM4 11h1v1h-1zM5 11h1v1h-1zM8 11h1v1h-1zM10 11h1v1h-1zM12 11h1v1h-1zM14 11h1v1h-1zM17 11h1v1h-1zM18 11h1v1h-1zM20 11h1v1h-1zM24 11h1v1h-1zM25 11h1v1h-1zM27 11h1v1h-1zM28 11h1v1h-1zM6 12h1v1h-1zM10 12h1v1h-1zM11 12h1v1h-1zM12 12h1v1h-1zM13 12h1v1h-1zM14 12h1v1h-1zM15 12h1v1h-1zM16 12h1v1h-1zM17 12h1v1h-1zM19 12h1v1h-1zM21 12h1v1h-1zM27 12h1v1h-1zM5 13h1v1h-1zM9 13h1v1h-1zM10 13h1v1h-1zM12 13h1v1h-1zM17 13h1v1h-1zM18 13h1v1h-1zM22 13h1v1h-1zM23 13h1v1h-1zM24 13h1v1h-1zM25 13h1v1h-1zM26 13h1v1h-1zM27 13h1v1h-1zM28 13h1v1h-1zM0 14h1v1h-1zM6 14h1v1h-1zM9 14h1v1h-1zM10 14h1v1h-1zM13 14h1v1h-1zM14 14h1v1h-1zM15 14h1v1h-1zM18 14h1v1h-1zM20 14h1v1h-1zM22 14h1v1h-1zM24 14h1v1h-1zM25 14h1v1h-1zM26 14h1v1h-1zM28 14h1v1h-1zM0 15h1v1h-1zM2 15h1v1h-1zM3 15h1v1h-1zM7 15h1v1h-1zM9 15h1v1h-1zM13 15h1v1h-1zM15 15h1v1h-1zM16 15h1v1h-1zM17 15h1v1h-1zM18 15h1v1h-1zM22 15h1v1h-1zM24 15h1v1h-1zM27 15h1v1h-1zM28 15h1v1h-1zM1 16h1v1h-1zM3 16h1v1h-1zM5 16h1v1h-1zM6 16h1v1h-1zM13 16h1v1h-1zM17 16h1v1h-1zM18 16h1v1h-1zM20 16h1v1h-1zM21 16h1v1h-1zM27 16h1v1h-1zM0 17h1v1h-1zM2 17h1v1h-1zM5 17h1v1h-1zM9 17h1v1h-1zM11 17h1v1h-1zM13 17h1v1h-1zM14 17h1v1h-1zM16 17h1v1h-1zM17 17h1v1h-1zM18 17h1v1h-1zM22 17h1v1h-1zM23 17h1v1h-1zM24 17h1v1h-1zM25 17h1v1h-1zM27 17h1v1h-1zM28 17h1v1h-1zM2 18h1v1h-1zM4 18h1v1h-1zM6 18h1v1h-1zM7 18h1v1h-1zM9 18h1v1h-1zM12 18h1v1h-1zM16 18h1v1h-1zM18 18h1v1h-1zM20 18h1v1h-1zM21 18h1v1h-1zM22 18h1v1h-1zM26 18h1v1h-1zM28 18h1v1h-1zM2 19h1v1h-1zM8 19h1v1h-1zM9 19h1v1h-1zM10 19h1v1h-1zM11 19h1v1h-1zM14 19h1v1h-1zM17 19h1v1h-1zM18 19h1v1h-1zM19 19h1v1h-1zM20 19h1v1h-1zM22 19h1v1h-1zM27 19h1v1h-1zM28 19h1v1h-1zM0 20h1v1h-1zM1 20h1v1h-1zM2 20h1v1h-1zM4 20h1v1h-1zM6 20h1v1h-1zM8 20h1v1h-1zM10 20h1v1h-1zM12 20h1v1h-1zM13 20h1v1h-1zM14 20h1v1h-1zM15 20h1v1h-1zM16 20h1v1h-1zM18 20h1v1h-1zM19 20h1v1h-1zM20 20h1v1h-1zM21 20h1v1h-1zM22 20h1v1h-1zM23 20h1v1h-1zM24 20h1v1h-1zM25 20h1v1h-1zM28 20h1v1h-1zM8 21h1v1h-1zM9 21h1v1h-1zM11 21h1v1h-1zM17 21h1v1h-1zM18 21h1v1h-1zM19 21h1v1h-1zM20 21h1v1h-1zM24 21h1v1h-1zM28 21h1v1h-1zM0 22h1v1h-1zM1 22h1v1h-1zM2 22h1v1h-1zM3 22h1v1h-1zM4 22h1v1h-1zM5 22h1v1h-1zM6 22h1v1h-1zM8 22h1v1h-1zM9 22h1v1h-1zM10 22h1v1h-1zM13 22h1v1h-1zM14 22h1v1h-1zM15 22h1v1h-1zM18 22h1v1h-1zM19 22h1v1h-1zM20 22h1v1h-1zM22 22h1v1h-1zM24 22h1v1h-1zM25 22h1v1h-1zM26 22h1v1h-1zM28 22h1v1h-1zM0 23h1v1h-1zM6 23h1v1h-1zM11 23h1v1h-1zM13 23h1v1h-1zM15 23h1v1h-1zM16 23h1v1h-1zM19 23h1v1h-1zM20 23h1v1h-1zM24 23h1v1h-1zM0 24h1v1h-1zM2 24h1v1h-1zM3 24h1v1h-1zM4 24h1v1h-1zM6 24h1v1h-1zM8 24h1v1h-1zM9 24h1v1h-1zM10 24h1v1h-1zM11 24h1v1h-1zM12 24h1v1h-1zM13 24h1v1h-1zM19 24h1v1h-1zM20 24h1v1h-1zM21 24h1v1h-1zM22 24h1v1h-1zM23 24h1v1h-1zM24 24h1v1h-1zM25 24h1v1h-1zM28 24h1v1h-1zM0 25h1v1h-1zM2 25h1v1h-1zM3 25h1v1h-1zM4 25h1v1h-1zM6 25h1v1h-1zM9 25h1v1h-1zM13 25h1v1h-1zM14 25h1v1h-1zM16 25h1v1h-1zM18 25h1v1h-1zM19 25h1v1h-1zM21 25h1v1h-1zM27 25h1v1h-1zM0 26h1v1h-1zM2 26h1v1h-1zM3 26h1v1h-1zM4 26h1v1h-1zM6 26h1v1h-1zM11 26h1v1h-1zM12 26h1v1h-1zM13 26h1v1h-1zM14 26h1v1h-1zM16 26h1v1h-1zM17 26h1v1h-1zM19 26h1v1h-1zM20 26h1v1h-1zM21 26h1v1h-1zM25 26h1v1h-1zM26 26h1v1h-1zM27 26h1v1h-1zM28 26h1v1h-1zM0 27h1v1h-1zM6 27h1v1h-1zM9 27h1v1h-1zM17 27h1v1h-1zM18 27h1v1h-1zM20 27h1v1h-1zM21 27h1v1h-1zM23 27h1v1h-1zM24 27h1v1h-1zM25 27h1v1h-1zM27 27h1v1h-1zM28 27h1v1h-1zM0 28h1v1h-1zM1 28h1v1h-1zM2 28h1v1h-1zM3 28h1v1h-1zM4 28h1v1h-1zM5 28h1v1h-1zM6 28h1v1h-1zM8 28h1v1h-1zM12 28h1v1h-1zM13 28h1v1h-1zM14 28h1v1h-1zM15 28h1v1h-1zM16 28h1v1h-1zM18 28h1v1h-1zM19 28h1v1h-1zM20 28h1v1h-1zM21 28h1v1h-1zM25 28h1v1h-1zM27 28h1v1h-1z"/></svg></div><span>찍어서 더 알아보기</span><small>jeonseai.github.io</small></div>
+</section>
+
+</div>
+<script>
+(function () {
+  // 장면: [지속 ms, [단계가 바뀌는 시점 ms ...]]
+  var PLAN = [
+    [6000, [1300, 2000]],          // 1 질문: 형광펜 1 → 2
+    [7000, [3500]],                // 2 현실: 숫자 → 100명 중 76명
+    [6000, []],                    // 3 왜 어려운가
+    [18000, [3000, 6000, 9000, 12000, 15000]], // 4 하는 일: 펼치기 → 한 장씩
+    [4500, []],                    // 5 챗봇
+    [10500, [3500, 7000]],         // 6 철학: 규칙 → AI → 사용자
+    [4500, []],                    // 7 비전
+    [5500, []]                     // 8 엔딩
+  ];
+  var stage = document.getElementById('stage');
+  var scenes = Array.prototype.slice.call(stage.querySelectorAll('.sc'));
+  var root = document.documentElement;
+
+  function fit() { var k = Math.min(innerWidth / 1920, innerHeight / 1080); stage.style.setProperty('--k', k); }
+  addEventListener('resize', fit); fit();
+
+  var dots = document.querySelector('[data-dots]');
+  for (var i = 0; i < 100; i++) { var d = document.createElement('i'); if (i < 76) d.className = 'y'; d.style.transitionDelay = (i * 0.006) + 's'; dots.appendChild(d); }
+  var counter = document.querySelector('[data-count]'), target = +counter.getAttribute('data-count');
+
+  var cur = -1, t = 0, last = 0, paused = false;
+  var m = /[?&]scene=(\d+)/.exec(location.search);
+  var startAt = m ? Math.max(0, Math.min(scenes.length - 1, +m[1] - 1)) : 0;
+
+  function stepOf(n, ms) { var s = 0; PLAN[n][1].forEach(function (b) { if (ms >= b) s++; }); return s; }
+  function go(n) {
+    n = (n + scenes.length) % scenes.length;
+    if (cur >= 0 && cur !== n) {
+      var old = scenes[cur]; old.classList.add('out');
+      setTimeout(function () { if (scenes.indexOf(old) !== cur) { old.classList.remove('on', 'out'); old.removeAttribute('data-step'); } }, 520);
+    }
+    cur = n; t = 0;
+    var s = scenes[n]; s.classList.remove('out', 'on'); s.setAttribute('data-step', '0'); void s.offsetWidth; s.classList.add('on');
+    root.style.setProperty('--bg', s.getAttribute('data-bg'));
+    counter.textContent = '0';
+  }
+  function tick(now) {
+    if (!last) last = now;
+    var dt = now - last; last = now;
+    if (!paused) {
+      t += dt;
+      var s = scenes[cur], st = String(stepOf(cur, t));
+      if (s.getAttribute('data-step') !== st) s.setAttribute('data-step', st);
+      if (cur === 1) { var p = Math.min(1, Math.max(0, (t - 200) / 900)); p = 1 - Math.pow(1 - p, 3); counter.textContent = Math.round(target * p).toLocaleString('ko-KR'); }
+      window.__film = { scene: cur + 1, t: t };
+      if (t >= PLAN[cur][0]) go(cur + 1);
+    }
+    requestAnimationFrame(tick);
+  }
+  // 리허설: 스페이스 = 멈춤/재생, ←/→ = 이전/다음 장면
+  addEventListener('keydown', function (e) {
+    if (e.code === 'Space') { e.preventDefault(); paused = !paused; document.getAnimations && document.getAnimations().forEach(function (a) { paused ? a.pause() : a.play(); }); }
+    else if (e.key === 'ArrowRight') go(cur + 1);
+    else if (e.key === 'ArrowLeft') go(cur - 1);
+  });
+  var begin = function () { go(startAt); requestAnimationFrame(tick); };
+  if (document.fonts && document.fonts.ready) Promise.race([document.fonts.ready, new Promise(function (r) { setTimeout(r, 1500); })]).then(begin); else begin();
+})();
+</script>
+</body>
+</html>
