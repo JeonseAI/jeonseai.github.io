@@ -38,7 +38,7 @@ film_css = r'''
 html,body{margin:0;height:100%;overflow:hidden !important;background:var(--fbg,#07140F) !important;transition:background-color .6s ease;cursor:none}
 body::before{display:none}
 #fstage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;margin:-540px 0 0 -960px;transform:scale(var(--k,1));overflow:hidden;color:var(--white)}
-.fsc{position:absolute;inset:0;padding:54px 96px;display:none;flex-direction:column;justify-content:center;opacity:0;transition:opacity .5s ease}
+.fsc{position:absolute;inset:0;padding:54px 96px;display:none;flex-direction:column;justify-content:center;opacity:0;transition:opacity .6s ease}
 .fsc.on{display:flex}
 .fsc.on.f-s1{display:grid}
 .fsc.vis{opacity:1}
@@ -73,9 +73,9 @@ body::before{display:none}
 .f-s2 .f-p2{opacity:0;transform:translateY(30px)}
 .f-s2[data-step="1"] .f-p1{opacity:0;transform:translateY(-30px)}
 .f-s2[data-step="1"] .f-p2{opacity:1;transform:none}
-.f-row2{display:grid;grid-template-columns:720px 1fr;gap:40px;align-items:center}
-.f-num{font-size:220px;line-height:1;font-weight:800;letter-spacing:-.05em;color:var(--gold);font-variant-numeric:tabular-nums;margin-top:18px;white-space:nowrap}
-.f-num small{font-size:96px;margin-left:10px;color:var(--white)}
+.f-row2{display:grid;grid-template-columns:minmax(0,1fr) 860px;gap:56px;align-items:center}
+.f-num{font-size:180px;line-height:1;font-weight:800;letter-spacing:-.05em;color:var(--gold);font-variant-numeric:tabular-nums;margin-top:18px;white-space:nowrap}
+.f-num small{font-size:80px;margin-left:10px;color:var(--white)}
 .f-ch{position:relative;border-radius:36px;background:rgba(255,255,255,.04);border:2px solid rgba(255,255,255,.1);padding:34px 34px 24px}
 .f-ch b{display:block;font-size:34px}
 .f-ch span{display:block;font-size:26px;color:var(--dim);margin-top:6px}
@@ -246,14 +246,14 @@ html = f'''<!doctype html>
 (function () {{
   // 장면: dur(ms) · steps(단계가 바뀌는 시점) · ins([시점, 선택자] → .in 을 붙여 랜딩 움직임 시작) · freeze(이 시점에 반복 움직임을 멈춰 완성 화면으로 고정)
   var PLAN = [
-    {{ dur: 14500, steps: [], ins: [], freeze: 11600 }},
-    {{ dur: 13000, steps: [7000], ins: [] }},
-    {{ dur: 9800, steps: [], ins: [[600, '.wc']], freeze: 6600 }},
-    {{ dur: 22000, steps: [3000, 6800, 10600, 14400, 18200], ins: [[300, '.stn'], [3000, '.stn:nth-child(1)', 1], [6800, '.stn:nth-child(2)', 1], [10600, '.stn:nth-child(3)', 1], [14400, '.stn:nth-child(4)', 1], [18200, '.stn:nth-child(5)', 1]] }},
-    {{ dur: 7000, steps: [], ins: [[150, '.askai']], type: [1300, '확정일자|는 언제 받아야 해?'] }},
-    {{ dur: 12600, steps: [4200, 8400], ins: [], fills: [0, 4200, 8400] }},
-    {{ dur: 10000, steps: [4000], ins: [[4100, '.tri']] }},
-    {{ dur: 6000, steps: [], ins: [] }}
+    {{ dur: 12300, steps: [], ins: [], freeze: 10800 }},
+    {{ dur: 9200, steps: [5200], ins: [] }},
+    {{ dur: 7000, steps: [], ins: [[500, '.wc']], freeze: 5300 }},
+    {{ dur: 17000, steps: [2200, 5200, 8200, 11200, 14200], ins: [[300, '.stn'], [2200, '.stn:nth-child(1)', 1], [5200, '.stn:nth-child(2)', 1], [8200, '.stn:nth-child(3)', 1], [11200, '.stn:nth-child(4)', 1], [14200, '.stn:nth-child(5)', 1]] }},
+    {{ dur: 4800, steps: [], ins: [[150, '.askai']], type: [900, '확정일자|는 언제 받아야 해?'] }},
+    {{ dur: 9000, steps: [3000, 6000], ins: [], fills: [0, 3000, 6000] }},
+    {{ dur: 7300, steps: [3000], ins: [[3100, '.tri']] }},
+    {{ dur: 4500, steps: [], ins: [] }}
   ];
   var stage = document.getElementById('fstage');
   var scenes = Array.prototype.slice.call(stage.querySelectorAll('.fsc'));
@@ -287,7 +287,7 @@ html = f'''<!doctype html>
     n = (n + scenes.length) % scenes.length;
     if (cur >= 0 && cur !== n) {{
       var old = scenes[cur]; old.classList.remove('vis');
-      setTimeout(function () {{ if (scenes.indexOf(old) !== cur) old.classList.remove('on'); }}, 520);
+      setTimeout(function () {{ if (scenes.indexOf(old) !== cur) old.classList.remove('on'); }}, 640);
     }}
     cur = n; t = 0; froze = false; done = {{}};
     var s = scenes[n];
