@@ -24,6 +24,8 @@
   try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
   try { first = !sessionStorage.getItem('jsafe-intro'); sessionStorage.setItem('jsafe-intro', '1'); } catch (e) {}
   if (!reduce && 'IntersectionObserver' in window) d.classList.add('an');
+  // 부스 TV 모드(주소 끝 ?tv): 화면을 크게, 오프닝은 매 바퀴마다, 움직임 줄이기 설정과 상관없이 켠다
+  if (/[?&]tv(=|&|$)/.test(location.search)) { d.classList.add('tv'); reduce = false; first = true; d.classList.add('an'); }
   if (!reduce && first) d.classList.add('intro-on');
 })();
 </script>
@@ -708,6 +710,12 @@ p,.lead{text-wrap:pretty}
   .an .wc,.an .tri .tri-l article{opacity:1;transform:none}.an .tri .tri-n,.an .tri .tri-c{opacity:1;scale:1}.an .tri .tri-e{stroke-dashoffset:0}.an .tl .alert{opacity:1;transform:translateX(-50%)}.an .tl i{--tp:1}
   .hs-cam,.hs-hint,.hs-shut,.hs-vf,.hs-flash,.hs-scan,.hs-ring,.hs-w{display:none}.hs-bar,.hs-hl,.hs-pin,.hs-g b,.hs-it,.hs-ans{opacity:1}.hs-res,.hs-doc,.hs-seg i{transform:none !important}.hs-st .s1{opacity:0}.hs-st .s2{opacity:1}
 }
+
+/* ━━ 부스 TV 모드 (?tv) — 데스크톱 배치를 TV 크기로 키우고, 마우스 커서를 숨긴다 ━━ */
+html.tv{zoom:1.33;scroll-padding-top:72px}
+@media (min-width:2400px){html.tv{zoom:1.8}}
+html.tv, html.tv *{cursor:none !important}
+html.tv .progress{display:none}
 </style>
 </head>
 <body>
@@ -1280,6 +1288,46 @@ p,.lead{text-wrap:pretty}
   }
   window.addEventListener('scroll', spy, { passive: true });
   spy();
+
+  // 부스 TV 모드: 몇 초씩 머물며 아래로 자동으로 내려가고, 끝나면 처음(오프닝)부터 다시
+  if (root.classList.contains('tv')) (function () {
+    var q = function (s) { return document.querySelector(s); };
+    var goStop = function (k) { var b = document.querySelectorAll('[data-go]')[k]; if (b) b.click(); };
+    var STOPS = [
+      { el: '[data-hero]', sec: 15 },
+      { el: '#now', sec: 7 },
+      { el: '#now .duo', sec: 6 },
+      { el: '#why', sec: 9 },
+      { el: '#how', sec: 4, run: function () { goStop(0); } },
+      { el: '#how .stations', sec: 3, run: function () { goStop(1); } },
+      { el: '#how .stations', sec: 3, run: function () { goStop(2); } },
+      { el: '#how .stations', sec: 3, run: function () { goStop(3); } },
+      { el: '#how .stations', sec: 4, run: function () { goStop(4); } },
+      { el: '.askai', sec: 10 },
+      { el: '#trust', sec: 5 },
+      { el: '#trust .beat:nth-of-type(2)', sec: 6 },
+      { el: '#trust .beat:nth-of-type(3)', sec: 5 },
+      { el: '#with', sec: 9 },
+      { el: '#film', sec: 9 }
+    ];
+    var i = 0, timer = null, idle = null;
+    var startAt = root.classList.contains('intro-on') ? 2900 : 400;
+    function show(n) {
+      var s = STOPS[n], el = q(s.el);
+      if (el) { if (n === 0) window.scrollTo({ top: 0, behavior: 'smooth' }); else el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      if (s.run) setTimeout(s.run, 700);
+      timer = setTimeout(next, s.sec * 1000);
+    }
+    function next() {
+      i++;
+      if (i >= STOPS.length) { try { sessionStorage.removeItem('jsafe-intro'); } catch (e) {} window.scrollTo(0, 0); location.reload(); return; }
+      show(i);
+    }
+    // 누가 화면을 만지거나 스크롤하면 잠깐 멈췄다가 20초 뒤 그 자리부터 다시
+    function pause() { clearTimeout(timer); clearTimeout(idle); idle = setTimeout(function () { show(i); }, 20000); }
+    ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (ev) { window.addEventListener(ev, pause, { passive: true }); });
+    setTimeout(function () { show(0); }, startAt);
+  })();
 
   if (!AN) return;
 
